@@ -1,5 +1,5 @@
 /* ============================================
-   Design System & Variables
+   Design System & Variables (Dark Mode Only)
    ============================================ */
 :root {
   --bg: #0f1117;
@@ -387,7 +387,6 @@ main {
   background: var(--accent-soft);
 }
 
-/* Project cards */
 .card-project {
   display: flex;
   flex-direction: column;
@@ -460,7 +459,7 @@ main {
 }
 
 /* ============================================
-   Awards & Certifications
+   Awards
    ============================================ */
 .awards-grid {
   display: flex;
@@ -598,8 +597,7 @@ footer {
 .fade-in {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-in.visible {
@@ -608,320 +606,83 @@ footer {
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================
-   Scrollbar (Webkit)
+   Scrollbar
    ============================================ */
-::-webkit-scrollbar {
-  width: 8px;
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-tertiary);
-}
+::selection { background: var(--accent); color: #fff; }
 
 /* ============================================
-   Selection
-   ============================================ */
-::selection {
-  background: var(--accent);
-  color: #fff;
-}
-
-/* ============================================
-   Mobile
+   Mobile (640px)
    ============================================ */
 @media (max-width: 640px) {
-  main {
-    padding: 24px 16px 20px;
-  }
-
-  .hero {
-    padding: 12px 0 8px;
-  }
-
-  .hero-badge {
-    font-size: 0.7rem;
-    padding: 4px 10px;
-    margin-bottom: 16px;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-    margin-bottom: 12px;
-  }
-
-  .hero-tagline {
-    font-size: 1rem;
-    margin-bottom: 10px;
-  }
-
-  .hero-desc {
-    font-size: 0.92rem;
-    margin-bottom: 20px;
-  }
-
-  .hero-links {
-    flex-direction: column;
-  }
-
-  .btn {
-    width: 100%;
-    justify-content: center;
-    padding: 10px 18px;
-    font-size: 0.85rem;
-  }
-
-  .nav {
-    padding: 6px 16px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .nav::-webkit-scrollbar {
-    display: none;
-  }
-
-  .nav-inner {
-    width: max-content;
-    min-width: 100%;
-  }
-
-  .nav-link {
-    font-size: 0.8rem;
-    padding: 7px 12px;
-    white-space: nowrap;
-  }
-
-  .nav-indicator {
-    top: 4px;
-    height: calc(100% - 8px);
-  }
-
-  .section {
-    margin-bottom: 48px;
-    scroll-margin-top: 80px;
-  }
-
-  .section h2 {
-    font-size: 0.72rem;
-    margin-bottom: 20px;
-    gap: 8px;
-  }
-
-  .section-number {
-    font-size: 0.65rem;
-  }
-
-  .section h2::after {
-    display: none;
-  }
-
-  .card {
-    padding: 16px 18px;
-    border-radius: var(--radius-md);
-  }
-
-  .card-meta {
-    font-size: 0.72rem;
-  }
-
-  .card-title {
-    font-size: 0.95rem;
-  }
-
-  .card-desc {
-    font-size: 0.85rem;
-    margin-bottom: 12px;
-  }
-
-  .card-icon {
-    width: 34px;
-    height: 34px;
-    margin-bottom: 10px;
-  }
-
-  .card-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .tag {
-    font-size: 0.68rem;
-    padding: 3px 9px;
-  }
-
-  .card-award-badge {
-    font-size: 0.6rem;
-    padding: 1px 8px;
-    display: inline-block;
-    margin-top: 2px;
-  }
-
-  .award-card {
-    padding: 14px 16px;
-    gap: 12px;
-    border-radius: var(--radius-md);
-  }
-
-  .award-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .award-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .award-title {
-    font-size: 0.9rem;
-  }
-
-  .award-sub {
-    font-size: 0.75rem;
-    margin-bottom: 4px;
-  }
-
-  .award-desc {
-    font-size: 0.82rem;
-  }
-
-  .contact-card {
-    padding: 24px 18px;
-    border-radius: var(--radius-lg);
-  }
-
-  .contact-text {
-    font-size: 0.92rem;
-    margin-bottom: 20px;
-  }
-
-  .contact-actions {
-    flex-direction: column;
-  }
-
-  .contact-actions .btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
-
-  footer {
-    padding: 24px 16px 36px;
-  }
-
-  .footer-content {
-    padding-top: 16px;
-  }
-
-  .footer-made {
-    font-size: 0.78rem;
-  }
-
-  .footer-year {
-    font-size: 0.75rem;
-  }
+  main { padding: 24px 16px 20px; }
+  .hero { padding: 12px 0 8px; }
+  .hero-badge { font-size: 0.7rem; padding: 4px 10px; margin-bottom: 16px; }
+  .hero h1 { font-size: 2rem; margin-bottom: 12px; }
+  .hero-tagline { font-size: 1rem; margin-bottom: 10px; }
+  .hero-desc { font-size: 0.92rem; margin-bottom: 20px; }
+  .hero-links { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; padding: 10px 18px; font-size: 0.85rem; }
+  .nav { padding: 6px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-inner { width: max-content; min-width: 100%; }
+  .nav-link { font-size: 0.8rem; padding: 7px 12px; white-space: nowrap; }
+  .nav-indicator { top: 4px; height: calc(100% - 8px); }
+  .section { margin-bottom: 48px; scroll-margin-top: 80px; }
+  .section h2 { font-size: 0.72rem; margin-bottom: 20px; gap: 8px; }
+  .section-number { font-size: 0.65rem; }
+  .section h2::after { display: none; }
+  .card { padding: 16px 18px; border-radius: var(--radius-md); }
+  .card-meta { font-size: 0.72rem; }
+  .card-title { font-size: 0.95rem; }
+  .card-desc { font-size: 0.85rem; margin-bottom: 12px; }
+  .card-icon { width: 34px; height: 34px; margin-bottom: 10px; }
+  .card-icon svg { width: 18px; height: 18px; }
+  .tag { font-size: 0.68rem; padding: 3px 9px; }
+  .card-award-badge { font-size: 0.6rem; padding: 1px 8px; display: inline-block; margin-top: 2px; }
+  .award-card { padding: 14px 16px; gap: 12px; border-radius: var(--radius-md); }
+  .award-icon { width: 36px; height: 36px; }
+  .award-icon svg { width: 18px; height: 18px; }
+  .award-title { font-size: 0.9rem; }
+  .award-sub { font-size: 0.75rem; margin-bottom: 4px; }
+  .award-desc { font-size: 0.82rem; }
+  .contact-card { padding: 24px 18px; border-radius: var(--radius-lg); }
+  .contact-text { font-size: 0.92rem; margin-bottom: 20px; }
+  .contact-actions { flex-direction: column; }
+  .contact-actions .btn { width: 100%; justify-content: center; }
+  footer { padding: 24px 16px 36px; }
+  .footer-content { padding-top: 16px; }
+  .footer-made { font-size: 0.78rem; }
+  .footer-year { font-size: 0.75rem; }
 }
 
 @media (max-width: 400px) {
-  main {
-    padding: 16px 12px 16px;
-  }
-
-  .hero h1 {
-    font-size: 1.6rem;
-  }
-
-  .hero-tagline {
-    font-size: 0.92rem;
-  }
-
-  .hero-desc {
-    font-size: 0.85rem;
-  }
-
-  .card {
-    padding: 14px 14px;
-  }
-
-  .card-title {
-    font-size: 0.88rem;
-  }
-
-  .card-desc {
-    font-size: 0.8rem;
-  }
-
-  .nav {
-    padding: 4px 12px;
-  }
-
-  .nav-link {
-    font-size: 0.75rem;
-    padding: 6px 10px;
-  }
-
-  .section {
-    margin-bottom: 36px;
-  }
-
-  .award-card {
-    padding: 12px 14px;
-  }
-
-  .contact-card {
-    padding: 20px 14px;
-  }
+  main { padding: 16px 12px; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero-tagline { font-size: 0.92rem; }
+  .hero-desc { font-size: 0.85rem; }
+  .card { padding: 14px; }
+  .card-title { font-size: 0.88rem; }
+  .card-desc { font-size: 0.8rem; }
+  .nav { padding: 4px 12px; }
+  .nav-link { font-size: 0.75rem; padding: 6px 10px; }
+  .section { margin-bottom: 36px; }
+  .award-card { padding: 12px 14px; }
+  .contact-card { padding: 20px 14px; }
 }
 
-/* ============================================
-   Reduce Motion
-   ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  .fade-in {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .card,
-  .award-card,
-  .contact-card {
-    transition: border-color 0.2s ease;
-  }
-
-  .card:hover,
-  .award-card:hover,
-  .contact-card:hover {
-    transform: none;
-  }
-
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  .card, .award-card, .contact-card { transition: border-color 0.2s ease; }
+  .card:hover, .award-card:hover, .contact-card:hover { transform: none; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

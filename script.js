@@ -1,25 +1,4 @@
 /* ============================================
-   Dark Mode Toggle
-   ============================================ */
-(function initTheme() {
-  const toggle = document.getElementById('theme-toggle');
-  const stored = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-  // Set initial theme
-  if (stored === 'dark' || (!stored && prefersDark)) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  }
-
-  toggle.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const next = isDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  });
-})();
-
-/* ============================================
    Sticky Nav — Active Link, Sliding Indicator & Scroll Shadow
    ============================================ */
 (function initNav() {
@@ -52,12 +31,18 @@
       }
     });
 
-    // Fallback: if no section is active and we're past the second-to-last,
-    // activate the last section (contact)
-    if (!currentId && sections.length > 1) {
-      const secondLast = sections[sections.length - 2];
+    // Fallback: if no section is active
+    if (!currentId && sections.length > 0) {
+      const first = sections[0];
       const last = sections[sections.length - 1];
-      if (window.scrollY + 140 >= secondLast.offsetTop + secondLast.offsetHeight) {
+      const secondLast = sections.length > 1 ? sections[sections.length - 2] : null;
+
+      // At the very top — default to first section
+      if (window.scrollY < first.offsetTop) {
+        currentId = first.getAttribute('id');
+      }
+      // Past the second-to-last — activate last section (contact)
+      else if (secondLast && window.scrollY + 140 >= secondLast.offsetTop + secondLast.offsetHeight) {
         currentId = last.getAttribute('id');
       }
     }

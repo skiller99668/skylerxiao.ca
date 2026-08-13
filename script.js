@@ -62,6 +62,85 @@ clearTimeout(window.revealFailsafe);
 })();
 
 /* ============================================================
+   Project hover preview
+
+   Shows the image named in each row's data-preview and follows
+   the cursor. Enhancement only — without it the rows behave
+   exactly as they do now.
+   ============================================================ */
+(function initPreview() {
+  var rows = document.querySelectorAll('.project[data-preview]');
+  if (!rows.length) return;
+
+  // Touch and coarse pointers never hover, and reduced-motion users
+  // shouldn't get something chasing the cursor.
+  if (!window.matchMedia) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var img = document.createElement('img');
+  img.className = 'project-preview';
+  img.alt = '';
+  img.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(img);
+
+  var current = null;
+  var frame = null;
+  var pending = { x: 0, y: 0 };
+
+  function place() {
+    frame = null;
+    var pad = 14;
+    var w = img.offsetWidth || 268;
+    var h = img.offsetHeight || 168;
+    // Keep the card fully on screen, and to the cursor's right when it fits.
+    var x = pending.x + w / 2 + 28;
+    if (x + w / 2 > window.innerWidth - pad) x = pending.x - w / 2 - 28;
+    var y = Math.min(
+      Math.max(pending.y, h / 2 + pad),
+      window.innerHeight - h / 2 - pad
+    );
+    img.style.setProperty('--x', (x - w / 2) + 'px');
+    img.style.setProperty('--y', (y - h / 2) + 'px');
+  }
+
+  function onMove(e) {
+    pending.x = e.clientX;
+    pending.y = e.clientY;
+    if (!frame) frame = window.requestAnimationFrame(place);
+  }
+
+  rows.forEach(function (row) {
+    row.addEventListener('mouseenter', function (e) {
+      var src = row.getAttribute('data-preview');
+      if (!src) return;
+      if (current !== src) {
+        img.src = src;
+        current = src;
+      }
+      pending.x = e.clientX;
+      pending.y = e.clientY;
+      place();
+      img.classList.add('on');
+    });
+
+    row.addEventListener('mousemove', onMove, { passive: true });
+
+    row.addEventListener('mouseleave', function () {
+      img.classList.remove('on');
+    });
+  });
+
+  // A missing or not-yet-added screenshot should show nothing, not a broken icon.
+  img.addEventListener('error', function () { img.classList.remove('on'); });
+
+  // Don't leave the card floating over the page while scrolling away.
+  window.addEventListener('scroll', function () {
+    if (img.classList.contains('on')) img.classList.remove('on');
+  }, { passive: true });
+})();
+
+/* ============================================================
    Scroll-triggered reveal
    ============================================================ */
 (function initReveal() {

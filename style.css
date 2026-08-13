@@ -340,24 +340,68 @@ main { position: relative; }
 
 /* ============================================================
    Projects — list rows, not boxes
+
+   The row is an <article>, not an <a>: it holds several links
+   (project page, repo, live site) and an anchor can't nest.
+   The title link stretches over the whole row via ::after, so
+   the row still behaves like one big click target, while the
+   icon links sit above it on z-index.
    ============================================================ */
 .project {
+  position: relative;
   display: grid; grid-template-columns: 1fr auto; gap: var(--s-5);
   align-items: start; padding: var(--s-5) 0;
   border-top: 1px solid var(--rule);
-  text-decoration: none; color: inherit;
 }
 .project:last-of-type { border-bottom: 1px solid var(--rule); }
+
 .project h3 {
   font-family: var(--display); font-weight: 600; font-size: var(--t-lg);
   margin: 0 0 var(--s-1); letter-spacing: -0.015em;
+}
+.project-title {
+  color: var(--ink); text-decoration: none;
   transition: color var(--dur) var(--ease);
 }
-.project:hover h3 { color: var(--trace); }
+.project-title::after {          /* stretches the hit area over the row */
+  content: ""; position: absolute; inset: 0; z-index: 1;
+}
+.project:hover .project-title { color: var(--trace); }
 .project p { margin: 0 0 var(--s-2); color: var(--ink-2); font-size: var(--t-md); max-width: 46em; }
-.project-go { color: var(--ink-3); padding-top: 6px; transition: color var(--dur) var(--ease); }
-.project-go .icon { width: 16px; height: 16px; }
-.project:hover .project-go { color: var(--trace); }
+
+/* Icon links — above the stretched title link so they stay clickable */
+.project-links {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; gap: var(--s-3); padding-top: 6px;
+}
+.project-icon {
+  display: inline-flex; color: var(--ink-3);
+  transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.project-icon .icon { width: 17px; height: 17px; }
+.project-icon:hover { color: var(--trace); transform: translateY(-1px); }
+
+/* ============================================================
+   Project hover preview
+
+   A floating thumbnail that follows the cursor. Progressive
+   enhancement only: script.js creates it, and it's enabled just
+   for real hover + fine-pointer devices, so touch is unaffected.
+   ============================================================ */
+.project-preview {
+  position: fixed; top: 0; left: 0; z-index: 60;
+  width: 268px; aspect-ratio: 16 / 10;
+  object-fit: cover; background: var(--paper-raise);
+  border: 1px solid var(--rule); border-radius: 3px;
+  box-shadow: 0 6px 22px rgba(20, 22, 26, 0.13), 0 2px 6px rgba(20, 22, 26, 0.07);
+  opacity: 0; pointer-events: none;
+  /* JS only writes --x/--y, so the transform stays owned by CSS and an
+     inline style can't clobber it. Position isn't transitioned — the card
+     should track the cursor exactly, not lag behind it. */
+  transform: translate(var(--x, -400px), var(--y, -400px));
+  transition: opacity 0.16s var(--ease);
+}
+.project-preview.on { opacity: 1; }
 
 .tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .tag {
@@ -396,6 +440,64 @@ main { position: relative; }
 .gallery figcaption {
   font-family: var(--mono); font-size: 10px;
   color: var(--ink-3); margin-top: 5px; letter-spacing: 0.03em;
+}
+
+/* ============================================================
+   Project page  (/projects/<slug>/)
+   ============================================================ */
+.case { padding: var(--s-7) 0 var(--s-8); }
+
+.case-back {
+  display: inline-flex; align-items: center; gap: var(--s-2);
+  font-family: var(--mono); font-size: var(--t-xs);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-3); text-decoration: none; margin-bottom: var(--s-6);
+  transition: color var(--dur) var(--ease);
+}
+.case-back:hover { color: var(--trace); }
+.case-back .icon { width: 14px; height: 14px; }
+
+.case-eyebrow {
+  font-family: var(--mono); font-size: var(--t-xs);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--trace); margin: 0 0 var(--s-3);
+}
+.case h1 {
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(2.1rem, 5.5vw, 3.2rem); line-height: 1.05;
+  letter-spacing: -0.035em; margin: 0 0 var(--s-3); text-wrap: balance;
+}
+.case-tagline {
+  font-size: var(--t-lg); color: var(--ink-2);
+  max-width: 34em; margin: 0 0 var(--s-4); line-height: 1.5;
+}
+.case-badge { margin: 0 0 var(--s-6); font-size: var(--t-sm); }
+
+.case-shot { margin: 0 0 var(--s-7); }
+.case-shot img {
+  width: 100%; height: auto; display: block;
+  border: 1px solid var(--rule); border-radius: 3px;
+  background: var(--paper-raise);
+}
+
+.case-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) 220px;
+  gap: var(--s-7); align-items: start; margin-bottom: var(--s-7);
+}
+.case-body p { margin: 0 0 var(--s-4); color: var(--ink-2); max-width: 62ch; }
+.case-body p:first-child { color: var(--ink); font-size: 1.06rem; }
+
+.case-meta { display: flex; flex-direction: column; gap: var(--s-5); }
+.case-meta h2 {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--trace); margin: 0 0 var(--s-2);
+}
+.case-meta p { margin: 0; font-size: var(--t-md); color: var(--ink-2); }
+
+@media (max-width: 720px) {
+  .case { padding: var(--s-6) 0 var(--s-7); }
+  .case-grid { grid-template-columns: 1fr; gap: var(--s-5); }
 }
 
 /* ============================================================
@@ -440,8 +542,9 @@ main { position: relative; }
   .about { grid-template-columns: 1fr; gap: var(--s-4); }
   .about-photo { max-width: 170px; }
   .row { grid-template-columns: 1fr; gap: var(--s-1); }
-  .project { grid-template-columns: 1fr; }
-  .project-go { display: none; }
+  /* Projects keep their two columns: stacked, the icons drift closer to the
+     next project's title than to their own and read as belonging to it. */
+  .project { gap: var(--s-4); }
   .gallery { grid-template-columns: repeat(2, 1fr); }
   /* Buttons stay content-sized: a stretched button stretches its brush
      swipe too, leaving ink trailing well past the words. */

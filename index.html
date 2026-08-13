@@ -161,11 +161,14 @@
       <h2>Selected work <span class="aside">— 4 of 6</span></h2>
 
       <!-- ── PROJECT ──────────────────────────────────────────
-           Copy this block to add one. Drop the .tag--win span
-           if there's no award.                                 -->
-      <a class="project" href="https://waivelegal.vercel.app" target="_blank" rel="noopener">
+           Copy this block to add one.
+           data-preview  → image shown on hover (optional)
+           .project-title → the project's own page
+           Drop the .tag--win span if there's no award, and drop
+           either icon link if there's no repo / no live site.   -->
+      <article class="project" data-preview="img/previews/waive.jpg">
         <div>
-          <h3>Waive</h3>
+          <h3><a class="project-title" href="projects/waive/">Waive</a></h3>
           <p>A web app that turns intimidating government notices into plain language and a clear next step. Built with three teammates in 36 hours.</p>
           <div class="tags">
             <span class="tag tag--win">2nd place</span>
@@ -174,13 +177,16 @@
             <span class="tag">Hackathon</span>
           </div>
         </div>
-        <span class="project-go"><svg class="icon"><use href="#i-arrow"></use></svg></span>
-      </a>
+        <div class="project-links">
+          <a class="project-icon" href="https://github.com/skiller99668/Waive" target="_blank" rel="noopener" aria-label="Waive repository on GitHub"><svg class="icon icon--solid"><use href="#i-github"></use></svg></a>
+          <a class="project-icon" href="https://waivelegal.vercel.app" target="_blank" rel="noopener" aria-label="Waive live site"><svg class="icon"><use href="#i-arrow"></use></svg></a>
+        </div>
+      </article>
       <!-- ── /PROJECT ────────────────────────────────────────- -->
 
-      <a class="project" href="https://sublyrealtor.vercel.app" target="_blank" rel="noopener">
+      <article class="project" data-preview="img/previews/subly.jpg">
         <div>
-          <h3>Subly</h3>
+          <h3><a class="project-title" href="projects/subly/">Subly</a></h3>
           <p>A sublease marketplace with map-based discovery, auth, and listing management — for students who move twice a year.</p>
           <div class="tags">
             <span class="tag">TypeScript</span>
@@ -188,12 +194,15 @@
             <span class="tag">Maps API</span>
           </div>
         </div>
-        <span class="project-go"><svg class="icon"><use href="#i-arrow"></use></svg></span>
-      </a>
+        <div class="project-links">
+          <a class="project-icon" href="https://github.com/skiller99668/Subly" target="_blank" rel="noopener" aria-label="Subly repository on GitHub"><svg class="icon icon--solid"><use href="#i-github"></use></svg></a>
+          <a class="project-icon" href="https://sublyrealtor.vercel.app" target="_blank" rel="noopener" aria-label="Subly live site"><svg class="icon"><use href="#i-arrow"></use></svg></a>
+        </div>
+      </article>
 
-      <a class="project" href="https://github.com/skiller99668/AlarmClock" target="_blank" rel="noopener">
+      <article class="project" data-preview="img/previews/alarm-clock.jpg">
         <div>
-          <h3>Alarm clock, from scratch</h3>
+          <h3><a class="project-title" href="projects/alarm-clock/">Alarm clock, from scratch</a></h3>
           <p>An ESP-32 alarm clock — simulated in Wokwi, then soldered. Firmware, enclosure, and a snooze button that actually feels good to press.</p>
           <div class="tags">
             <span class="tag">C++</span>
@@ -201,12 +210,14 @@
             <span class="tag">PlatformIO</span>
           </div>
         </div>
-        <span class="project-go"><svg class="icon"><use href="#i-arrow"></use></svg></span>
-      </a>
+        <div class="project-links">
+          <a class="project-icon" href="https://github.com/skiller99668/AlarmClock" target="_blank" rel="noopener" aria-label="Alarm clock repository on GitHub"><svg class="icon icon--solid"><use href="#i-github"></use></svg></a>
+        </div>
+      </article>
 
-      <a class="project" href="https://github.com/skiller99668/SnapTeX" target="_blank" rel="noopener">
+      <article class="project" data-preview="img/previews/snaptex.jpg">
         <div>
-          <h3>SnapTeX</h3>
+          <h3><a class="project-title" href="projects/snaptex/">SnapTeX</a></h3>
           <p>A Chrome extension that screenshots scrolling pages and converts LaTeX into readable Unicode — including the malformed kind.</p>
           <div class="tags">
             <span class="tag">JavaScript</span>
@@ -214,8 +225,10 @@
             <span class="tag">RegEx</span>
           </div>
         </div>
-        <span class="project-go"><svg class="icon"><use href="#i-arrow"></use></svg></span>
-      </a>
+        <div class="project-links">
+          <a class="project-icon" href="https://github.com/skiller99668/SnapTeX" target="_blank" rel="noopener" aria-label="SnapTeX repository on GitHub"><svg class="icon icon--solid"><use href="#i-github"></use></svg></a>
+        </div>
+      </article>
     </div>
   </section>
 

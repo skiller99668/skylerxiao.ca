@@ -125,11 +125,17 @@
       Drop <code>.tag--win</code> when there&rsquo;s no award, and drop either icon when there&rsquo;s no
       repo or no live site.
     </p>
+    <p class="cmp-note">
+      <code>--brush</code> on the row sets the marker colour, which the title&rsquo;s
+      <code>.mark</code> inherits. Named tokens exist for the current four; a new project can use
+      any hex directly &mdash; <code>style="--brush: #A8EBCF"</code>. Pick something light: the
+      marker sits <em>behind</em> dark text, so a saturated colour will fail contrast.
+    </p>
     <div class="cmp-grid">
       <div class="demo">
-        <article class="project" style="border-top:0" data-preview="img/previews/subly.jpg">
+        <article class="project" style="border-top:0;--brush:var(--brush-subly)" data-preview="img/previews/subly.jpg">
           <div>
-            <h3><a class="project-title" href="#">Project name</a></h3>
+            <h3><a class="project-title" href="#"><span class="mark">Project name</span></a></h3>
             <p>One or two sentences on what it does and who it&rsquo;s for.</p>
             <div class="tags">
               <span class="tag tag--win">2nd place</span>
@@ -144,11 +150,14 @@
         </article>
       </div>
 <pre>&lt;<span class="t">article</span> <span class="a">class</span>=<span class="a">"project"</span>
+         <span class="a">style</span>=<span class="a">"--brush: var(--brush-subly)"</span>
          <span class="a">data-preview</span>=<span class="a">"img/previews/slug.jpg"</span>&gt;
   &lt;<span class="t">div</span>&gt;
     &lt;<span class="t">h3</span>&gt;
       &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-title"</span>
-         <span class="a">href</span>=<span class="a">"projects/slug/"</span>&gt;Project name&lt;/<span class="t">a</span>&gt;
+         <span class="a">href</span>=<span class="a">"projects/slug/"</span>&gt;
+        &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"mark"</span>&gt;Project name&lt;/<span class="t">span</span>&gt;
+      &lt;/<span class="t">a</span>&gt;
     &lt;/<span class="t">h3</span>&gt;
     &lt;<span class="t">p</span>&gt;One or two sentences.&lt;/<span class="t">p</span>&gt;
     &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"tags"</span>&gt;
@@ -393,6 +402,10 @@
           <div class="sw"><i style="background:#6A7079"></i><span>Ink 3<code>--ink-3</code></span></div>
           <div class="sw"><i style="background:#0E7490"></i><span>Trace<code>--trace</code></span></div>
           <div class="sw"><i style="background:#DDF2B2"></i><span>Marker<code>--wash</code></span></div>
+          <div class="sw"><i style="background:#A8EBCF"></i><span>Waive<code>--brush-waive</code></span></div>
+          <div class="sw"><i style="background:#B3D0FA"></i><span>Subly<code>--brush-subly</code></span></div>
+          <div class="sw"><i style="background:#FAD79B"></i><span>Alarm clock<code>--brush-clock</code></span></div>
+          <div class="sw"><i style="background:#D9C7F5"></i><span>SnapTeX<code>--brush-tex</code></span></div>
           <div class="sw"><i style="background:#DDE2DE"></i><span>Rule<code>--rule</code></span></div>
           <div class="sw"><i style="background:#E7ECE8"></i><span>Grid<code>--grid</code></span></div>
         </div>

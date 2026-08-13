@@ -49,14 +49,29 @@
   --dur: 0.22s;
 
   /* ── Brush swipes ───────────────────────────────────────
-     The signature mark. Two passes per colour: a full swipe,
-     and a shorter second pass that fades in on hover.
-     Edges are intentionally uneven — that irregularity is the
-     whole point, so don't "tidy" these paths.                */
-  --swipe-wash:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath fill='%23DDF2B2' d='M3 24C10 12 22 9 40 8 78 5 116 14 150 8c20-3.5 36 2 47-4L192 48c-14 9-36 2-58 4.5-33 3.7-72-3-99 1-14 2-24 1-26 3.5Z'/%3E%3C/svg%3E");
-  --swipe-wash-2:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath fill='%23DDF2B2' d='M14 20C40 16 70 22 100 17 128 12.5 156 20 186 15L184 42c-26 5-58-1-88 2.5-26 3-52-1-70 2.5Z'/%3E%3C/svg%3E");
-  --swipe-trace:   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath fill='%230E7490' d='M3 24C10 12 22 9 40 8 78 5 116 14 150 8c20-3.5 36 2 47-4L192 48c-14 9-36 2-58 4.5-33 3.7-72-3-99 1-14 2-24 1-26 3.5Z'/%3E%3C/svg%3E");
-  --swipe-trace-2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath fill='%230A5C73' d='M14 20C40 16 70 22 100 17 128 12.5 156 20 186 15L184 42c-26 5-58-1-88 2.5-26 3-52-1-70 2.5Z'/%3E%3C/svg%3E");
+     The signature mark. These are *shapes*, not colours: they
+     are used as masks, so the colour comes from --brush and any
+     element can carry any colour with one variable.
+
+     Two passes — a full swipe, and a shorter second pass that
+     fades in on hover, the way going over a line twice does.
+     Edges are intentionally uneven; that irregularity is the
+     whole point, so don't "tidy" these paths.                 */
+  --swipe-1: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath d='M3 24C10 12 22 9 40 8 78 5 116 14 150 8c20-3.5 36 2 47-4L192 48c-14 9-36 2-58 4.5-33 3.7-72-3-99 1-14 2-24 1-26 3.5Z'/%3E%3C/svg%3E");
+  --swipe-2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath d='M14 20C40 16 70 22 100 17 128 12.5 156 20 186 15L184 42c-26 5-58-1-88 2.5-26 3-52-1-70 2.5Z'/%3E%3C/svg%3E");
+
+  --brush: var(--wash);   /* default marker colour; override per element */
+
+  /* ── Per-project marker colours ─────────────────────────
+     Sampled from each project's own interface where one exists
+     (Waive #2DA980, Subly #2563EB), then lightened to
+     highlighter strength so dark text stays readable on top.
+     The clock and SnapTeX have no site, so they take a colour
+     from their subject: LED-glow amber, syntax violet.        */
+  --brush-waive: #A8EBCF;   /* from Waive's emerald   */
+  --brush-subly: #B3D0FA;   /* from Subly's cobalt    */
+  --brush-clock: #FAD79B;   /* LED-display amber      */
+  --brush-tex:   #D9C7F5;   /* syntax-highlight violet */
 }
 
 /* ============================================================
@@ -162,27 +177,34 @@ img { max-width: 100%; height: auto; }
   position: relative;
   isolation: isolate;          /* keeps the z-index:-1 ink inside */
 }
-.brush-mark::before, .btn::before, .mark::before,
-.brush-mark::after,  .btn::after,  .mark::after {
-  content: "";
-  position: absolute;
-  inset: 0 -5px;               /* ink runs slightly past the text, as marker does */
-  z-index: -1; pointer-events: none;
-  mix-blend-mode: multiply;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-}
-.brush-mark::before, .btn::before, .mark::before { background-image: var(--brush-1); }
-.brush-mark::after,  .btn::after,  .mark::after {
-  background-image: var(--brush-2);
-  opacity: 0; transition: opacity var(--dur) var(--ease);
+
+/* The ink itself. Masked, so --brush alone decides the colour.
+   Guarded by @supports: without mask support these would paint as
+   plain rectangles, so they simply don't render instead. */
+@supports ((-webkit-mask-image: url("#m")) or (mask-image: url("#m"))) {
+  .brush-mark::before, .btn::before, .mark::before,
+  .brush-mark::after,  .btn::after,  .mark::after {
+    content: "";
+    position: absolute;
+    inset: 0 -5px;             /* ink runs slightly past the text, as marker does */
+    z-index: -1; pointer-events: none;
+    mix-blend-mode: multiply;
+    background-color: var(--brush);
+  }
+  .brush-mark::before, .btn::before, .mark::before {
+    -webkit-mask: var(--swipe-1) center / 100% 100% no-repeat;
+            mask: var(--swipe-1) center / 100% 100% no-repeat;
+  }
+  /* Second pass — overlapping ink multiplies darker, as real marker does. */
+  .brush-mark::after, .btn::after, .mark::after {
+    -webkit-mask: var(--swipe-2) center / 100% 100% no-repeat;
+            mask: var(--swipe-2) center / 100% 100% no-repeat;
+    opacity: 0; transition: opacity var(--dur) var(--ease);
+  }
 }
 
 /* Highlighted words in running text */
 .mark {
-  --brush-1: var(--swipe-wash);
-  --brush-2: var(--swipe-wash-2);
   display: inline-block;
   padding: 0 4px;
   color: inherit;
@@ -195,8 +217,6 @@ img { max-width: 100%; height: auto; }
    .btn--quiet    tertiary:  a swipe under the words only
    ============================================================ */
 .btn {
-  --brush-1: var(--swipe-wash);
-  --brush-2: var(--swipe-wash-2);
   display: inline-flex; align-items: center; gap: var(--s-2);
   padding: 10px 20px;
   font-family: var(--mono); font-size: 11.5px;
@@ -210,8 +230,7 @@ img { max-width: 100%; height: auto; }
 .btn:hover::after { opacity: 1; }
 
 .btn--primary {
-  --brush-1: var(--swipe-trace);
-  --brush-2: var(--swipe-trace-2);
+  --brush: var(--trace);
   color: var(--on-trace);
 }
 
@@ -359,14 +378,16 @@ main { position: relative; }
   font-family: var(--display); font-weight: 600; font-size: var(--t-lg);
   margin: 0 0 var(--s-1); letter-spacing: -0.015em;
 }
-.project-title {
-  color: var(--ink); text-decoration: none;
-  transition: color var(--dur) var(--ease);
-}
+/* The title marks itself with a nested .mark, which keeps the link
+   itself unpositioned — its ::after must resolve against .project to
+   stretch over the whole row, and a positioned link would trap it. */
+.project-title { color: var(--ink); text-decoration: none; }
 .project-title::after {          /* stretches the hit area over the row */
   content: ""; position: absolute; inset: 0; z-index: 1;
 }
-.project:hover .project-title { color: var(--trace); }
+.project .mark::before { opacity: 0.8; transition: opacity var(--dur) var(--ease); }
+.project:hover .mark::before { opacity: 1; }
+.project:hover .mark::after { opacity: 1; }
 .project p { margin: 0 0 var(--s-2); color: var(--ink-2); font-size: var(--t-md); max-width: 46em; }
 
 /* Icon links — above the stretched title link so they stay clickable */
@@ -499,6 +520,9 @@ main { position: relative; }
   .case { padding: var(--s-6) 0 var(--s-7); }
   .case-grid { grid-template-columns: 1fr; gap: var(--s-5); }
 }
+
+/* Big display type needs a little more ink around it. */
+.case h1 .mark { padding: 0 10px; }
 
 /* ============================================================
    Contact & footer

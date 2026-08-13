@@ -1,116 +1,85 @@
 /* Disarm the reveal failsafe in index.html — this file loaded, so the
-   scroll-triggered animations below will run. */
+   scroll-triggered animations below will run. Must stay the first
+   statement: if it never executes, the page falls back to showing
+   everything, which is the safe direction but loses the animation. */
 clearTimeout(window.revealFailsafe);
 
-/* ============================================
-   Sticky Nav — Active Link, Sliding Indicator & Scroll Shadow
-   ============================================ */
+/* ============================================================
+   Nav — active link tracking
+
+   Both features below derive their targets from `.section`
+   elements, so adding a section to index.html needs no change
+   here beyond a matching nav link.
+   ============================================================ */
 (function initNav() {
-  const nav = document.querySelector('.nav');
-  const navInner = document.querySelector('.nav-inner');
-  const sections = document.querySelectorAll('.section');
-  const navLinks = document.querySelectorAll('.nav-link');
-  const indicator = document.querySelector('.nav-indicator');
-  let navTop = 0;
+  var sections = document.querySelectorAll('.section');
+  var links = document.querySelectorAll('.nav-link');
+  if (!sections.length || !links.length) return;
 
-  function updateNavTop() {
-    if (nav) navTop = nav.offsetTop;
-  }
-
-  function updateNav() {
-    // Add shadow when nav is sticky
-    if (nav) {
-      nav.classList.toggle('nav-scrolled', window.scrollY > navTop);
-    }
-
-    // Determine active section
-    let currentId = '';
-    const scrollPos = window.scrollY + 140;
-
-    sections.forEach((section) => {
-      const top = section.offsetTop;
-      const bottom = top + section.offsetHeight;
-      if (scrollPos >= top && scrollPos < bottom) {
-        currentId = section.getAttribute('id');
-      }
-    });
-
-    // Fallback: if no section is active
-    if (!currentId && sections.length > 0) {
-      const first = sections[0];
-      const last = sections[sections.length - 1];
-      const secondLast = sections.length > 1 ? sections[sections.length - 2] : null;
-
-      // At the very top — default to first section
-      if (window.scrollY < first.offsetTop) {
-        currentId = first.getAttribute('id');
-      }
-      // Past the second-to-last — activate last section (contact)
-      else if (secondLast && window.scrollY + 140 >= secondLast.offsetTop + secondLast.offsetHeight) {
-        currentId = last.getAttribute('id');
-      }
-    }
-
-    navLinks.forEach((link) => {
-      link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`);
-    });
-
-    // Move the sliding indicator relative to nav-inner
-    const activeLink = document.querySelector('.nav-link.active');
-    if (activeLink && indicator && navInner) {
-      const innerRect = navInner.getBoundingClientRect();
-      const linkRect = activeLink.getBoundingClientRect();
-      indicator.style.transform = `translateX(${linkRect.left - innerRect.left}px)`;
-      indicator.style.width = `${linkRect.width}px`;
-    }
-  }
-
-  // Throttled scroll handler
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        updateNav();
-        ticking = false;
-      });
-      ticking = true;
-    }
+  var linkFor = {};
+  links.forEach(function (link) {
+    linkFor[link.getAttribute('href').slice(1)] = link;
   });
 
-  // Run on load and resize
-  window.addEventListener('load', () => {
-    updateNavTop();
-    updateNav();
+  function setActive(id) {
+    links.forEach(function (link) {
+      link.classList.toggle('active', link === linkFor[id]);
+    });
+  }
+
+  if (!('IntersectionObserver' in window)) return;
+
+  /* Track which sections are on screen and light up the topmost one.
+     A Set keeps this correct when several are visible at once — the
+     old approach read offsetTop for every section on every frame. */
+  var onScreen = new Set();
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) onScreen.add(entry.target);
+      else onScreen.delete(entry.target);
+    });
+
+    var topmost = null;
+    onScreen.forEach(function (section) {
+      if (!topmost || section.offsetTop < topmost.offsetTop) topmost = section;
+    });
+    if (topmost) setActive(topmost.id);
+  }, {
+    // Only count a section once it reaches the upper part of the viewport.
+    rootMargin: '-74px 0px -55% 0px',
+    threshold: 0
   });
-  window.addEventListener('resize', updateNavTop);
-  setTimeout(() => {
-    updateNavTop();
-    updateNav();
-  }, 100);
+
+  sections.forEach(function (section) { observer.observe(section); });
+
+  // Clicking a nav link should light it immediately, ahead of the scroll.
+  links.forEach(function (link) {
+    link.addEventListener('click', function () {
+      setActive(link.getAttribute('href').slice(1));
+    });
+  });
 })();
 
-/* ============================================
-   Scroll-Triggered Fade-In Animations
-   ============================================ */
-(function initScrollReveal() {
-  const fadeElements = document.querySelectorAll('.fade-in');
+/* ============================================================
+   Scroll-triggered reveal
+   ============================================================ */
+(function initReveal() {
+  var items = document.querySelectorAll('.fade-in');
+  if (!items.length) return;
 
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    fadeElements.forEach((el) => observer.observe(el));
-  } else {
-    // Fallback: show everything immediately
-    fadeElements.forEach((el) => el.classList.add('visible'));
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('visible'); });
+    return;
   }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  items.forEach(function (el) { observer.observe(el); });
 })();

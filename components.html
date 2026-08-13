@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Components — skylerxiao.ca</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#FBFBF9">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .doc { max-width: 1180px; margin: 0 auto; padding: 0 28px 90px; }
+    .doc-head { padding: 60px 0 34px; }
+    .doc-head h1 {
+      font-family: var(--display); font-weight: 800; font-size: 2.2rem;
+      letter-spacing: -0.03em; margin: 0 0 12px;
+    }
+    .doc-head p { color: var(--ink-2); max-width: 62ch; margin: 0 0 10px; }
+
+    .cmp { border-top: 1px solid var(--rule); padding: 30px 0; }
+    .cmp-title {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--trace); margin: 0 0 4px;
+    }
+    .cmp-note { color: var(--ink-2); font-size: var(--t-md); margin: 0 0 18px; max-width: 68ch; }
+
+    .cmp-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 22px; align-items: start; }
+    .demo {
+      background: var(--paper-raise); border: 1px solid var(--rule);
+      border-radius: var(--radius); padding: 20px 22px; min-width: 0;
+    }
+    pre {
+      margin: 0; background: #14161A; color: #D7DBE0;
+      border-radius: var(--radius); padding: 16px 18px;
+      overflow-x: auto; font-family: var(--mono); font-size: 12px; line-height: 1.65;
+    }
+    pre .c { color: #7C8698; }
+    pre .t { color: #7FD1E8; }
+    pre .a { color: #C3E88D; }
+
+    .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; }
+    .toc a {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+      text-transform: uppercase; text-decoration: none; color: var(--ink-2);
+      border: 1px solid var(--rule); border-radius: 2px; padding: 4px 9px;
+      background: var(--paper-raise);
+    }
+    .toc a:hover { border-color: var(--trace); color: var(--trace); }
+
+    .swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 12px; }
+    .sw { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+    .sw i {
+      width: 26px; height: 26px; border-radius: 4px;
+      border: 1px solid rgba(0,0,0,.12); flex: none;
+    }
+    .sw code { font-family: var(--mono); font-size: 11px; color: var(--ink-3); display: block; }
+    @media (max-width: 860px) { .cmp-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="doc">
+
+  <header class="doc-head">
+    <h1>Components</h1>
+    <p>Every block used on the site, next to the exact markup. To add content, copy a block, paste it into <code>index.html</code>, and overwrite the words. Nothing here needs new CSS.</p>
+    <p>Icons come from the sprite at the top of <code>index.html</code>&rsquo;s <code>&lt;body&gt;</code>. Colours and spacing come from the tokens in <code>style.css</code>.</p>
+    <nav class="toc">
+      <a href="#c-section">Section</a>
+      <a href="#c-project">Project</a>
+      <a href="#c-row">Row</a>
+      <a href="#c-skills">Skill group</a>
+      <a href="#c-photo">Photo</a>
+      <a href="#c-stat">Stat</a>
+      <a href="#c-btn">Buttons</a>
+      <a href="#c-mark">Highlight</a>
+      <a href="#c-tag">Tags</a>
+      <a href="#c-icons">Icons</a>
+      <a href="#c-tokens">Tokens</a>
+    </nav>
+  </header>
+
+  <!-- SECTION -->
+  <section class="cmp" id="c-section">
+    <p class="cmp-title">Section shell</p>
+    <p class="cmp-note">The wrapper every section uses. The <code>.node</code> span draws the diamond and the routing line into the title &mdash; it&rsquo;s decorative, so it carries <code>aria-hidden</code>. Give the section an <code>id</code> and add a matching nav link; the scroll-spy picks it up automatically.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div style="position:relative;padding-left:76px">
+          <span class="node" aria-hidden="true" style="left:0"></span>
+          <h2 style="font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:0">Section name <span class="aside">&mdash; optional aside</span></h2>
+        </div>
+      </div>
+<pre><span class="c">&lt;!-- ═══ SECTION NAME ═══ --&gt;</span>
+&lt;<span class="t">section</span> <span class="a">class</span>=<span class="a">"section fade-in"</span> <span class="a">id</span>=<span class="a">"slug"</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"wrap"</span>&gt;
+    &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"node"</span> <span class="a">aria-hidden</span>=<span class="a">"true"</span>&gt;&lt;/<span class="t">span</span>&gt;
+    &lt;<span class="t">h2</span>&gt;Section name &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"aside"</span>&gt;&mdash; optional&lt;/<span class="t">span</span>&gt;&lt;/<span class="t">h2</span>&gt;
+
+    <span class="c">&lt;!-- content --&gt;</span>
+
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">section</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- PROJECT -->
+  <section class="cmp" id="c-project">
+    <p class="cmp-title">Project</p>
+    <p class="cmp-note">A whole row is the link. Drop the <code>.tag--win</code> span when there&rsquo;s no award; drop <code>target</code>/<code>rel</code> for internal links.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <a class="project" href="#" style="border-top:0">
+          <div>
+            <h3>Project name</h3>
+            <p>One or two sentences on what it does and who it&rsquo;s for.</p>
+            <div class="tags">
+              <span class="tag tag--win">2nd place</span>
+              <span class="tag">Next.js</span>
+              <span class="tag">Supabase</span>
+            </div>
+          </div>
+          <span class="project-go"><svg class="icon" viewBox="0 0 24 24"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="9,6 18,6 18,15"/></svg></span>
+        </a>
+      </div>
+<pre>&lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project"</span> <span class="a">href</span>=<span class="a">"URL"</span> <span class="a">target</span>=<span class="a">"_blank"</span> <span class="a">rel</span>=<span class="a">"noopener"</span>&gt;
+  &lt;<span class="t">div</span>&gt;
+    &lt;<span class="t">h3</span>&gt;Project name&lt;/<span class="t">h3</span>&gt;
+    &lt;<span class="t">p</span>&gt;One or two sentences.&lt;/<span class="t">p</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"tags"</span>&gt;
+      &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tag tag--win"</span>&gt;2nd place&lt;/<span class="t">span</span>&gt;
+      &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tag"</span>&gt;Next.js&lt;/<span class="t">span</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"project-go"</span>&gt;
+    &lt;<span class="t">svg</span> <span class="a">class</span>=<span class="a">"icon"</span>&gt;&lt;<span class="t">use</span> <span class="a">href</span>=<span class="a">"#i-arrow"</span>&gt;&lt;/<span class="t">use</span>&gt;&lt;/<span class="t">svg</span>&gt;
+  &lt;/<span class="t">span</span>&gt;
+&lt;/<span class="t">a</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- ROW -->
+  <section class="cmp" id="c-row">
+    <p class="cmp-title">Row</p>
+    <p class="cmp-note">Used by Experience, Education and Awards. The left column takes a date range, a year, or a word like &ldquo;Certification&rdquo;.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div class="row" style="border-top:0">
+          <div class="row-when">2025 &mdash; now</div>
+          <div class="row-what">
+            <h3>Role or title <span class="org">&middot; Organisation</span></h3>
+            <p>One sentence on what you did and what changed because of it.</p>
+          </div>
+        </div>
+      </div>
+<pre>&lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"row"</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"row-when"</span>&gt;2025 &mdash; now&lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"row-what"</span>&gt;
+    &lt;<span class="t">h3</span>&gt;Role &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"org"</span>&gt;&middot; Org&lt;/<span class="t">span</span>&gt;&lt;/<span class="t">h3</span>&gt;
+    &lt;<span class="t">p</span>&gt;What you did.&lt;/<span class="t">p</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">div</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="cmp" id="c-skills">
+    <p class="cmp-title">Skill group</p>
+    <p class="cmp-note">Columns wrap automatically &mdash; add as many groups as you like without touching the CSS.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div class="skills">
+          <div class="skill-group">
+            <h3>Languages</h3>
+            <ul><li>TypeScript</li><li>Python</li><li>C / C++</li></ul>
+          </div>
+          <div class="skill-group">
+            <h3>Hardware</h3>
+            <ul><li>ESP-32</li><li>PlatformIO</li><li>Soldering</li></ul>
+          </div>
+        </div>
+      </div>
+<pre>&lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"skill-group"</span>&gt;
+  &lt;<span class="t">h3</span>&gt;Languages&lt;/<span class="t">h3</span>&gt;
+  &lt;<span class="t">ul</span>&gt;
+    &lt;<span class="t">li</span>&gt;TypeScript&lt;/<span class="t">li</span>&gt;
+    &lt;<span class="t">li</span>&gt;Python&lt;/<span class="t">li</span>&gt;
+  &lt;/<span class="t">ul</span>&gt;
+&lt;/<span class="t">div</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- PHOTO -->
+  <section class="cmp" id="c-photo">
+    <p class="cmp-title">Photo</p>
+    <p class="cmp-note">Swap the file in <code>/img</code> and keep the same filename &mdash; nothing else changes. Keep <code>width</code>/<code>height</code> matching the real file so the page doesn&rsquo;t jump while images load, and leave <code>alt</code> empty for purely decorative shots.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div class="gallery" style="grid-template-columns:repeat(2,1fr)">
+          <figure><img src="img/travel-02.jpg" alt="" width="1200" height="800" loading="lazy"><figcaption>Banff, AB</figcaption></figure>
+          <figure><img src="img/travel-05.jpg" alt="" width="1200" height="800" loading="lazy"><figcaption>Algonquin, ON</figcaption></figure>
+        </div>
+      </div>
+<pre>&lt;<span class="t">figure</span>&gt;
+  &lt;<span class="t">img</span> <span class="a">src</span>=<span class="a">"img/travel-01.jpg"</span> <span class="a">alt</span>=<span class="a">""</span>
+       <span class="a">width</span>=<span class="a">"1200"</span> <span class="a">height</span>=<span class="a">"800"</span> <span class="a">loading</span>=<span class="a">"lazy"</span>&gt;
+  &lt;<span class="t">figcaption</span>&gt;Moab, UT&lt;/<span class="t">figcaption</span>&gt;
+&lt;/<span class="t">figure</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- STAT -->
+  <section class="cmp" id="c-stat">
+    <p class="cmp-title">Stat</p>
+    <p class="cmp-note">The hero rail. Four reads best; five starts to wrap awkwardly on a laptop.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div class="stats">
+          <div class="stat"><b>4.0</b><span>GPA</span></div>
+          <div class="stat"><b>6</b><span>Projects shipped</span></div>
+          <div class="stat"><b>2028</b><span>Expected grad</span></div>
+        </div>
+      </div>
+<pre>&lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"stat"</span>&gt;
+  &lt;<span class="t">b</span>&gt;4.0&lt;/<span class="t">b</span>&gt;
+  &lt;<span class="t">span</span>&gt;GPA&lt;/<span class="t">span</span>&gt;
+&lt;/<span class="t">div</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- BUTTONS -->
+  <section class="cmp" id="c-btn">
+    <p class="cmp-title">Buttons</p>
+    <p class="cmp-note">Marker swipes, not boxes. The stroke is a background image on the element, so a button is one tag &mdash; no wrapper spans. Hovering lays down a second, shorter pass. Use <code>--primary</code> once per section at most.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#">Primary</a>
+          <a class="btn" href="#">Secondary</a>
+          <a class="btn btn--quiet" href="#">Quiet</a>
+        </div>
+      </div>
+<pre>&lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"btn btn--primary"</span> <span class="a">href</span>=<span class="a">"#"</span>&gt;
+  &lt;<span class="t">svg</span> <span class="a">class</span>=<span class="a">"icon"</span>&gt;&lt;<span class="t">use</span> <span class="a">href</span>=<span class="a">"#i-mail"</span>&gt;&lt;/<span class="t">use</span>&gt;&lt;/<span class="t">svg</span>&gt;Email me
+&lt;/<span class="t">a</span>&gt;
+
+&lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"btn"</span> <span class="a">href</span>=<span class="a">"#"</span>&gt;Secondary&lt;/<span class="t">a</span>&gt;
+&lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"btn btn--quiet"</span> <span class="a">href</span>=<span class="a">"#"</span>&gt;Quiet&lt;/<span class="t">a</span>&gt;
+
+<span class="c">&lt;!-- group them --&gt;</span>
+&lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"btn-row"</span>&gt; &hellip; &lt;/<span class="t">div</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- MARK -->
+  <section class="cmp" id="c-mark">
+    <p class="cmp-title">Highlight</p>
+    <p class="cmp-note">The same marker, used inline. One per paragraph at most &mdash; it stops meaning anything if everything is highlighted.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <p style="margin:0;font-size:var(--t-lg)">I build things that sit between <span class="mark">software and hardware</span>.</p>
+      </div>
+<pre>&lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"mark"</span>&gt;software and hardware&lt;/<span class="t">span</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- TAGS -->
+  <section class="cmp" id="c-tag">
+    <p class="cmp-title">Tags</p>
+    <p class="cmp-note"><code>.tag--win</code> picks up the accent &mdash; use it for awards and placings only.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div class="tags">
+          <span class="tag tag--win">2nd place</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">ESP-32</span>
+          <span class="tag">Hackathon</span>
+        </div>
+      </div>
+<pre>&lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"tags"</span>&gt;
+  &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tag tag--win"</span>&gt;2nd place&lt;/<span class="t">span</span>&gt;
+  &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tag"</span>&gt;TypeScript&lt;/<span class="t">span</span>&gt;
+&lt;/<span class="t">div</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- ICONS -->
+  <section class="cmp" id="c-icons">
+    <p class="cmp-title">Icons</p>
+    <p class="cmp-note">All five live in the sprite at the top of <code>index.html</code>. Add one by pasting a <code>&lt;symbol id="i-name"&gt;</code> beside them. Use <code>.icon--solid</code> for filled logo marks like GitHub.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div style="display:flex;gap:24px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--ink-3);text-align:center">
+          <div><svg class="icon" style="width:22px;height:22px;color:var(--ink)" viewBox="0 0 24 24"><path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><polyline points="22,7 12,14 2,7"/></svg><br>i-mail</div>
+          <div><svg class="icon" style="width:22px;height:22px;color:var(--ink)" viewBox="0 0 24 24"><path d="M12 3v12"/><polyline points="7,10 12,15 17,10"/><path d="M3 20h18"/></svg><br>i-download</div>
+          <div><svg class="icon" style="width:22px;height:22px;color:var(--ink)" viewBox="0 0 24 24"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="9,6 18,6 18,15"/></svg><br>i-arrow</div>
+          <div><svg class="icon icon--solid" style="width:22px;height:22px;color:var(--ink)" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.7.8.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg><br>i-github</div>
+          <div><svg class="icon icon--solid" style="width:22px;height:22px;color:var(--ink)" viewBox="0 0 24 24"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg><br>i-linkedin</div>
+        </div>
+      </div>
+<pre>&lt;<span class="t">svg</span> <span class="a">class</span>=<span class="a">"icon"</span>&gt;&lt;<span class="t">use</span> <span class="a">href</span>=<span class="a">"#i-mail"</span>&gt;&lt;/<span class="t">use</span>&gt;&lt;/<span class="t">svg</span>&gt;
+
+<span class="c">&lt;!-- filled logo marks --&gt;</span>
+&lt;<span class="t">svg</span> <span class="a">class</span>=<span class="a">"icon icon--solid"</span>&gt;
+  &lt;<span class="t">use</span> <span class="a">href</span>=<span class="a">"#i-github"</span>&gt;&lt;/<span class="t">use</span>&gt;
+&lt;/<span class="t">svg</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- TOKENS -->
+  <section class="cmp" id="c-tokens">
+    <p class="cmp-title">Tokens</p>
+    <p class="cmp-note">Change these in <code>style.css</code> and the whole site follows. If you restyle, re-check text contrast &mdash; the current values are all AA or better on the paper ground.</p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div class="swatches">
+          <div class="sw"><i style="background:#FBFBF9"></i><span>Paper<code>--paper</code></span></div>
+          <div class="sw"><i style="background:#14161A"></i><span>Ink<code>--ink</code></span></div>
+          <div class="sw"><i style="background:#585F6B"></i><span>Ink 2<code>--ink-2</code></span></div>
+          <div class="sw"><i style="background:#6A7079"></i><span>Ink 3<code>--ink-3</code></span></div>
+          <div class="sw"><i style="background:#0E7490"></i><span>Trace<code>--trace</code></span></div>
+          <div class="sw"><i style="background:#DDF2B2"></i><span>Marker<code>--wash</code></span></div>
+          <div class="sw"><i style="background:#DDE2DE"></i><span>Rule<code>--rule</code></span></div>
+          <div class="sw"><i style="background:#E7ECE8"></i><span>Grid<code>--grid</code></span></div>
+        </div>
+      </div>
+<pre><span class="c">/* style.css */</span>
+<span class="a">--paper</span>: #FBFBF9;   <span class="c">/* page ground   */</span>
+<span class="a">--ink</span>:   #14161A;   <span class="c">/* body text     */</span>
+<span class="a">--trace</span>: #0E7490;   <span class="c">/* accent        */</span>
+<span class="a">--wash</span>:  #DDF2B2;   <span class="c">/* marker        */</span>
+
+<span class="c">/* type + space scales live here too */</span>
+<span class="a">--t-base</span>: 1rem;
+<span class="a">--s-5</span>: 24px;
+<span class="a">--gutter</span>: 76px;  <span class="c">/* trace rail    */</span></pre>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

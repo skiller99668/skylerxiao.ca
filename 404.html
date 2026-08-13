@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Page not found — Skyler Xiao</title>
   <meta name="description" content="That page doesn't exist.">
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#0f1117">
+  <meta name="theme-color" content="#FBFBF9">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -14,53 +14,37 @@
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <style>
     .notfound {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 24px;
-      gap: 4px;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: var(--s-8) var(--pad);
     }
     /* Two classes so this wins over the `.notfound p` colour rule below. */
     .notfound .notfound-code {
-      font-family: var(--font-display);
-      font-size: 4.5rem;
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: -0.04em;
-      color: var(--accent);
-      margin: 0;
+      font-family: var(--mono); font-size: 13px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--trace); margin: 0 0 var(--s-4);
     }
     .notfound h1 {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin: 12px 0 0;
+      font-family: var(--display); font-weight: 800;
+      font-size: clamp(1.9rem, 5vw, 2.6rem); letter-spacing: -0.03em;
+      line-height: 1.1; margin: 0 0 var(--s-3);
     }
     .notfound p {
-      color: var(--text-secondary);
-      margin: 8px 0 28px;
-      max-width: 420px;
-    }
-    @media (max-width: 640px) {
-      .notfound { padding: 56px 16px; }
-      .notfound-code { font-size: 3.2rem; }
-      .notfound h1 { font-size: 1.2rem; }
+      color: var(--ink-2); margin: 0 0 var(--s-6); max-width: 38ch;
     }
   </style>
 </head>
 <body>
   <main class="notfound">
-    <p class="notfound-code">404</p>
-    <h1>Page not found</h1>
-    <p>That page doesn't exist — it may have been moved or the link may be wrong.</p>
-    <a href="/" class="btn btn-primary btn-lg">Back home</a>
+    <p class="notfound-code">Error 404</p>
+    <h1>This page doesn't exist.</h1>
+    <p>It may have been moved, or the link that brought you here may be wrong.</p>
+    <a class="btn btn--primary" href="/">Back home</a>
   </main>
 </body>
 </html>

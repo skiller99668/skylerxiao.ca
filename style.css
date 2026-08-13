@@ -7,10 +7,11 @@
   --bg-elevated: #232736;
   --text: #e8eaed;
   --text-secondary: #9ca3b4;
-  --text-tertiary: #6b7385;
+  --text-tertiary: #7e879c;
   --link: #e8eaed;
   --border: #2e3242;
   --accent: #6fcaff;
+  --accent-ink: #0f1117;
   --accent-soft: #1a2d3d;
   --accent-glow: rgba(111, 202, 255, 0.15);
   --nav-bg: rgba(15, 17, 23, 0.85);
@@ -60,6 +61,18 @@ a {
 a:hover {
   color: var(--accent);
   text-decoration-color: var(--accent);
+}
+
+/* Keyboard focus. Every interactive element here suppresses its underline,
+   so without this there is no visible focus target anywhere on the page. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.btn:focus-visible {
+  outline-offset: 3px;
 }
 
 /* ============================================
@@ -165,9 +178,10 @@ main {
   flex-shrink: 0;
 }
 
+/* Dark ink on the accent: 11.2:1. White on this blue was 1.8:1. */
 .btn-primary {
   background: var(--accent);
-  color: #fff !important;
+  color: var(--accent-ink) !important;
   border-color: var(--accent);
   box-shadow: 0 2px 8px var(--accent-glow);
 }
@@ -177,7 +191,7 @@ main {
   border-color: #5ab8e8;
   box-shadow: 0 4px 16px var(--accent-glow);
   transform: translateY(-1px);
-  color: #fff !important;
+  color: var(--accent-ink) !important;
   text-decoration: none;
 }
 
@@ -356,6 +370,11 @@ main {
   text-decoration: none;
 }
 
+/* Organisation name when there is no URL to link to. */
+.card-org {
+  color: var(--text);
+}
+
 .card-desc {
   margin: 0 0 14px;
   color: var(--text-secondary);
@@ -408,7 +427,7 @@ main {
 
 .card:hover .card-icon {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
   box-shadow: 0 4px 12px var(--accent-glow);
 }
 
@@ -499,7 +518,7 @@ main {
 
 .award-card:hover .award-icon {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
   box-shadow: 0 4px 12px var(--accent-glow);
 }
 
@@ -594,13 +613,16 @@ footer {
 /* ============================================
    Animations
    ============================================ */
-.fade-in {
+/* Scoped to .js, which index.html sets on <html> before first paint and
+   drops again if script.js never checks in — so a disabled or failed script
+   leaves the content visible instead of a blank page. */
+.js .fade-in {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.fade-in.visible {
+.js .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -618,7 +640,7 @@ footer {
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
 
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: var(--accent-ink); }
 
 /* ============================================
    Mobile (640px)
@@ -681,7 +703,7 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fade-in { opacity: 1; transform: none; transition: none; }
+  .js .fade-in { opacity: 1; transform: none; transition: none; }
   .card, .award-card, .contact-card { transition: border-color 0.2s ease; }
   .card:hover, .award-card:hover, .contact-card:hover { transform: none; }
   * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }

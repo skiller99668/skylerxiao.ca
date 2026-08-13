@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Skyler Xiao — Electrical Engineering student at McGill University.">
-  <title>Skyler Xiao</title>
+  <title>Skyler Xiao — Electrical Engineering @ McGill</title>
+  <meta name="description" content="Electrical Engineering student at McGill University building software, embedded systems, and data tools. Dean's List, 4.0 GPA.">
+  <meta name="author" content="Skyler Xiao">
+  <link rel="canonical" href="https://skylerxiao.ca/">
+  <meta name="theme-color" content="#0f1117">
+
+  <!-- Flag JS as available before first paint, so the reveal animations can
+       start hidden without risking a blank page. If script.js never runs
+       (blocked, failed, errored) it never disarms this timer, and the page
+       falls back to showing everything. -->
+  <script>
+    document.documentElement.className = 'js';
+    window.revealFailsafe = setTimeout(function () {
+      document.documentElement.className = 'no-js';
+    }, 4000);
+  </script>
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://skylerxiao.ca/">
+  <meta property="og:title" content="Skyler Xiao — Electrical Engineering @ McGill">
+  <meta property="og:description" content="Electrical Engineering student at McGill University building software, embedded systems, and data tools. Dean's List, 4.0 GPA.">
+  <meta property="og:image" content="https://skylerxiao.ca/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Skyler Xiao — Electrical Engineering at McGill University">
+  <meta property="og:site_name" content="Skyler Xiao">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Skyler Xiao — Electrical Engineering @ McGill">
+  <meta name="twitter:description" content="Electrical Engineering student at McGill University building software, embedded systems, and data tools. Dean's List, 4.0 GPA.">
+  <meta name="twitter:image" content="https://skylerxiao.ca/og-image.png">
+
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -14,6 +44,36 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Skyler Xiao",
+    "url": "https://skylerxiao.ca/",
+    "email": "mailto:skyler.xiao@mail.mcgill.ca",
+    "jobTitle": "Electrical Engineering Student",
+    "description": "Electrical Engineering student at McGill University building software, embedded systems, and data tools.",
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "McGill University",
+      "url": "https://www.mcgill.ca/"
+    },
+    "knowsAbout": [
+      "Electrical Engineering",
+      "Embedded Systems",
+      "Software Development",
+      "TypeScript",
+      "Python",
+      "C++",
+      "Data Analysis"
+    ],
+    "sameAs": [
+      "https://github.com/skiller99668",
+      "https://www.linkedin.com/in/skyler-xiao-434a28331"
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -67,7 +127,7 @@
       <div class="card-list">
         <article class="card">
           <div class="card-meta">Jul 2023 – Jun 2025</div>
-          <h3 class="card-title">Specialized Sports Instructor (Badminton) · <a href="#" target="_blank" rel="noopener">Glen Abbey Community Center</a></h3>
+          <h3 class="card-title">Specialized Sports Instructor (Badminton) · <span class="card-org">Glen Abbey Community Center</span></h3>
           <p class="card-desc">Managed and designed a weekly Youth program of 200+ members across local communities. Delivered coaching and customer service for 60+ members of different ethnic backgrounds and ages (4–65) per week. Streamlined data analysis (attendance, player statistics) using Excel formulas, reducing manual work and errors.</p>
           <div class="card-tags">
             <span class="tag">Program Management</span>
@@ -79,7 +139,7 @@
 
         <article class="card">
           <div class="card-meta">Sep 2025 – Present</div>
-          <h3 class="card-title">Varsity Badminton Player · <a href="#" target="_blank" rel="noopener">McGill University Athletics</a></h3>
+          <h3 class="card-title">Varsity Badminton Player · <a href="https://mcgillathletics.ca/" target="_blank" rel="noopener">McGill University Athletics</a></h3>
           <p class="card-desc">Balancing studies and early morning practices, cooperating with coaches and teammates at the university varsity level.</p>
           <div class="card-tags">
             <span class="tag">Teamwork</span>

@@ -1,3 +1,7 @@
+/* Disarm the reveal failsafe in index.html — this file loaded, so the
+   scroll-triggered animations below will run. */
+clearTimeout(window.revealFailsafe);
+
 /* ============================================
    Sticky Nav — Active Link, Sliding Indicator & Scroll Shadow
    ============================================ */

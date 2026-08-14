@@ -76,7 +76,6 @@
       <a href="#c-project">Project</a>
       <a href="#c-casepage">Project page</a>
       <a href="#c-row">Row</a>
-      <a href="#c-skills">Skill group</a>
       <a href="#c-photo">Photo</a>
       <a href="#c-btn">Buttons</a>
       <a href="#c-mark">Highlight</a>
@@ -191,7 +190,7 @@
       Each project has its own page at <code>projects/&lt;slug&gt;/index.html</code>. To add one, copy an
       existing folder, rename it, and change the words &mdash; then add a matching row above and a
       <code>&lt;url&gt;</code> entry in <code>sitemap.xml</code>. The page links back with
-      <code>../../#work</code> and pulls CSS from <code>../../style.css</code>.
+      <code>../../#projects</code> and pulls CSS from <code>../../style.css</code>.
     </p>
     <div class="cmp-grid">
       <div class="demo">
@@ -208,7 +207,7 @@
 
 <span class="c">&lt;!-- inside each page --&gt;</span>
 &lt;<span class="t">article</span> <span class="a">class</span>=<span class="a">"case"</span>&gt;
-  &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"case-back"</span> <span class="a">href</span>=<span class="a">"../../#work"</span>&gt;&hellip;&lt;/<span class="t">a</span>&gt;
+  &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"case-back"</span> <span class="a">href</span>=<span class="a">"../../#projects"</span>&gt;&hellip;&lt;/<span class="t">a</span>&gt;
   &lt;<span class="t">h1</span>&gt;Waive&lt;/<span class="t">h1</span>&gt;
   &lt;<span class="t">p</span> <span class="a">class</span>=<span class="a">"case-tagline"</span>&gt;&hellip;&lt;/<span class="t">p</span>&gt;
   &lt;<span class="t">figure</span> <span class="a">class</span>=<span class="a">"case-shot"</span>&gt;&hellip;&lt;/<span class="t">figure</span>&gt;
@@ -240,33 +239,6 @@
     &lt;<span class="t">h3</span>&gt;Role &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"org"</span>&gt;&middot; Org&lt;/<span class="t">span</span>&gt;&lt;/<span class="t">h3</span>&gt;
     &lt;<span class="t">p</span>&gt;What you did.&lt;/<span class="t">p</span>&gt;
   &lt;/<span class="t">div</span>&gt;
-&lt;/<span class="t">div</span>&gt;</pre>
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section class="cmp" id="c-skills">
-    <p class="cmp-title">Skill group</p>
-    <p class="cmp-note">Columns wrap automatically &mdash; add as many groups as you like without touching the CSS.</p>
-    <div class="cmp-grid">
-      <div class="demo">
-        <div class="skills">
-          <div class="skill-group">
-            <h3>Languages</h3>
-            <ul><li>TypeScript</li><li>Python</li><li>C / C++</li></ul>
-          </div>
-          <div class="skill-group">
-            <h3>Hardware</h3>
-            <ul><li>ESP-32</li><li>PlatformIO</li><li>Soldering</li></ul>
-          </div>
-        </div>
-      </div>
-<pre>&lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"skill-group"</span>&gt;
-  &lt;<span class="t">h3</span>&gt;Languages&lt;/<span class="t">h3</span>&gt;
-  &lt;<span class="t">ul</span>&gt;
-    &lt;<span class="t">li</span>&gt;TypeScript&lt;/<span class="t">li</span>&gt;
-    &lt;<span class="t">li</span>&gt;Python&lt;/<span class="t">li</span>&gt;
-  &lt;/<span class="t">ul</span>&gt;
 &lt;/<span class="t">div</span>&gt;</pre>
     </div>
   </section>

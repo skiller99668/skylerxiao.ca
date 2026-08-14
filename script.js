@@ -62,14 +62,14 @@ clearTimeout(window.revealFailsafe);
 })();
 
 /* ============================================================
-   Project hover preview
+   Hover preview
 
-   Shows the image named in each row's data-preview and follows
-   the cursor. Enhancement only — without it the rows behave
-   exactly as they do now.
+   Any element with data-preview shows that image on hover,
+   following the cursor — project rows, inline links, anything.
+   Enhancement only: without it those elements behave normally.
    ============================================================ */
 (function initPreview() {
-  var rows = document.querySelectorAll('.project[data-preview]');
+  var rows = document.querySelectorAll('[data-preview]');
   if (!rows.length) return;
 
   // Touch and coarse pointers never hover, and reduced-motion users

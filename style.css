@@ -72,6 +72,7 @@
   --brush-subly: #B3D0FA;   /* from Subly's cobalt    */
   --brush-clock: #FAD79B;   /* LED-display amber      */
   --brush-tex:   #D9C7F5;   /* syntax-highlight violet */
+  --brush-mcgill:#F9C3C9;   /* McGill red #ED1B2F, lightened */
 }
 
 /* ============================================================
@@ -295,8 +296,16 @@ main { position: relative; }
 .hero-eyebrow {
   font-family: var(--mono); font-size: var(--t-xs);
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--trace); margin: 0 0 var(--s-5);
+  color: var(--ink-2); margin: 0 0 var(--s-5);
 }
+/* The marked link goes a step darker still: --ink-2 only reaches 4.2:1 on
+   the red marker, under AA for text this small. Ink clears 11:1, and the
+   marker itself is the affordance. */
+.hero-eyebrow a {
+  color: var(--ink); text-decoration: none;
+}
+.hero-eyebrow a .mark::after { opacity: 0; transition: opacity var(--dur) var(--ease); }
+.hero-eyebrow a:hover .mark::after { opacity: 1; }
 .hero h1 {
   font-family: var(--display); font-weight: 800; font-size: var(--t-2xl);
   line-height: 1.02; letter-spacing: -0.035em; margin: 0 0 var(--s-5);
@@ -445,10 +454,11 @@ main { position: relative; }
 .case-back:hover { color: var(--trace); }
 .case-back .icon { width: 14px; height: 14px; }
 
+/* Matches .hero-eyebrow — same role, so same colour. */
 .case-eyebrow {
   font-family: var(--mono); font-size: var(--t-xs);
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--trace); margin: 0 0 var(--s-3);
+  color: var(--ink-2); margin: 0 0 var(--s-3);
 }
 .case h1 {
   font-family: var(--display); font-weight: 800;

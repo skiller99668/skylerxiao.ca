@@ -73,6 +73,8 @@
   --brush-clock: #FAD79B;   /* LED-display amber      */
   --brush-tex:   #D9C7F5;   /* syntax-highlight violet */
   --brush-mcgill:#F9C3C9;   /* McGill red #ED1B2F, lightened */
+
+  --pencil: #2F343D;        /* graphite for the margin doodles */
 }
 
 /* ============================================================
@@ -85,6 +87,7 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   min-height: 100vh;
+  position: relative;   /* containing block for .doodles, which spans the page */
   background-color: var(--paper);
   color: var(--ink);
   font-family: var(--body);
@@ -131,6 +134,60 @@ img { max-width: 100%; height: auto; }
   flex: none;
 }
 .icon--solid { fill: currentColor; stroke: none; }
+
+/* ============================================================
+   Margin doodles
+
+   Drafting shapes in graphite, sitting in the empty margins to
+   break up the quadrille. Sharp geometry, but each shape is
+   stroked twice with a slight offset and pushed through a fine
+   displacement filter, so the lines read as pencil rather than
+   vector. They sit faint and firm up under the cursor.
+
+   Decoration only: no links, no keyboard stop, and they hide
+   entirely once the margins are too narrow to hold them.
+   ============================================================ */
+.doodles {
+  position: absolute; inset: 0;
+  z-index: 1;
+  pointer-events: none;      /* the shapes opt back in individually */
+  overflow: hidden;          /* never let a rotated shape cause scroll */
+}
+
+.doodle {
+  position: absolute;
+  width: 118px; height: 118px;
+  color: var(--pencil);
+  opacity: 0.5;              /* present, but never fully solid */
+  filter: url(#pencil-grain);
+  transition: opacity var(--dur) var(--ease);
+}
+.doodle use {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.45;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
+  pointer-events: all;       /* whole shape is hoverable, not just the line */
+}
+/* The second pass: same shape, nudged, as if gone over again. */
+.doodle .pass-2 {
+  transform: translate(1.2px, -0.9px);
+  opacity: 0.55;
+}
+.doodle:hover { opacity: 0.9; }
+
+/* Scattered down the page, alternating margins. Percentages so they keep
+   their spread as sections are added or removed. */
+.doodle--a { top:  7%; right: calc(50% + 452px); transform: rotate(-8deg); }
+.doodle--b { top: 21%; left:  calc(50% + 452px); transform: rotate(6deg); }
+.doodle--c { top: 39%; right: calc(50% + 452px); transform: rotate(11deg); }
+.doodle--d { top: 54%; left:  calc(50% + 452px); transform: rotate(-5deg); }
+.doodle--e { top: 70%; right: calc(50% + 452px); transform: rotate(4deg); }
+.doodle--f { top: 85%; left:  calc(50% + 452px); transform: rotate(-10deg); }
+
+/* Below this the margins can't hold a 118px shape without crowding. */
+@media (max-width: 1200px) { .doodles { display: none; } }
 
 /* ============================================================
    Navigation

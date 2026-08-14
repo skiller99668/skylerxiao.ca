@@ -75,6 +75,13 @@
        <svg class="icon"><use href="#i-name"></use></svg>
      ═══════════════════════════════════════════════════════════ -->
 <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <!-- Graphite grain. Displacement is deliberately tiny (1.5): enough to
+       break the vector cleanliness, not enough to bend a straight edge. -->
+  <filter id="pencil-grain" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" seed="5" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+
   <symbol id="i-github" viewBox="0 0 24 24">
     <path fill="currentColor" stroke="none" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.7.8.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
   </symbol>
@@ -91,7 +98,44 @@
   <symbol id="i-arrow" viewBox="0 0 24 24">
     <line x1="6" y1="18" x2="18" y2="6"/><polyline points="9,6 18,6 18,15"/>
   </symbol>
+
+  <!-- ── Margin doodles ──────────────────────────────────────
+       Drafting shapes, drawn twice by .doodle to fake a pencil
+       going over a line. Kept as symbols so each is one <use>. -->
+  <symbol id="d-tri" viewBox="0 0 100 100">
+    <polygon points="50,8 93,86 7,86"/><line x1="50" y1="8" x2="50" y2="86"/>
+  </symbol>
+  <symbol id="d-hex" viewBox="0 0 100 100">
+    <polygon points="50,5 89,27 89,73 50,95 11,73 11,27"/><line x1="11" y1="27" x2="89" y2="73"/>
+  </symbol>
+  <symbol id="d-circ" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="43"/><circle cx="50" cy="50" r="26"/>
+    <line x1="7" y1="50" x2="93" y2="50"/>
+  </symbol>
+  <symbol id="d-diamond" viewBox="0 0 100 100">
+    <polygon points="50,6 94,50 50,94 6,50"/><rect x="27" y="27" width="46" height="46"/>
+  </symbol>
+  <symbol id="d-arc" viewBox="0 0 100 100">
+    <path d="M8 78A42 42 0 0 1 92 78"/><line x1="8" y1="78" x2="92" y2="78"/>
+    <line x1="50" y1="78" x2="50" y2="36"/><line x1="50" y1="78" x2="80" y2="49"/>
+  </symbol>
+  <symbol id="d-frame" viewBox="0 0 100 100">
+    <rect x="8" y="8" width="84" height="84"/><line x1="8" y1="8" x2="92" y2="92"/>
+    <line x1="92" y1="8" x2="8" y2="92"/>
+  </symbol>
 </svg>
+
+<!-- ═══ MARGIN DOODLES ═══
+     Purely decorative, so aria-hidden. They sit faint against the paper and
+     firm up under the cursor — no links, no images, nothing to click. -->
+<div class="doodles" aria-hidden="true">
+  <svg class="doodle doodle--a" viewBox="0 0 100 100"><use href="#d-tri"></use><use href="#d-tri" class="pass-2"></use></svg>
+  <svg class="doodle doodle--b" viewBox="0 0 100 100"><use href="#d-circ"></use><use href="#d-circ" class="pass-2"></use></svg>
+  <svg class="doodle doodle--c" viewBox="0 0 100 100"><use href="#d-hex"></use><use href="#d-hex" class="pass-2"></use></svg>
+  <svg class="doodle doodle--d" viewBox="0 0 100 100"><use href="#d-arc"></use><use href="#d-arc" class="pass-2"></use></svg>
+  <svg class="doodle doodle--e" viewBox="0 0 100 100"><use href="#d-diamond"></use><use href="#d-diamond" class="pass-2"></use></svg>
+  <svg class="doodle doodle--f" viewBox="0 0 100 100"><use href="#d-frame"></use><use href="#d-frame" class="pass-2"></use></svg>
+</div>
 
 <!-- ═══ NAV ═══ Add a section: add a link here, give the <section> a matching id. -->
 <nav class="nav">

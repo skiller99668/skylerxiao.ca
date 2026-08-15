@@ -98,30 +98,72 @@
   <symbol id="i-arrow" viewBox="0 0 24 24">
     <line x1="6" y1="18" x2="18" y2="6"/><polyline points="9,6 18,6 18,15"/>
   </symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24">
+    <polyline points="6,9 12,15 18,9"/>
+  </symbol>
 
   <!-- ── Margin doodles ──────────────────────────────────────
-       Drafting shapes, drawn twice by .doodle to fake a pencil
-       going over a line. Kept as symbols so each is one <use>. -->
-  <symbol id="d-tri" viewBox="0 0 100 100">
-    <polygon points="50,8 93,86 7,86"/><line x1="50" y1="8" x2="50" y2="86"/>
+       Graph-paper geometry: radial rhombus figures with solid
+       fills alternating against outlines, the way the shading
+       alternates in a hand-drawn pattern.
+
+       Fill is set per-shape as a presentation attribute rather
+       than in CSS, because <use> renders into a shadow tree that
+       document selectors can't reach. `currentColor` still picks
+       up --pencil through inheritance.                          -->
+
+  <!-- 8-point star: one petal, rotated. Alternating petals filled. -->
+  <symbol id="d-star" viewBox="0 0 100 100">
+    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="currentColor" fill-opacity=".9"/>
+    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="none" transform="rotate(45 50 50)"/>
+    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="currentColor" fill-opacity=".9" transform="rotate(90 50 50)"/>
+    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="none" transform="rotate(135 50 50)"/>
+    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="currentColor" fill-opacity=".9" transform="rotate(180 50 50)"/>
+    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="none" transform="rotate(225 50 50)"/>
+    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="currentColor" fill-opacity=".9" transform="rotate(270 50 50)"/>
+    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="none" transform="rotate(315 50 50)"/>
   </symbol>
-  <symbol id="d-hex" viewBox="0 0 100 100">
-    <polygon points="50,5 89,27 89,73 50,95 11,73 11,27"/><line x1="11" y1="27" x2="89" y2="73"/>
+
+  <!-- Isometric cube: two faces shaded, one left open. -->
+  <symbol id="d-cube" viewBox="0 0 100 100">
+    <polygon points="50,16 79,33 50,50 21,33" fill="none"/>
+    <polygon points="21,33 50,50 50,84 21,67" fill="currentColor" fill-opacity=".9"/>
+    <polygon points="79,33 79,67 50,84 50,50" fill="currentColor" fill-opacity=".62"/>
   </symbol>
-  <symbol id="d-circ" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="43"/><circle cx="50" cy="50" r="26"/>
-    <line x1="7" y1="50" x2="93" y2="50"/>
+
+  <!-- 6-petal rhombus flower. -->
+  <symbol id="d-flower" viewBox="0 0 100 100">
+    <polygon points="50,50 41,29 50,10 59,29" fill="currentColor" fill-opacity=".9"/>
+    <polygon points="50,50 41,29 50,10 59,29" fill="none" transform="rotate(60 50 50)"/>
+    <polygon points="50,50 41,29 50,10 59,29" fill="currentColor" fill-opacity=".9" transform="rotate(120 50 50)"/>
+    <polygon points="50,50 41,29 50,10 59,29" fill="none" transform="rotate(180 50 50)"/>
+    <polygon points="50,50 41,29 50,10 59,29" fill="currentColor" fill-opacity=".9" transform="rotate(240 50 50)"/>
+    <polygon points="50,50 41,29 50,10 59,29" fill="none" transform="rotate(300 50 50)"/>
+    <polygon points="50,32 62,50 50,68 38,50" fill="none"/>
   </symbol>
-  <symbol id="d-diamond" viewBox="0 0 100 100">
-    <polygon points="50,6 94,50 50,94 6,50"/><rect x="27" y="27" width="46" height="46"/>
+
+  <!-- Nested diamonds, solid core. -->
+  <symbol id="d-nest" viewBox="0 0 100 100">
+    <polygon points="50,5 95,50 50,95 5,50" fill="none"/>
+    <polygon points="50,20 80,50 50,80 20,50" fill="none"/>
+    <polygon points="50,34 66,50 50,66 34,50" fill="currentColor" fill-opacity=".9"/>
   </symbol>
-  <symbol id="d-arc" viewBox="0 0 100 100">
-    <path d="M8 78A42 42 0 0 1 92 78"/><line x1="8" y1="78" x2="92" y2="78"/>
-    <line x1="50" y1="78" x2="50" y2="36"/><line x1="50" y1="78" x2="80" y2="49"/>
+
+  <!-- Pinwheel of shaded triangles. -->
+  <symbol id="d-pin" viewBox="0 0 100 100">
+    <polygon points="50,50 50,10 80,24" fill="currentColor" fill-opacity=".9"/>
+    <polygon points="50,50 50,10 80,24" fill="none" transform="rotate(90 50 50)"/>
+    <polygon points="50,50 50,10 80,24" fill="currentColor" fill-opacity=".9" transform="rotate(180 50 50)"/>
+    <polygon points="50,50 50,10 80,24" fill="none" transform="rotate(270 50 50)"/>
+    <polygon points="50,6 94,50 50,94 6,50" fill="none"/>
   </symbol>
-  <symbol id="d-frame" viewBox="0 0 100 100">
-    <rect x="8" y="8" width="84" height="84"/><line x1="8" y1="8" x2="92" y2="92"/>
-    <line x1="92" y1="8" x2="8" y2="92"/>
+
+  <!-- Hexagon cut into sectors, alternate ones shaded. -->
+  <symbol id="d-hexfan" viewBox="0 0 100 100">
+    <polygon points="50,6 88,28 88,72 50,94 12,72 12,28" fill="none"/>
+    <polygon points="50,50 50,6 88,28" fill="currentColor" fill-opacity=".9"/>
+    <polygon points="50,50 88,72 50,94" fill="currentColor" fill-opacity=".9"/>
+    <polygon points="50,50 12,28 12,72" fill="currentColor" fill-opacity=".9"/>
   </symbol>
 </svg>
 
@@ -129,12 +171,12 @@
      Purely decorative, so aria-hidden. They sit faint against the paper and
      firm up under the cursor — no links, no images, nothing to click. -->
 <div class="doodles" aria-hidden="true">
-  <svg class="doodle doodle--a" viewBox="0 0 100 100"><use href="#d-tri"></use><use href="#d-tri" class="pass-2"></use></svg>
-  <svg class="doodle doodle--b" viewBox="0 0 100 100"><use href="#d-circ"></use><use href="#d-circ" class="pass-2"></use></svg>
-  <svg class="doodle doodle--c" viewBox="0 0 100 100"><use href="#d-hex"></use><use href="#d-hex" class="pass-2"></use></svg>
-  <svg class="doodle doodle--d" viewBox="0 0 100 100"><use href="#d-arc"></use><use href="#d-arc" class="pass-2"></use></svg>
-  <svg class="doodle doodle--e" viewBox="0 0 100 100"><use href="#d-diamond"></use><use href="#d-diamond" class="pass-2"></use></svg>
-  <svg class="doodle doodle--f" viewBox="0 0 100 100"><use href="#d-frame"></use><use href="#d-frame" class="pass-2"></use></svg>
+  <svg class="doodle doodle--a" viewBox="0 0 100 100"><use href="#d-star"></use><use href="#d-star" class="pass-2"></use></svg>
+  <svg class="doodle doodle--b" viewBox="0 0 100 100"><use href="#d-cube"></use><use href="#d-cube" class="pass-2"></use></svg>
+  <svg class="doodle doodle--c" viewBox="0 0 100 100"><use href="#d-flower"></use><use href="#d-flower" class="pass-2"></use></svg>
+  <svg class="doodle doodle--d" viewBox="0 0 100 100"><use href="#d-nest"></use><use href="#d-nest" class="pass-2"></use></svg>
+  <svg class="doodle doodle--e" viewBox="0 0 100 100"><use href="#d-pin"></use><use href="#d-pin" class="pass-2"></use></svg>
+  <svg class="doodle doodle--f" viewBox="0 0 100 100"><use href="#d-hexfan"></use><use href="#d-hexfan" class="pass-2"></use></svg>
 </div>
 
 <!-- ═══ NAV ═══ Add a section: add a link here, give the <section> a matching id. -->
@@ -196,24 +238,47 @@
   <section class="section fade-in" id="experience">
     <div class="wrap">
       <span class="node" aria-hidden="true"></span>
-      <h2>Experience</h2>
+      <h2>Experience <span class="aside">— tap an entry for detail</span></h2>
 
-      <!-- ── ROW ── Copy to add. Used by Experience, Education and Awards. -->
-      <div class="row">
-        <div class="row-when">2025 — now</div>
-        <div class="row-what">
-          <h3>Varsity Badminton <span class="org">· McGill Athletics</span></h3>
-          <p>Training at 6am four days a week alongside a full engineering course load.</p>
-        </div>
-      </div>
-      <!-- ── /ROW ── -->
+      <div class="timeline">
+        <!-- ── TIMELINE ENTRY ──────────────────────────────────
+             <details>, so open/close works with no JavaScript and
+             is keyboard-operable for free. Swap the logo file in
+             img/logos/ and keep the filename.                    -->
+        <details class="tl">
+          <summary class="tl-head">
+            <img class="tl-logo" src="img/logos/mcgill-athletics.jpg" alt="" width="240" height="240" loading="lazy">
+            <span class="tl-role">Varsity Badminton</span>
+            <span class="tl-org">McGill Athletics</span>
+            <span class="tl-when">2025 — now</span>
+            <svg class="icon tl-chev" aria-hidden="true"><use href="#i-chev"></use></svg>
+          </summary>
+          <div class="tl-body">
+            <ul>
+              <li>Train four mornings a week at 6am around a full engineering course load.</li>
+              <li>Compete in the RSEQ university league.</li>
+              <li>Where I learned that consistency beats intensity — on a court and everywhere else.</li>
+            </ul>
+          </div>
+        </details>
+        <!-- ── /TIMELINE ENTRY ─────────────────────────────────- -->
 
-      <div class="row">
-        <div class="row-when">2023 — 2025</div>
-        <div class="row-what">
-          <h3>Sports Instructor <span class="org">· Glen Abbey Community Centre</span></h3>
-          <p>Ran a weekly youth program of 200+ members and rebuilt attendance tracking so it stopped being done by hand.</p>
-        </div>
+        <details class="tl">
+          <summary class="tl-head">
+            <img class="tl-logo" src="img/logos/glen-abbey.jpg" alt="" width="240" height="240" loading="lazy">
+            <span class="tl-role">Specialised Sports Instructor</span>
+            <span class="tl-org">Glen Abbey Community Centre</span>
+            <span class="tl-when">2023 — 2025</span>
+            <svg class="icon tl-chev" aria-hidden="true"><use href="#i-chev"></use></svg>
+          </summary>
+          <div class="tl-body">
+            <ul>
+              <li>Designed and ran a weekly youth badminton program of 200+ members.</li>
+              <li>Coached players aged 4 to 65, across every level from first racket to competitive.</li>
+              <li>Rebuilt attendance and player tracking in Excel, so it stopped being done by hand.</li>
+            </ul>
+          </div>
+        </details>
       </div>
     </div>
   </section>

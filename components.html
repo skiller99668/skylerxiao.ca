@@ -75,6 +75,7 @@
       <a href="#c-section">Section</a>
       <a href="#c-project">Project</a>
       <a href="#c-casepage">Project page</a>
+      <a href="#c-timeline">Timeline</a>
       <a href="#c-row">Row</a>
       <a href="#c-photo">Photo</a>
       <a href="#c-btn">Buttons</a>
@@ -216,6 +217,60 @@
     &lt;<span class="t">aside</span> <span class="a">class</span>=<span class="a">"case-meta"</span>&gt;&hellip;&lt;/<span class="t">aside</span>&gt;
   &lt;/<span class="t">div</span>&gt;
 &lt;/<span class="t">article</span>&gt;</pre>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="cmp" id="c-timeline">
+    <p class="cmp-title">Timeline entry</p>
+    <p class="cmp-note">
+      Used by Experience. Each entry is a <code>&lt;details&gt;</code>, so click-to-expand and
+      keyboard operation come from the browser &mdash; no JavaScript, and it still works if
+      <code>script.js</code> fails. Add <code>open</code> to have one expanded on load.
+    </p>
+    <p class="cmp-note">
+      The logo sits on the rail rather than in the grid, so text columns stay aligned whatever
+      the image is. Drop a real logo into <code>img/logos/</code> keeping the filename; square
+      images work best. Keep <code>alt=""</code> &mdash; the organisation is already named in text
+      beside it, so alt text would just repeat it.
+    </p>
+    <div class="cmp-grid">
+      <div class="demo">
+        <div class="timeline">
+          <details class="tl" open>
+            <summary class="tl-head">
+              <img class="tl-logo" src="img/logos/mcgill-athletics.jpg" alt="" width="240" height="240">
+              <span class="tl-role">Role or title</span>
+              <span class="tl-org">Organisation</span>
+              <span class="tl-when">2025 &mdash; now</span>
+              <svg class="icon tl-chev" aria-hidden="true" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+            </summary>
+            <div class="tl-body">
+              <ul><li>What you did, and what changed because of it.</li><li>One line each.</li></ul>
+            </div>
+          </details>
+        </div>
+      </div>
+<pre>&lt;<span class="t">details</span> <span class="a">class</span>=<span class="a">"tl"</span>&gt;
+  &lt;<span class="t">summary</span> <span class="a">class</span>=<span class="a">"tl-head"</span>&gt;
+    &lt;<span class="t">img</span> <span class="a">class</span>=<span class="a">"tl-logo"</span> <span class="a">src</span>=<span class="a">"img/logos/name.jpg"</span>
+         <span class="a">alt</span>=<span class="a">""</span> <span class="a">width</span>=<span class="a">"240"</span> <span class="a">height</span>=<span class="a">"240"</span> <span class="a">loading</span>=<span class="a">"lazy"</span>&gt;
+    &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tl-role"</span>&gt;Role&lt;/<span class="t">span</span>&gt;
+    &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tl-org"</span>&gt;Organisation&lt;/<span class="t">span</span>&gt;
+    &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tl-when"</span>&gt;2025 &mdash; now&lt;/<span class="t">span</span>&gt;
+    &lt;<span class="t">svg</span> <span class="a">class</span>=<span class="a">"icon tl-chev"</span> <span class="a">aria-hidden</span>=<span class="a">"true"</span>&gt;
+      &lt;<span class="t">use</span> <span class="a">href</span>=<span class="a">"#i-chev"</span>&gt;&lt;/<span class="t">use</span>&gt;
+    &lt;/<span class="t">svg</span>&gt;
+  &lt;/<span class="t">summary</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"tl-body"</span>&gt;
+    &lt;<span class="t">ul</span>&gt;
+      &lt;<span class="t">li</span>&gt;What you did.&lt;/<span class="t">li</span>&gt;
+    &lt;/<span class="t">ul</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">details</span>&gt;
+
+<span class="c">&lt;!-- wrap all entries --&gt;</span>
+&lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"timeline"</span>&gt; &hellip; &lt;/<span class="t">div</span>&gt;</pre>
     </div>
   </section>
 

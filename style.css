@@ -156,26 +156,28 @@ img { max-width: 100%; height: auto; }
 
 .doodle {
   position: absolute;
-  width: 118px; height: 118px;
+  width: 132px; height: 132px;
   color: var(--pencil);
-  opacity: 0.5;              /* present, but never fully solid */
+  opacity: 0.72;             /* solid enough to read as shaded-in graphite */
   filter: url(#pencil-grain);
   transition: opacity var(--dur) var(--ease);
 }
 .doodle use {
-  fill: none;
+  fill: none;                /* default; filled shapes set their own */
   stroke: currentColor;
-  stroke-width: 1.45;
+  stroke-width: 1.3;
   stroke-linejoin: miter;
   vector-effect: non-scaling-stroke;
   pointer-events: all;       /* whole shape is hoverable, not just the line */
 }
-/* The second pass: same shape, nudged, as if gone over again. */
+/* Second pass: same shape, barely offset. Kept faint and tight —
+   with solid fills a bigger offset reads as an off-register print
+   rather than a hand that went over the shading twice. */
 .doodle .pass-2 {
-  transform: translate(1.2px, -0.9px);
-  opacity: 0.55;
+  transform: translate(0.8px, -0.6px);
+  opacity: 0.22;
 }
-.doodle:hover { opacity: 0.9; }
+.doodle:hover { opacity: 1; }
 
 /* Scattered down the page, alternating margins. Percentages so they keep
    their spread as sections are added or removed. */
@@ -186,8 +188,8 @@ img { max-width: 100%; height: auto; }
 .doodle--e { top: 70%; right: calc(50% + 452px); transform: rotate(4deg); }
 .doodle--f { top: 85%; left:  calc(50% + 452px); transform: rotate(-10deg); }
 
-/* Below this the margins can't hold a 118px shape without crowding. */
-@media (max-width: 1200px) { .doodles { display: none; } }
+/* Below this the margins can't hold a 132px shape without crowding. */
+@media (max-width: 1240px) { .doodles { display: none; } }
 
 /* ============================================================
    Navigation
@@ -404,6 +406,96 @@ main { position: relative; }
 }
 .row-what h3 .org { color: var(--ink-2); font-weight: 400; }
 .row-what p { margin: 0; color: var(--ink-2); font-size: var(--t-md); }
+
+/* ============================================================
+   Experience timeline
+
+   Each entry is a <details>, so open/close needs no JavaScript
+   and is keyboard-operable by default. The rail is drawn on the
+   container and the logos sit on top of it.
+   ============================================================ */
+.timeline {
+  position: relative;
+  padding-left: 62px;
+}
+.timeline::before {                 /* the rail */
+  content: "";
+  position: absolute;
+  left: 21px; top: 14px; bottom: 14px;
+  width: 1px;
+  /* Same teal as the section routing — --rule is barely distinguishable
+     from the quadrille and the rail vanished into it. */
+  background: var(--trace); opacity: 0.3;
+}
+
+.tl { border-bottom: 1px solid var(--rule); }
+.tl:first-child { border-top: 1px solid var(--rule); }
+
+.tl-head {
+  position: relative;               /* reference for the logo */
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-template-areas: "role when chev" "org when chev";
+  align-items: center; column-gap: var(--s-3);
+  padding: var(--s-4) 0;
+  cursor: pointer;
+  list-style: none;                 /* kill the default disclosure triangle */
+}
+.tl-head::-webkit-details-marker { display: none; }
+
+/* Sits on the rail rather than in the grid, so the text columns
+   line up regardless of logo size. */
+.tl-logo {
+  position: absolute;
+  left: 0; margin-left: -62px;
+  top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px;
+  border-radius: 3px; object-fit: cover;
+  border: 1px solid var(--rule);
+  background: var(--paper);         /* covers the rail behind it */
+  transition: transform var(--dur) var(--ease);
+}
+.tl-head:hover .tl-logo { transform: translateY(-50%) scale(1.07); }
+
+.tl-role {
+  grid-area: role;
+  font-family: var(--display); font-weight: 600; font-size: var(--t-base);
+  letter-spacing: -0.01em; line-height: 1.3;
+}
+.tl-org {
+  grid-area: org;
+  color: var(--ink-2); font-size: var(--t-md);
+}
+.tl-when {
+  grid-area: when;
+  font-family: var(--mono); font-size: var(--t-xs);
+  color: var(--ink-3); white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.tl-chev {
+  grid-area: chev;
+  width: 16px; height: 16px; color: var(--ink-3);
+  transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.tl-head:hover .tl-chev { color: var(--trace); }
+.tl[open] .tl-chev { transform: rotate(180deg); color: var(--trace); }
+
+.tl-body { padding: 0 0 var(--s-5); }
+.tl-body ul { margin: 0; padding-left: 1.1em; }
+.tl-body li {
+  color: var(--ink-2); font-size: var(--t-md);
+  margin-bottom: var(--s-2); padding-left: 2px;
+}
+.tl-body li::marker { color: var(--trace); }
+.tl-body li:last-child { margin-bottom: 0; }
+
+@media (max-width: 720px) {
+  .timeline { padding-left: 52px; }
+  .timeline::before { left: 17px; }
+  .tl-logo { width: 36px; height: 36px; margin-left: -52px; }
+  .tl-head { grid-template-columns: 1fr auto; grid-template-areas: "role chev" "org chev" "when chev"; }
+  .tl-when { margin-top: 2px; }
+}
 
 /* ============================================================
    Projects — list rows, not boxes

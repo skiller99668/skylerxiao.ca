@@ -415,13 +415,18 @@ main { position: relative; }
    container and the logos sit on top of it.
    ============================================================ */
 .timeline {
+  /* One set of measurements drives the grid, the rail position and the
+     body indent, so they can't drift apart. */
+  --tl-date: 94px;
+  --tl-logo: 46px;
+  --tl-gap: 16px;
   position: relative;
-  padding-left: 62px;
 }
-.timeline::before {                 /* the rail */
+.timeline::before {                 /* the rail, running through the logos */
   content: "";
   position: absolute;
-  left: 21px; top: 14px; bottom: 14px;
+  left: calc(var(--tl-date) + var(--tl-gap) + var(--tl-logo) / 2);
+  top: 14px; bottom: 14px;
   width: 1px;
   /* Same teal as the section routing — --rule is barely distinguishable
      from the quadrille and the rail vanished into it. */
@@ -432,30 +437,35 @@ main { position: relative; }
 .tl:first-child { border-top: 1px solid var(--rule); }
 
 .tl-head {
-  position: relative;               /* reference for the logo */
   display: grid;
-  grid-template-columns: 1fr auto auto;
-  grid-template-areas: "role when chev" "org when chev";
-  align-items: center; column-gap: var(--s-3);
+  grid-template-columns: var(--tl-date) var(--tl-logo) minmax(0, 1fr) auto;
+  grid-template-areas:
+    "when logo role chev"
+    "when logo org  chev";
+  align-items: center; column-gap: var(--tl-gap);
   padding: var(--s-4) 0;
   cursor: pointer;
   list-style: none;                 /* kill the default disclosure triangle */
 }
 .tl-head::-webkit-details-marker { display: none; }
 
-/* Sits on the rail rather than in the grid, so the text columns
-   line up regardless of logo size. */
+/* The logo IS the node on the rail. The paper-coloured ring punches a
+   clean hole in the line behind it. */
 .tl-logo {
-  position: absolute;
-  left: 0; margin-left: -62px;
-  top: 50%; transform: translateY(-50%);
-  width: 44px; height: 44px;
-  border-radius: 3px; object-fit: cover;
-  border: 1px solid var(--rule);
-  background: var(--paper);         /* covers the rail behind it */
-  transition: transform var(--dur) var(--ease);
+  grid-area: logo;
+  /* Above the rail: .timeline::before is positioned, so without this it
+     paints over the in-flow logo and the line cuts straight through it. */
+  position: relative; z-index: 1;
+  width: var(--tl-logo); height: var(--tl-logo);
+  border-radius: 50%; object-fit: cover;
+  background: var(--paper);
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--rule);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
-.tl-head:hover .tl-logo { transform: translateY(-50%) scale(1.07); }
+.tl-head:hover .tl-logo {
+  transform: scale(1.07);
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 5px var(--trace);
+}
 
 .tl-role {
   grid-area: role;
@@ -471,6 +481,7 @@ main { position: relative; }
   font-family: var(--mono); font-size: var(--t-xs);
   color: var(--ink-3); white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  text-align: right;                /* reads into the rail */
 }
 .tl-chev {
   grid-area: chev;
@@ -480,7 +491,11 @@ main { position: relative; }
 .tl-head:hover .tl-chev { color: var(--trace); }
 .tl[open] .tl-chev { transform: rotate(180deg); color: var(--trace); }
 
-.tl-body { padding: 0 0 var(--s-5); }
+/* Indented to line up with the text column above it. */
+.tl-body {
+  padding: 0 0 var(--s-5)
+           calc(var(--tl-date) + var(--tl-gap) + var(--tl-logo) + var(--tl-gap));
+}
 .tl-body ul { margin: 0; padding-left: 1.1em; }
 .tl-body li {
   color: var(--ink-2); font-size: var(--t-md);
@@ -489,12 +504,20 @@ main { position: relative; }
 .tl-body li::marker { color: var(--trace); }
 .tl-body li:last-child { margin-bottom: 0; }
 
+/* Narrow screens can't spare 94px for a date column, so the date drops
+   under the org and the logo leads the row. */
 @media (max-width: 720px) {
-  .timeline { padding-left: 52px; }
-  .timeline::before { left: 17px; }
-  .tl-logo { width: 36px; height: 36px; margin-left: -52px; }
-  .tl-head { grid-template-columns: 1fr auto; grid-template-areas: "role chev" "org chev" "when chev"; }
-  .tl-when { margin-top: 2px; }
+  .timeline { --tl-logo: 38px; --tl-gap: 12px; }
+  .timeline::before { left: calc(var(--tl-logo) / 2); }
+  .tl-head {
+    grid-template-columns: var(--tl-logo) minmax(0, 1fr) auto;
+    grid-template-areas:
+      "logo role chev"
+      "logo org  chev"
+      "logo when chev";
+  }
+  .tl-when { text-align: left; margin-top: 2px; }
+  .tl-body { padding-left: calc(var(--tl-logo) + var(--tl-gap)); }
 }
 
 /* ============================================================

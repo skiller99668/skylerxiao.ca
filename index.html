@@ -193,7 +193,7 @@
 
      Three <use> of one symbol per doodle: the boil frames. CSS gives each a
      different noise seed and shows one at a time. -->
-<div class="doodles" aria-hidden="true">
+<div class="doodles doodles--margin" aria-hidden="true">
   <svg class="doodle doodle--01" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-ring"></use><use class="frame frame-2" href="#d-ring"></use><use class="frame frame-3" href="#d-ring"></use></svg>
   <svg class="doodle doodle--02" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
   <svg class="doodle doodle--03" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-scrawl"></use><use class="frame frame-2" href="#d-scrawl"></use><use class="frame frame-3" href="#d-scrawl"></use></svg>
@@ -260,6 +260,17 @@
        of step with the visual one.                                        -->
   <header class="hero">
     <div class="wrap">
+      <!-- The margin set needs margins to live in, so it goes at 1240px and
+           the whole page is bare below that. These sit in the hero's own
+           empty top-right corner instead, which stays clear whether the
+           portrait is beside the text or stacked above it — so there are
+           still marks on the page on a phone. -->
+      <div class="doodles doodles--hero" aria-hidden="true">
+        <svg class="doodle doodle--h1" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-coil"></use><use class="frame frame-2" href="#d-coil"></use><use class="frame frame-3" href="#d-coil"></use></svg>
+        <svg class="doodle doodle--h2" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-star"></use><use class="frame frame-2" href="#d-star"></use><use class="frame frame-3" href="#d-star"></use></svg>
+        <svg class="doodle doodle--h3" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-loops"></use><use class="frame frame-2" href="#d-loops"></use><use class="frame frame-3" href="#d-loops"></use></svg>
+      </div>
+
       <div class="hero-inner">
         <img class="hero-portrait" src="img/portrait.jpg" alt="Skyler Xiao" width="800" height="1000">
         <div class="hero-text">

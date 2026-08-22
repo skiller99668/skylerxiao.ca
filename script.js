@@ -157,8 +157,10 @@ clearTimeout(window.revealFailsafe);
    a synchronous reflow while scrolling.
    ============================================================ */
 (function initDoodleSpin() {
-  var doodles = document.querySelector('.doodles');
-  if (!doodles) return;
+  // Every container, not just the first: the margin set and the hero set are
+  // separate elements, and each needs its own --scroll and spinning class.
+  var groups = document.querySelectorAll('.doodles');
+  if (!groups.length) return;
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var frame = null;
@@ -166,7 +168,8 @@ clearTimeout(window.revealFailsafe);
 
   function update() {
     frame = null;
-    doodles.style.setProperty('--scroll', String(window.scrollY || window.pageYOffset || 0));
+    var y = String(window.scrollY || window.pageYOffset || 0);
+    groups.forEach(function (g) { g.style.setProperty('--scroll', y); });
   }
 
   window.addEventListener('scroll', function () {
@@ -174,10 +177,10 @@ clearTimeout(window.revealFailsafe);
 
     // Held open by every scroll event and only closes once they stop, so a
     // continuous scroll never flickers the class off between two frames.
-    doodles.classList.add('spinning');
+    groups.forEach(function (g) { g.classList.add('spinning'); });
     window.clearTimeout(settle);
     settle = window.setTimeout(function () {
-      doodles.classList.remove('spinning');
+      groups.forEach(function (g) { g.classList.remove('spinning'); });
     }, 180);
   }, { passive: true });
 

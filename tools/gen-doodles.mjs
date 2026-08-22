@@ -252,22 +252,13 @@ const shapes = [
    doodles are hidden entirely; at exactly that width the margin outside the
    860px measure is only ~190px per side, and anything wider than MAX_SPAN
    gets sliced off by the container's overflow.                            */
-const MAX_SPAN = 598;
-const MIN_REACH = 440;
-
-/* ── The outer band ──────────────────────────────────────────────────────
-   Some marks get pushed out against the window edge instead of tracking the
-   text column, which reads as a second layer further out.
-
-   It can only exist on a wide window. At the 1240px cutoff the margin is
-   only ~190px per side and the inner band already fills it to within ~22px,
-   so there is simply nowhere further out to go. These marks therefore keep
-   their inner position as the base rule and only move outward above
-   OUTER_MIN_W, where the two bands clear each other. Below that width
-   nothing is lost — they just stay in the one band.                       */
-const OUTER_MIN_W = 1500;
-const OUTER_MAX_SIZE = 108;   // bigger marks can't clear the inner band
-const OUTER_INSET = [8, 40];  // gap from the window edge
+/* Reach is a fraction of the margin, not a pixel offset: 0 puts a mark
+   against the text column, 1 against the window edge, and anything between
+   lands somewhere in the middle. CSS resolves it per viewport (see --edge
+   in style.css), so the spread widens with the window instead of clustering
+   into fixed bands — and a mark can never overflow, because the travel it
+   scales is by definition the space that exists. */
+const F_RANGE = [0.04, 0.96];
 
 function placements(seed, perSide) {
   const rand = rng(seed);
@@ -285,33 +276,20 @@ function placements(seed, perSide) {
       const k = (i + s * 0.5) / perSide;
       const top = TOP + k * (BOTTOM - TOP) + (rand() - 0.5) * 2.4;
       const size = Math.round(84 + rand() * 54);
-      const reach = Math.round(MIN_REACH + rand() * (MAX_SPAN - size - MIN_REACH));
+      const f = F_RANGE[0] + rand() * (F_RANGE[1] - F_RANGE[0]);
       let shape = ids[Math.floor(rand() * ids.length)];
       while (shape === last) shape = ids[Math.floor(rand() * ids.length)];
       last = shape;
       out.push({
-        side, shape, size, reach,
+        side, shape, size,
+        f: Math.round(f * 100) / 100,
         top: Math.round(top * 10) / 10,
         tilt: Math.round(rand() * 60 - 30),
         spin: (2.4 + rand() * 1.5) * (rand() < 0.5 ? -1 : 1)
       });
     }
   });
-
-  const list = out.map((p, i) => ({ ...p, n: i + 1 }));
-
-  // A random third move out to the window edge. Only the smaller ones are
-  // eligible — a wide mark can't clear the inner band at OUTER_MIN_W.
-  const pool = list.filter((p) => p.size <= OUTER_MAX_SIZE);
-  const want = Math.min(Math.round(list.length / 3), pool.length);
-  const picked = new Set();
-  while (picked.size < want) picked.add(pool[Math.floor(rand() * pool.length)].n);
-  list.forEach((p) => {
-    if (picked.has(p.n)) {
-      p.outer = Math.round(OUTER_INSET[0] + rand() * (OUTER_INSET[1] - OUTER_INSET[0]));
-    }
-  });
-  return list;
+  return out.map((p, i) => ({ ...p, n: i + 1 }));
 }
 
 const pad = (s, w) => String(s).padStart(w);
@@ -321,31 +299,17 @@ const idx = (n) => String(n).padStart(2, '0');
 
 if (process.argv.includes('--place')) {
   const list = placements(77, 21);
-  const bad = list.filter((p) => p.reach + p.size > MAX_SPAN || p.top < 0 || p.top > 97);
-  // An outer mark must clear the inner band at the width it first appears,
-  // or the two overlap and it lands on top of a mark from the other layer.
-  const clash = list.filter((p) => p.outer && OUTER_MIN_W / 2 - p.outer - p.size < MAX_SPAN);
-  if (bad.length || clash.length) {
-    bad.forEach((p) => console.error(`out of bounds: #${p.n} top=${p.top}% span=${p.reach + p.size}`));
-    clash.forEach((p) => console.error(`outer band clashes: #${p.n} size=${p.size} inset=${p.outer}`));
+  const bad = list.filter((p) => p.top < 0 || p.top > 97 || p.f < 0 || p.f > 1);
+  if (bad.length) {
+    bad.forEach((p) => console.error(`out of bounds: #${p.n} top=${p.top}% f=${p.f}`));
     process.exit(1);
   }
   console.log('/* ── CSS: paste over the .doodle--NN block ── */');
   console.log(list.map((p) =>
-    `.doodle--${idx(p.n)} { top: ${pad(p.top, 4)}%; ${p.side}: calc(50% + ${p.reach}px); ` +
-    `--size: ${pad(p.size, 3)}px; --tilt: ${pad(p.tilt, 3)}deg; --spin: ${pad(p.spin.toFixed(2), 5)}; }`
+    `.doodle--${idx(p.n)} { top: ${pad(p.top, 4)}%; ${p.side}: var(--edge); ` +
+    `--f: ${p.f.toFixed(2)}; --size: ${pad(p.size, 3)}px; ` +
+    `--tilt: ${pad(p.tilt, 3)}deg; --spin: ${pad(p.spin.toFixed(2), 5)}; }`
   ).join('\n'));
-
-  const outer = list.filter((p) => p.outer);
-  console.log(`\n/* The outer band: ${outer.length} of ${list.length} pushed to the window edge,`);
-  console.log('   once the window is wide enough to hold two bands. */');
-  console.log(`@media (min-width: ${OUTER_MIN_W}px) {`);
-  console.log(outer.map((p) =>
-    `  .doodle--${idx(p.n)} { ` +
-    (p.side === 'right' ? `left: ${pad(p.outer, 2)}px; right: auto;` : `right: ${pad(p.outer, 2)}px; left: auto;`) +
-    ` }`
-  ).join('\n'));
-  console.log('}');
   console.log('\n<!-- ── HTML: paste over the .doodles children ── -->');
   console.log(list.map((p) =>
     `  <svg class="doodle doodle--${idx(p.n)}" viewBox="0 0 100 100">` +

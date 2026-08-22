@@ -295,7 +295,7 @@ const SPIN = [0.7, 1.3];  // degrees per pixel scrolled
    purpose — colour on every one would read as a palette rather than as
    someone having reached for a marker on the way past. Drawn from the same
    brush tokens the text highlights use, so the two are obviously one hand. */
-const HL_SHARE = 0.16;
+const HL_SHARE = 0.34;
 const BRUSHES = ['--wash', '--brush-waive', '--brush-subly',
                  '--brush-clock', '--brush-tex', '--brush-mcgill'];
 
@@ -365,7 +365,7 @@ if (process.argv.includes('--place')) {
 
   console.log('\n<!-- ── HTML: paste over the .doodles children ── -->');
   console.log(list.map((p) =>
-    `  <svg class="doodle doodle--${idx(p.n)}" viewBox="0 0 100 100">` +
+    `  <svg class="doodle doodle--${idx(p.n)}${p.brush ? ' doodle--lit' : ''}" viewBox="0 0 100 100">` +
     (p.brush ? '<use class="hl" href="#d-swipe"></use>' : '') +
     [1, 2, 3].map((f) => `<use class="frame frame-${f}" href="#${p.shape}"></use>`).join('') +
     `</svg>`

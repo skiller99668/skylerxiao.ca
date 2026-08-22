@@ -184,7 +184,6 @@
   <div class="wrap">
     <a href="#top" class="nav-sig">SX</a>
     <div class="nav-links">
-      <a href="#about"      class="nav-link">About</a>
       <a href="#experience" class="nav-link">Experience</a>
       <a href="#projects"   class="nav-link">Projects</a>
       <a href="#awards"     class="nav-link">Awards</a>
@@ -196,43 +195,41 @@
 
 <main id="top">
 
-  <!-- ═══ HERO ═══ -->
+  <!-- ═══ HERO — this is also the about section ═══
+       The portrait leads in source order so it stacks above the name on
+       narrow screens without an `order` hop putting the reading order out
+       of step with the visual one.                                        -->
   <header class="hero">
     <div class="wrap">
-      <p class="hero-eyebrow">Electrical Engineering ·
-        <a href="https://coursecatalogue.mcgill.ca/archive/2025-2026/en/undergraduate/engineering/programs/electrical-computer-engineering/electrical-engineering-beng/"
-           target="_blank" rel="noopener"
-           data-preview="img/mcgill.jpg"><span class="mark" style="--brush: var(--brush-mcgill)">McGill University</span></a></p>
-      <h1>Skyler Xiao</h1>
-      <p class="hero-thesis">
-        I build things that sit between <span class="mark">software and hardware</span> — web apps,
-        firmware, and small tools that make tedious work disappear.
-      </p>
+      <div class="hero-inner">
+        <img class="hero-portrait" src="img/portrait.jpg" alt="Skyler Xiao" width="800" height="1000">
+        <div class="hero-text">
+          <h1>Skyler Xiao</h1>
+          <p class="hero-thesis">
+            I build things that sit between <span class="mark">software and hardware</span> — web apps,
+            firmware, and small tools that make tedious work disappear.
+          </p>
 
-      <div class="btn-row">
-        <a class="btn btn--primary" href="mailto:skyler.xiao@mail.mcgill.ca"><svg class="icon"><use href="#i-mail"></use></svg>Email me</a>
-        <a class="btn" href="/resume.pdf"><svg class="icon"><use href="#i-download"></use></svg>Résumé</a>
-        <a class="btn btn--quiet" href="https://github.com/skiller99668" target="_blank" rel="noopener"><svg class="icon icon--solid"><use href="#i-github"></use></svg>GitHub</a>
-        <a class="btn btn--quiet" href="https://www.linkedin.com/in/skyler-xiao-434a28331" target="_blank" rel="noopener"><svg class="icon icon--solid"><use href="#i-linkedin"></use></svg>LinkedIn</a>
-      </div>
-    </div>
-  </header>
+          <div class="hero-bio">
+            <p>I'm a second-year Electrical Engineering student at
+              <a href="https://coursecatalogue.mcgill.ca/archive/2025-2026/en/undergraduate/engineering/programs/electrical-computer-engineering/electrical-engineering-beng/"
+                 target="_blank" rel="noopener"
+                 data-preview="img/mcgill.jpg"><span class="mark" style="--brush: var(--brush-mcgill)">McGill University</span></a>
+              who spends most of his time somewhere between a breadboard and a text editor.</p>
+            <p>I like problems where the answer has to actually work — where a thing either lights up or it doesn't. Most of what I build starts as a small annoyance I wanted to remove.</p>
+            <p>Off the clock I play varsity badminton, solve cubes faster than is strictly reasonable, and take a camera most places I go.</p>
+          </div>
 
-  <!-- ═══ ABOUT ═══ -->
-  <section class="section fade-in" id="about">
-    <div class="wrap">
-      <span class="node" aria-hidden="true"></span>
-      <h2>About</h2>
-      <div class="about">
-        <img class="about-photo" src="img/portrait.jpg" alt="Skyler Xiao" width="800" height="1000" loading="lazy">
-        <div>
-          <p>I'm a second-year Electrical Engineering student who spends most of his time somewhere between a breadboard and a text editor.</p>
-          <p>I like problems where the answer has to actually work — where a thing either lights up or it doesn't. Most of what I build starts as a small annoyance I wanted to remove.</p>
-          <p>Off the clock I play varsity badminton, solve cubes faster than is strictly reasonable, and take a camera most places I go.</p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="mailto:skyler.xiao@mail.mcgill.ca"><svg class="icon"><use href="#i-mail"></use></svg>Email me</a>
+            <a class="btn" href="/resume.pdf"><svg class="icon"><use href="#i-download"></use></svg>Résumé</a>
+            <a class="btn btn--quiet" href="https://github.com/skiller99668" target="_blank" rel="noopener"><svg class="icon icon--solid"><use href="#i-github"></use></svg>GitHub</a>
+            <a class="btn btn--quiet" href="https://www.linkedin.com/in/skyler-xiao-434a28331" target="_blank" rel="noopener"><svg class="icon icon--solid"><use href="#i-linkedin"></use></svg>LinkedIn</a>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </header>
 
   <!-- ═══ EXPERIENCE ═══ -->
   <section class="section fade-in" id="experience">

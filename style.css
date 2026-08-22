@@ -262,6 +262,25 @@ img { max-width: 100%; height: auto; }
 .doodle--41 { top: 89.2%; left: calc(50% + 449px); --size:  89px; --tilt:  24deg; --spin: -3.33; }
 .doodle--42 { top: 93.2%; left: calc(50% + 481px); --size:  91px; --tilt:  -9deg; --spin:  2.69; }
 
+/* The outer band: 14 of 42 pushed to the window edge,
+   once the window is wide enough to hold two bands. */
+@media (min-width: 1500px) {
+  .doodle--01 { left: 16px; right: auto; }
+  .doodle--04 { left: 16px; right: auto; }
+  .doodle--08 { left: 33px; right: auto; }
+  .doodle--09 { left: 18px; right: auto; }
+  .doodle--11 { left: 17px; right: auto; }
+  .doodle--12 { left: 29px; right: auto; }
+  .doodle--14 { left: 27px; right: auto; }
+  .doodle--20 { left: 28px; right: auto; }
+  .doodle--25 { right: 11px; left: auto; }
+  .doodle--28 { right: 32px; left: auto; }
+  .doodle--29 { right: 30px; left: auto; }
+  .doodle--37 { right: 31px; left: auto; }
+  .doodle--41 { right: 34px; left: auto; }
+  .doodle--42 { right: 30px; left: auto; }
+}
+
 /* Below this the margins can't hold a 132px shape without crowding. */
 @media (max-width: 1240px) { .doodles { display: none; } }
 

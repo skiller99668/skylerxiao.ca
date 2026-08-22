@@ -1,11 +1,16 @@
+<!-- Placeholder monogram, built to match glen-abbey.jpg: a trace-family
+     ground, a ring in one of the project brush colours, white initials.
+     Swap for the real mark when there is one. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
   <defs>
-    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#333333" stroke-width="1" opacity="0.4"/>
+    <pattern id="q" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0v20" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.1"/>
     </pattern>
   </defs>
-  <rect width="240" height="240" fill="#161616"/>
-  <rect width="240" height="240" fill="url(#grid)"/>
-  <circle cx="120" cy="120" r="82" fill="none" stroke="#c2465f" stroke-width="6"/>
-  <text x="120" y="121" text-anchor="middle" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="72" fill="#ffffff">CW</text>
+  <rect width="240" height="240" fill="#123C4E"/>
+  <rect width="240" height="240" fill="url(#q)"/>
+  <circle cx="120" cy="120" r="82" fill="none" stroke="#B3D0FA" stroke-width="7"/>
+  <text x="120" y="120" text-anchor="middle" dominant-baseline="central"
+        font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="72"
+        fill="#ffffff">CW</text>
 </svg>

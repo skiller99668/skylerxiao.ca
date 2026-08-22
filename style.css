@@ -411,37 +411,28 @@ main { position: relative; }
    Experience timeline
 
    Each entry is a <details>, so open/close needs no JavaScript
-   and is keyboard-operable by default. The rail is drawn on the
-   container and the logos sit on top of it.
+   and is keyboard-operable by default.
+
+   The timeline has no rail of its own. The logos hang a full
+   gutter to the left and sit directly on the section trace, so
+   the page's vertical line runs through the entries and carries
+   on below them — one line, drawn once, by the section.
    ============================================================ */
 .timeline {
-  /* One set of measurements drives the grid, the rail position and the
-     body indent, so they can't drift apart. */
-  --tl-date: 94px;
   --tl-logo: 46px;
   --tl-gap: 16px;
-  position: relative;
-}
-.timeline::before {                 /* the rail, running through the logos */
-  content: "";
-  position: absolute;
-  left: calc(var(--tl-date) + var(--tl-gap) + var(--tl-logo) / 2);
-  top: 14px; bottom: 14px;
-  width: 1px;
-  /* Same teal as the section routing — --rule is barely distinguishable
-     from the quadrille and the rail vanished into it. */
-  background: var(--trace); opacity: 0.3;
 }
 
 .tl { border-bottom: 1px solid var(--rule); }
 .tl:first-child { border-top: 1px solid var(--rule); }
 
 .tl-head {
+  position: relative;               /* anchor for the logo out on the trace */
   display: grid;
-  grid-template-columns: var(--tl-date) var(--tl-logo) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   grid-template-areas:
-    "when logo role chev"
-    "when logo org  chev";
+    "role when chev"
+    "org  when chev";
   align-items: center; column-gap: var(--tl-gap);
   padding: var(--s-4) 0;
   cursor: pointer;
@@ -449,13 +440,14 @@ main { position: relative; }
 }
 .tl-head::-webkit-details-marker { display: none; }
 
-/* The logo IS the node on the rail. The paper-coloured ring punches a
-   clean hole in the line behind it. */
+/* The logo IS the node on the trace. Centred by margin rather than a
+   translate, so the hover scale keeps the transform to itself. The
+   paper-coloured ring punches a clean hole in the line behind it. */
 .tl-logo {
-  grid-area: logo;
-  /* Above the rail: .timeline::before is positioned, so without this it
-     paints over the in-flow logo and the line cuts straight through it. */
-  position: relative; z-index: 1;
+  position: absolute; z-index: 1;
+  left: calc(var(--gutter) * -1); top: 50%;
+  margin-left: calc(var(--tl-logo) / -2);
+  margin-top: calc(var(--tl-logo) / -2);
   width: var(--tl-logo); height: var(--tl-logo);
   border-radius: 50%; object-fit: cover;
   background: var(--paper);
@@ -476,12 +468,14 @@ main { position: relative; }
   grid-area: org;
   color: var(--ink-2); font-size: var(--t-md);
 }
+/* Content-sized column, not a fixed one: month-precision ranges like
+   "March 2023 — June 2025" outgrew the 94px it used to get and clipped. */
 .tl-when {
   grid-area: when;
   font-family: var(--mono); font-size: var(--t-xs);
   color: var(--ink-3); white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  text-align: right;                /* reads into the rail */
+  text-align: right;
 }
 .tl-chev {
   grid-area: chev;
@@ -491,11 +485,9 @@ main { position: relative; }
 .tl-head:hover .tl-chev { color: var(--trace); }
 .tl[open] .tl-chev { transform: rotate(180deg); color: var(--trace); }
 
-/* Indented to line up with the text column above it. */
-.tl-body {
-  padding: 0 0 var(--s-5)
-           calc(var(--tl-date) + var(--tl-gap) + var(--tl-logo) + var(--tl-gap));
-}
+/* The logo is out of flow, so the text column already is the section's
+   own content edge and the body needs no indent of its own. */
+.tl-body { padding: 0 0 var(--s-5); }
 .tl-body ul { margin: 0; padding-left: 1.1em; }
 .tl-body li {
   color: var(--ink-2); font-size: var(--t-md);
@@ -504,11 +496,22 @@ main { position: relative; }
 .tl-body li::marker { color: var(--trace); }
 .tl-body li:last-child { margin-bottom: 0; }
 
-/* Narrow screens can't spare 94px for a date column, so the date drops
-   under the org and the logo leads the row. */
+/* Hanging the logo on the trace needs slack outside --measure for it to
+   hang into. Below that the row goes self-contained and the logo leads it. */
+@media (max-width: 900px) {
+  .tl-head {
+    grid-template-columns: var(--tl-logo) minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "logo role when chev"
+      "logo org  when chev";
+  }
+  .tl-logo { position: static; grid-area: logo; margin: 0; }
+  .tl-body { padding-left: calc(var(--tl-logo) + var(--tl-gap)); }
+}
+
+/* Narrower still, the date can't share a line with the role either. */
 @media (max-width: 720px) {
   .timeline { --tl-logo: 38px; --tl-gap: 12px; }
-  .timeline::before { left: calc(var(--tl-logo) / 2); }
   .tl-head {
     grid-template-columns: var(--tl-logo) minmax(0, 1fr) auto;
     grid-template-areas:
@@ -517,7 +520,6 @@ main { position: relative; }
       "logo when chev";
   }
   .tl-when { text-align: left; margin-top: 2px; }
-  .tl-body { padding-left: calc(var(--tl-logo) + var(--tl-gap)); }
 }
 
 /* ============================================================

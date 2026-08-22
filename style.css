@@ -209,28 +209,58 @@ img { max-width: 100%; height: auto; }
   33.3333% { opacity: 0; }   /* held to 100% — no second stop needed */
 }
 
-/* Scattered down the page. Deliberately not a pattern: the vertical gaps are
-   uneven, the sides don't strictly alternate, and the reach into the margin
-   and the size vary per mark — a tidy sequence reads as ornament, and these
-   are meant to read as something someone did while not paying attention.
+/* Both margins, full height, so they read as a margin someone kept drawing in
+   rather than as ornaments dotted down the page. Deliberately not a pattern:
+   the two sides are staggered a half-step against each other, and the reach,
+   size and tilt vary per mark.
 
-   The one hard rule is that reach + size stays under ~600px, which is what
-   fits in the margin at the 1240px cutoff below. Break it and a doodle gets
-   sliced off by the container's overflow. */
-.doodle--a { top:  4%; right: calc(50% + 468px); --size: 104px; --tilt: -14deg; --spin:  1.25; }
-.doodle--b { top:  9%; left:  calc(50% + 452px); --size: 132px; --tilt:   7deg; --spin: -0.95; }
-.doodle--c { top: 16%; right: calc(50% + 449px); --size:  96px; --tilt: -21deg; --spin:  1.45; }
-.doodle--d { top: 22%; left:  calc(50% + 486px); --size:  92px; --tilt:  12deg; --spin: -1.30; }
-.doodle--e { top: 29%; left:  calc(50% + 447px); --size: 118px; --tilt:  -6deg; --spin:  1.05; }
-.doodle--f { top: 35%; right: calc(50% + 478px); --size: 110px; --tilt:  17deg; --spin: -1.50; }
-.doodle--g { top: 43%; right: calc(50% + 452px); --size: 136px; --tilt:  -9deg; --spin:  1.15; }
-.doodle--h { top: 49%; left:  calc(50% + 464px); --size: 124px; --tilt:  23deg; --spin: -1.35; }
-.doodle--i { top: 57%; left:  calc(50% + 495px); --size: 100px; --tilt: -17deg; --spin:  1.40; }
-.doodle--j { top: 63%; right: calc(50% + 445px); --size: 128px; --tilt:   5deg; --spin: -1.10; }
-.doodle--k { top: 71%; right: calc(50% + 480px); --size:  98px; --tilt: -25deg; --spin:  1.50; }
-.doodle--l { top: 78%; left:  calc(50% + 455px); --size: 114px; --tilt:  14deg; --spin: -1.20; }
-.doodle--m { top: 86%; right: calc(50% + 490px); --size: 106px; --tilt: -11deg; --spin:  1.30; }
-.doodle--n { top: 93%; left:  calc(50% + 460px); --size: 120px; --tilt:  19deg; --spin: -1.45; }
+   Generated — `node tools/gen-doodles.mjs --place` emits this block and the
+   matching markup. Two rules the generator enforces and hand-editing breaks:
+   reach + size must stay under 598px, which is what fits in the margin at the
+   1240px cutoff below, and top must stay under 97%. Past either, a doodle is
+   silently sliced off or dropped entirely by the container's overflow. */
+.doodle--01 { top:  1.8%; right: calc(50% + 490px); --size:  86px; --tilt: -23deg; --spin:  3.64; }
+.doodle--02 { top:  7.2%; right: calc(50% + 453px); --size:  87px; --tilt:   5deg; --spin:  3.14; }
+.doodle--03 { top: 10.8%; right: calc(50% + 449px); --size:  87px; --tilt:  -5deg; --spin:  3.16; }
+.doodle--04 { top: 14.4%; right: calc(50% + 454px); --size: 100px; --tilt: -18deg; --spin: -2.73; }
+.doodle--05 { top: 20.7%; right: calc(50% + 462px); --size: 112px; --tilt: -12deg; --spin:  2.79; }
+.doodle--06 { top: 23.8%; right: calc(50% + 456px); --size: 122px; --tilt: -23deg; --spin:  2.86; }
+.doodle--07 { top: 27.7%; right: calc(50% + 443px); --size: 134px; --tilt:  -1deg; --spin: -3.62; }
+.doodle--08 { top:   33%; right: calc(50% + 478px); --size:  99px; --tilt:  -7deg; --spin: -3.25; }
+.doodle--09 { top: 38.4%; right: calc(50% + 462px); --size: 104px; --tilt:  -2deg; --spin:  3.35; }
+.doodle--10 { top:   43%; right: calc(50% + 464px); --size: 112px; --tilt:  -9deg; --spin:  3.11; }
+.doodle--11 { top:   47%; right: calc(50% + 465px); --size: 103px; --tilt: -23deg; --spin: -2.45; }
+.doodle--12 { top: 50.8%; right: calc(50% + 452px); --size: 108px; --tilt:   7deg; --spin: -2.48; }
+.doodle--13 { top: 56.5%; right: calc(50% + 460px); --size: 121px; --tilt: -11deg; --spin:  3.61; }
+.doodle--14 { top: 61.4%; right: calc(50% + 441px); --size: 100px; --tilt: -21deg; --spin: -2.45; }
+.doodle--15 { top: 63.5%; right: calc(50% + 454px); --size: 128px; --tilt:  10deg; --spin: -2.94; }
+.doodle--16 { top: 68.5%; right: calc(50% + 458px); --size:  89px; --tilt:  18deg; --spin:  2.64; }
+.doodle--17 { top: 74.7%; right: calc(50% + 478px); --size: 112px; --tilt:   2deg; --spin: -2.75; }
+.doodle--18 { top: 77.5%; right: calc(50% + 470px); --size:  94px; --tilt:  16deg; --spin: -3.55; }
+.doodle--19 { top: 81.8%; right: calc(50% + 451px); --size: 126px; --tilt:  -1deg; --spin:  2.43; }
+.doodle--20 { top: 86.4%; right: calc(50% + 482px); --size: 105px; --tilt:  17deg; --spin:  3.76; }
+.doodle--21 { top: 91.2%; right: calc(50% + 478px); --size:  99px; --tilt:  13deg; --spin:  2.42; }
+.doodle--22 { top:  3.2%; left: calc(50% + 490px); --size: 105px; --tilt:   8deg; --spin:  2.96; }
+.doodle--23 { top:  8.5%; left: calc(50% + 462px); --size: 136px; --tilt:   6deg; --spin: -2.84; }
+.doodle--24 { top: 13.2%; left: calc(50% + 478px); --size: 115px; --tilt:   8deg; --spin: -3.25; }
+.doodle--25 { top: 18.1%; left: calc(50% + 488px); --size:  92px; --tilt: -26deg; --spin:  3.44; }
+.doodle--26 { top: 22.1%; left: calc(50% + 465px); --size: 110px; --tilt:  -3deg; --spin:  3.06; }
+.doodle--27 { top: 25.9%; left: calc(50% + 447px); --size: 135px; --tilt: -19deg; --spin: -2.56; }
+.doodle--28 { top:   31%; left: calc(50% + 476px); --size:  99px; --tilt:  -3deg; --spin:  3.61; }
+.doodle--29 { top: 35.8%; left: calc(50% + 443px); --size:  95px; --tilt:  25deg; --spin: -2.66; }
+.doodle--30 { top: 39.3%; left: calc(50% + 480px); --size:  99px; --tilt:  24deg; --spin: -2.49; }
+.doodle--31 { top: 45.6%; left: calc(50% + 453px); --size: 116px; --tilt:  28deg; --spin:  2.89; }
+.doodle--32 { top: 48.7%; left: calc(50% + 463px); --size: 124px; --tilt: -23deg; --spin: -2.67; }
+.doodle--33 { top: 54.5%; left: calc(50% + 466px); --size: 119px; --tilt:  21deg; --spin:  3.51; }
+.doodle--34 { top:   59%; left: calc(50% + 449px); --size: 122px; --tilt: -25deg; --spin:  2.47; }
+.doodle--35 { top: 61.5%; left: calc(50% + 468px); --size: 118px; --tilt:   5deg; --spin:  2.77; }
+.doodle--36 { top: 66.3%; left: calc(50% + 450px); --size: 132px; --tilt:   1deg; --spin: -2.51; }
+.doodle--37 { top: 71.5%; left: calc(50% + 466px); --size: 108px; --tilt:   4deg; --spin: -3.21; }
+.doodle--38 { top: 76.3%; left: calc(50% + 464px); --size: 127px; --tilt:   9deg; --spin: -3.71; }
+.doodle--39 { top: 79.5%; left: calc(50% + 462px); --size: 136px; --tilt:   8deg; --spin: -3.19; }
+.doodle--40 { top: 84.2%; left: calc(50% + 452px); --size: 105px; --tilt: -19deg; --spin:  3.62; }
+.doodle--41 { top: 89.2%; left: calc(50% + 449px); --size:  89px; --tilt:  24deg; --spin: -3.33; }
+.doodle--42 { top: 93.2%; left: calc(50% + 481px); --size:  91px; --tilt:  -9deg; --spin:  2.69; }
 
 /* Below this the margins can't hold a 132px shape without crowding. */
 @media (max-width: 1240px) { .doodles { display: none; } }

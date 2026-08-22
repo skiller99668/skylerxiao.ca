@@ -81,15 +81,15 @@
        the hand is not. numOctaves layers fine grain over the slow wobble,
        so the line reads as pen rather than as a wavy vector. -->
   <filter id="boil-1" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="3" result="n"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="3" result="n"/>
     <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
   <filter id="boil-2" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="17" result="n"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="17" result="n"/>
     <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
   <filter id="boil-3" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="31" result="n"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="31" result="n"/>
     <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
 
@@ -194,20 +194,48 @@
      Three <use> of one symbol per doodle: the boil frames. CSS gives each a
      different noise seed and shows one at a time. -->
 <div class="doodles" aria-hidden="true">
-  <svg class="doodle doodle--a" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-scrawl"></use><use class="frame frame-2" href="#d-scrawl"></use><use class="frame frame-3" href="#d-scrawl"></use></svg>
-  <svg class="doodle doodle--b" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-coil"></use><use class="frame frame-2" href="#d-coil"></use><use class="frame frame-3" href="#d-coil"></use></svg>
-  <svg class="doodle doodle--c" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-zigzag"></use><use class="frame frame-2" href="#d-zigzag"></use><use class="frame frame-3" href="#d-zigzag"></use></svg>
-  <svg class="doodle doodle--d" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-star"></use><use class="frame frame-2" href="#d-star"></use><use class="frame frame-3" href="#d-star"></use></svg>
-  <svg class="doodle doodle--e" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-blob"></use><use class="frame frame-2" href="#d-blob"></use><use class="frame frame-3" href="#d-blob"></use></svg>
-  <svg class="doodle doodle--f" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-loops"></use><use class="frame frame-2" href="#d-loops"></use><use class="frame frame-3" href="#d-loops"></use></svg>
-  <svg class="doodle doodle--g" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-burst"></use><use class="frame frame-2" href="#d-burst"></use><use class="frame frame-3" href="#d-burst"></use></svg>
-  <svg class="doodle doodle--h" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-arrow"></use><use class="frame frame-2" href="#d-arrow"></use><use class="frame frame-3" href="#d-arrow"></use></svg>
-  <svg class="doodle doodle--i" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-ring"></use><use class="frame frame-2" href="#d-ring"></use><use class="frame frame-3" href="#d-ring"></use></svg>
-  <svg class="doodle doodle--j" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-wave"></use><use class="frame frame-2" href="#d-wave"></use><use class="frame frame-3" href="#d-wave"></use></svg>
-  <svg class="doodle doodle--k" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
-  <svg class="doodle doodle--l" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-coil"></use><use class="frame frame-2" href="#d-coil"></use><use class="frame frame-3" href="#d-coil"></use></svg>
-  <svg class="doodle doodle--m" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-scrawl"></use><use class="frame frame-2" href="#d-scrawl"></use><use class="frame frame-3" href="#d-scrawl"></use></svg>
-  <svg class="doodle doodle--n" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-blob"></use><use class="frame frame-2" href="#d-blob"></use><use class="frame frame-3" href="#d-blob"></use></svg>
+  <svg class="doodle doodle--01" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-ring"></use><use class="frame frame-2" href="#d-ring"></use><use class="frame frame-3" href="#d-ring"></use></svg>
+  <svg class="doodle doodle--02" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
+  <svg class="doodle doodle--03" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-scrawl"></use><use class="frame frame-2" href="#d-scrawl"></use><use class="frame frame-3" href="#d-scrawl"></use></svg>
+  <svg class="doodle doodle--04" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-coil"></use><use class="frame frame-2" href="#d-coil"></use><use class="frame frame-3" href="#d-coil"></use></svg>
+  <svg class="doodle doodle--05" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-zigzag"></use><use class="frame frame-2" href="#d-zigzag"></use><use class="frame frame-3" href="#d-zigzag"></use></svg>
+  <svg class="doodle doodle--06" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-loops"></use><use class="frame frame-2" href="#d-loops"></use><use class="frame frame-3" href="#d-loops"></use></svg>
+  <svg class="doodle doodle--07" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-star"></use><use class="frame frame-2" href="#d-star"></use><use class="frame frame-3" href="#d-star"></use></svg>
+  <svg class="doodle doodle--08" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-loops"></use><use class="frame frame-2" href="#d-loops"></use><use class="frame frame-3" href="#d-loops"></use></svg>
+  <svg class="doodle doodle--09" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-burst"></use><use class="frame frame-2" href="#d-burst"></use><use class="frame frame-3" href="#d-burst"></use></svg>
+  <svg class="doodle doodle--10" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-ring"></use><use class="frame frame-2" href="#d-ring"></use><use class="frame frame-3" href="#d-ring"></use></svg>
+  <svg class="doodle doodle--11" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-scrawl"></use><use class="frame frame-2" href="#d-scrawl"></use><use class="frame frame-3" href="#d-scrawl"></use></svg>
+  <svg class="doodle doodle--12" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-burst"></use><use class="frame frame-2" href="#d-burst"></use><use class="frame frame-3" href="#d-burst"></use></svg>
+  <svg class="doodle doodle--13" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-zigzag"></use><use class="frame frame-2" href="#d-zigzag"></use><use class="frame frame-3" href="#d-zigzag"></use></svg>
+  <svg class="doodle doodle--14" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-arrow"></use><use class="frame frame-2" href="#d-arrow"></use><use class="frame frame-3" href="#d-arrow"></use></svg>
+  <svg class="doodle doodle--15" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-scrawl"></use><use class="frame frame-2" href="#d-scrawl"></use><use class="frame frame-3" href="#d-scrawl"></use></svg>
+  <svg class="doodle doodle--16" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-arrow"></use><use class="frame frame-2" href="#d-arrow"></use><use class="frame frame-3" href="#d-arrow"></use></svg>
+  <svg class="doodle doodle--17" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-zigzag"></use><use class="frame frame-2" href="#d-zigzag"></use><use class="frame frame-3" href="#d-zigzag"></use></svg>
+  <svg class="doodle doodle--18" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-blob"></use><use class="frame frame-2" href="#d-blob"></use><use class="frame frame-3" href="#d-blob"></use></svg>
+  <svg class="doodle doodle--19" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-zigzag"></use><use class="frame frame-2" href="#d-zigzag"></use><use class="frame frame-3" href="#d-zigzag"></use></svg>
+  <svg class="doodle doodle--20" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-coil"></use><use class="frame frame-2" href="#d-coil"></use><use class="frame frame-3" href="#d-coil"></use></svg>
+  <svg class="doodle doodle--21" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
+  <svg class="doodle doodle--22" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-ring"></use><use class="frame frame-2" href="#d-ring"></use><use class="frame frame-3" href="#d-ring"></use></svg>
+  <svg class="doodle doodle--23" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-star"></use><use class="frame frame-2" href="#d-star"></use><use class="frame frame-3" href="#d-star"></use></svg>
+  <svg class="doodle doodle--24" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-blob"></use><use class="frame frame-2" href="#d-blob"></use><use class="frame frame-3" href="#d-blob"></use></svg>
+  <svg class="doodle doodle--25" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-burst"></use><use class="frame frame-2" href="#d-burst"></use><use class="frame frame-3" href="#d-burst"></use></svg>
+  <svg class="doodle doodle--26" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-arrow"></use><use class="frame frame-2" href="#d-arrow"></use><use class="frame frame-3" href="#d-arrow"></use></svg>
+  <svg class="doodle doodle--27" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
+  <svg class="doodle doodle--28" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-burst"></use><use class="frame frame-2" href="#d-burst"></use><use class="frame frame-3" href="#d-burst"></use></svg>
+  <svg class="doodle doodle--29" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-ring"></use><use class="frame frame-2" href="#d-ring"></use><use class="frame frame-3" href="#d-ring"></use></svg>
+  <svg class="doodle doodle--30" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-scrawl"></use><use class="frame frame-2" href="#d-scrawl"></use><use class="frame frame-3" href="#d-scrawl"></use></svg>
+  <svg class="doodle doodle--31" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-arrow"></use><use class="frame frame-2" href="#d-arrow"></use><use class="frame frame-3" href="#d-arrow"></use></svg>
+  <svg class="doodle doodle--32" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
+  <svg class="doodle doodle--33" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-zigzag"></use><use class="frame frame-2" href="#d-zigzag"></use><use class="frame frame-3" href="#d-zigzag"></use></svg>
+  <svg class="doodle doodle--34" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-wave"></use><use class="frame frame-2" href="#d-wave"></use><use class="frame frame-3" href="#d-wave"></use></svg>
+  <svg class="doodle doodle--35" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-arrow"></use><use class="frame frame-2" href="#d-arrow"></use><use class="frame frame-3" href="#d-arrow"></use></svg>
+  <svg class="doodle doodle--36" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-loops"></use><use class="frame frame-2" href="#d-loops"></use><use class="frame frame-3" href="#d-loops"></use></svg>
+  <svg class="doodle doodle--37" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-coil"></use><use class="frame frame-2" href="#d-coil"></use><use class="frame frame-3" href="#d-coil"></use></svg>
+  <svg class="doodle doodle--38" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-arrow"></use><use class="frame frame-2" href="#d-arrow"></use><use class="frame frame-3" href="#d-arrow"></use></svg>
+  <svg class="doodle doodle--39" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
+  <svg class="doodle doodle--40" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-star"></use><use class="frame frame-2" href="#d-star"></use><use class="frame frame-3" href="#d-star"></use></svg>
+  <svg class="doodle doodle--41" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
+  <svg class="doodle doodle--42" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-coil"></use><use class="frame frame-2" href="#d-coil"></use><use class="frame frame-3" href="#d-coil"></use></svg>
 </div>
 
 <!-- ═══ NAV ═══ Add a section: add a link here, give the <section> a matching id. -->

@@ -242,6 +242,76 @@ const shapes = [
   ['d-tangle', 'Tangle, a walk that keeps knotting on itself.',     tangle(12)]
 ];
 
-console.log(shapes.map(([id, note, d]) =>
-  `  <!-- ${note} -->\n  <symbol id="${id}" viewBox="0 0 100 100">\n    <path d="${d}"/>\n  </symbol>`
-).join('\n\n'));
+/* ── Placement ───────────────────────────────────────────────────────────
+   Both margins run full height, so the marks read as a margin someone kept
+   drawing in rather than as six ornaments dotted down the page. Generated
+   for the same reason the paths are: 40 hand-tuned rules drift, and the one
+   constraint that actually matters is easy to break by hand.
+
+   That constraint: reach + size must stay under MAX_SPAN. Below 1240px the
+   doodles are hidden entirely; at exactly that width the margin outside the
+   860px measure is only ~190px per side, and anything wider than MAX_SPAN
+   gets sliced off by the container's overflow.                            */
+const MAX_SPAN = 598;
+const MIN_REACH = 440;
+
+function placements(seed, perSide) {
+  const rand = rng(seed);
+  const ids = shapes.map((s) => s[0]);
+  const out = [];
+  let last = '';
+  // `right` puts the mark in the LEFT margin, and vice versa.
+  // Spread across a fixed band rather than accumulating a step: accumulating
+  // overshoots, and anything past 100% lands outside the clipped container
+  // and is simply never seen.
+  const TOP = 2, BOTTOM = 96;
+  ['right', 'left'].forEach((side, s) => {
+    for (let i = 0; i < perSide; i++) {
+      // Half-step stagger between the sides so they never line up in pairs.
+      const k = (i + s * 0.5) / perSide;
+      const top = TOP + k * (BOTTOM - TOP) + (rand() - 0.5) * 2.4;
+      const size = Math.round(84 + rand() * 54);
+      const reach = Math.round(MIN_REACH + rand() * (MAX_SPAN - size - MIN_REACH));
+      let shape = ids[Math.floor(rand() * ids.length)];
+      while (shape === last) shape = ids[Math.floor(rand() * ids.length)];
+      last = shape;
+      out.push({
+        side, shape, size, reach,
+        top: Math.round(top * 10) / 10,
+        tilt: Math.round(rand() * 60 - 30),
+        spin: (2.4 + rand() * 1.5) * (rand() < 0.5 ? -1 : 1)
+      });
+    }
+  });
+  return out.map((p, i) => ({ ...p, n: i + 1 }));
+}
+
+const pad = (s, w) => String(s).padStart(w);
+// Class names are zero-padded: padStart with a space would put whitespace
+// inside the identifier and split it into two classes.
+const idx = (n) => String(n).padStart(2, '0');
+
+if (process.argv.includes('--place')) {
+  const list = placements(77, 21);
+  const bad = list.filter((p) => p.reach + p.size > MAX_SPAN || p.top < 0 || p.top > 97);
+  if (bad.length) {
+    console.error(`${bad.length} placement(s) out of bounds:`);
+    bad.forEach((p) => console.error(`  #${p.n} top=${p.top}% span=${p.reach + p.size}`));
+    process.exit(1);
+  }
+  console.log('/* ── CSS: paste over the .doodle--NN block ── */');
+  console.log(list.map((p) =>
+    `.doodle--${idx(p.n)} { top: ${pad(p.top, 4)}%; ${p.side}: calc(50% + ${p.reach}px); ` +
+    `--size: ${pad(p.size, 3)}px; --tilt: ${pad(p.tilt, 3)}deg; --spin: ${pad(p.spin.toFixed(2), 5)}; }`
+  ).join('\n'));
+  console.log('\n<!-- ── HTML: paste over the .doodles children ── -->');
+  console.log(list.map((p) =>
+    `  <svg class="doodle doodle--${idx(p.n)}" viewBox="0 0 100 100">` +
+    [1, 2, 3].map((f) => `<use class="frame frame-${f}" href="#${p.shape}"></use>`).join('') +
+    `</svg>`
+  ).join('\n'));
+} else {
+  console.log(shapes.map(([id, note, d]) =>
+    `  <!-- ${note} -->\n  <symbol id="${id}" viewBox="0 0 100 100">\n    <path d="${d}"/>\n  </symbol>`
+  ).join('\n\n'));
+}

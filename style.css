@@ -242,48 +242,48 @@ img { max-width: 100%; height: auto; }
    reach + size must stay under 598px, which is what fits in the margin at the
    1240px cutoff below, and top must stay under 97%. Past either, a doodle is
    silently sliced off or dropped entirely by the container's overflow. */
-.doodle--01 { top:  1.8%; right: var(--edge); --f: 0.68; --size:  86px; --tilt: -23deg; --spin:  3.64; }
-.doodle--02 { top:  7.2%; right: var(--edge); --f: 0.21; --size:  87px; --tilt:   5deg; --spin:  3.14; }
-.doodle--03 { top: 10.8%; right: var(--edge); --f: 0.16; --size:  87px; --tilt:  -5deg; --spin:  3.16; }
-.doodle--04 { top: 14.4%; right: var(--edge); --f: 0.27; --size: 100px; --tilt: -18deg; --spin: -2.73; }
-.doodle--05 { top: 20.7%; right: var(--edge); --f: 0.48; --size: 112px; --tilt: -12deg; --spin:  2.79; }
-.doodle--06 { top: 23.8%; right: var(--edge); --f: 0.45; --size: 122px; --tilt: -23deg; --spin:  2.86; }
-.doodle--07 { top: 27.7%; right: var(--edge); --f: 0.16; --size: 134px; --tilt:  -1deg; --spin: -3.62; }
-.doodle--08 { top:   33%; right: var(--edge); --f: 0.64; --size:  99px; --tilt:  -7deg; --spin: -3.25; }
-.doodle--09 { top: 38.4%; right: var(--edge); --f: 0.42; --size: 104px; --tilt:  -2deg; --spin:  3.35; }
-.doodle--10 { top:   43%; right: var(--edge); --f: 0.52; --size: 112px; --tilt:  -9deg; --spin:  3.11; }
-.doodle--11 { top:   47%; right: var(--edge); --f: 0.46; --size: 103px; --tilt: -23deg; --spin: -2.45; }
-.doodle--12 { top: 50.8%; right: var(--edge); --f: 0.26; --size: 108px; --tilt:   7deg; --spin: -2.48; }
-.doodle--13 { top: 56.5%; right: var(--edge); --f: 0.54; --size: 121px; --tilt: -11deg; --spin:  3.61; }
-.doodle--14 { top: 61.4%; right: var(--edge); --f: 0.05; --size: 100px; --tilt: -21deg; --spin: -2.45; }
-.doodle--15 { top: 63.5%; right: var(--edge); --f: 0.48; --size: 128px; --tilt:  10deg; --spin: -2.94; }
-.doodle--16 { top: 68.5%; right: var(--edge); --f: 0.28; --size:  89px; --tilt:  18deg; --spin:  2.64; }
-.doodle--17 { top: 74.7%; right: var(--edge); --f: 0.79; --size: 112px; --tilt:   2deg; --spin: -2.75; }
-.doodle--18 { top: 77.5%; right: var(--edge); --f: 0.47; --size:  94px; --tilt:  16deg; --spin: -3.55; }
-.doodle--19 { top: 81.8%; right: var(--edge); --f: 0.36; --size: 126px; --tilt:  -1deg; --spin:  2.43; }
-.doodle--20 { top: 86.4%; right: var(--edge); --f: 0.77; --size: 105px; --tilt:  17deg; --spin:  3.76; }
-.doodle--21 { top: 91.2%; right: var(--edge); --f: 0.63; --size:  99px; --tilt:  13deg; --spin:  2.42; }
-.doodle--22 { top:  3.2%; left: var(--edge); --f: 0.90; --size: 105px; --tilt:   8deg; --spin:  2.96; }
-.doodle--23 { top:  8.5%; left: var(--edge); --f: 0.95; --size: 136px; --tilt:   6deg; --spin: -2.84; }
-.doodle--24 { top: 13.2%; left: var(--edge); --f: 0.86; --size: 115px; --tilt:   8deg; --spin: -3.25; }
-.doodle--25 { top: 18.1%; left: var(--edge); --f: 0.71; --size:  92px; --tilt: -26deg; --spin:  3.44; }
-.doodle--26 { top: 22.1%; left: var(--edge); --f: 0.51; --size: 110px; --tilt:  -3deg; --spin:  3.06; }
-.doodle--27 { top: 25.9%; left: var(--edge); --f: 0.32; --size: 135px; --tilt: -19deg; --spin: -2.56; }
-.doodle--28 { top:   31%; left: var(--edge); --f: 0.60; --size:  99px; --tilt:  -3deg; --spin:  3.61; }
-.doodle--29 { top: 35.8%; left: var(--edge); --f: 0.08; --size:  95px; --tilt:  25deg; --spin: -2.66; }
-.doodle--30 { top: 39.3%; left: var(--edge); --f: 0.67; --size:  99px; --tilt:  24deg; --spin: -2.49; }
-.doodle--31 { top: 45.6%; left: var(--edge); --f: 0.33; --size: 116px; --tilt:  28deg; --spin:  2.89; }
-.doodle--32 { top: 48.7%; left: var(--edge); --f: 0.65; --size: 124px; --tilt: -23deg; --spin: -2.67; }
-.doodle--33 { top: 54.5%; left: var(--edge); --f: 0.66; --size: 119px; --tilt:  21deg; --spin:  3.51; }
-.doodle--34 { top:   59%; left: var(--edge); --f: 0.26; --size: 122px; --tilt: -25deg; --spin:  2.47; }
-.doodle--35 { top: 61.5%; left: var(--edge); --f: 0.68; --size: 118px; --tilt:   5deg; --spin:  2.77; }
-.doodle--36 { top: 66.3%; left: var(--edge); --f: 0.41; --size: 132px; --tilt:   1deg; --spin: -2.51; }
-.doodle--37 { top: 71.5%; left: var(--edge); --f: 0.51; --size: 108px; --tilt:   4deg; --spin: -3.21; }
-.doodle--38 { top: 76.3%; left: var(--edge); --f: 0.76; --size: 127px; --tilt:   9deg; --spin: -3.71; }
-.doodle--39 { top: 79.5%; left: var(--edge); --f: 0.94; --size: 136px; --tilt:   8deg; --spin: -3.19; }
-.doodle--40 { top: 84.2%; left: var(--edge); --f: 0.24; --size: 105px; --tilt: -19deg; --spin:  3.62; }
-.doodle--41 { top: 89.2%; left: var(--edge); --f: 0.16; --size:  89px; --tilt:  24deg; --spin: -3.33; }
-.doodle--42 { top: 93.2%; left: var(--edge); --f: 0.61; --size:  91px; --tilt:  -9deg; --spin:  2.69; }
+.doodle--01 { top:  1.8%; right: var(--edge); --f: 0.49; --size:  64px; --tilt:  20deg; --spin:  2.47; }
+.doodle--02 { top:  5.4%; right: var(--edge); --f: 0.58; --size:  82px; --tilt:  11deg; --spin: -1.96; }
+.doodle--03 { top: 10.1%; right: var(--edge); --f: 0.51; --size:  68px; --tilt: -27deg; --spin: -1.82; }
+.doodle--04 { top: 14.6%; right: var(--edge); --f: 1.06; --size:  85px; --tilt:   1deg; --spin:  2.02; }
+.doodle--05 { top: 19.4%; right: var(--edge); --f: 0.29; --size:  92px; --tilt:  -3deg; --spin:  2.19; }
+.doodle--06 { top: 24.1%; right: var(--edge); --f: 0.56; --size:  73px; --tilt:  26deg; --spin:  1.64; }
+.doodle--07 { top: 28.8%; right: var(--edge); --f: 0.39; --size: 166px; --tilt:   9deg; --spin: -2.43; }
+.doodle--08 { top: 33.1%; right: var(--edge); --f: 0.74; --size: 133px; --tilt:  -5deg; --spin: -1.87; }
+.doodle--09 { top: 38.1%; right: var(--edge); --f: 0.51; --size: 130px; --tilt:   1deg; --spin: -1.89; }
+.doodle--10 { top: 42.5%; right: var(--edge); --f: 0.46; --size: 138px; --tilt: -23deg; --spin: -1.54; }
+.doodle--11 { top: 46.3%; right: var(--edge); --f: 0.33; --size: 116px; --tilt: -27deg; --spin:  2.00; }
+.doodle--12 { top: 51.7%; right: var(--edge); --f: 0.33; --size: 130px; --tilt:   2deg; --spin: -2.59; }
+.doodle--13 { top: 54.5%; right: var(--edge); --f: 1.07; --size: 163px; --tilt: -29deg; --spin: -2.40; }
+.doodle--14 { top: 59.2%; right: var(--edge); --f: 0.13; --size: 145px; --tilt: -24deg; --spin:  1.78; }
+.doodle--15 { top: 65.4%; right: var(--edge); --f: 0.92; --size:  79px; --tilt:  19deg; --spin:  2.16; }
+.doodle--16 { top: 68.5%; right: var(--edge); --f: 0.22; --size:  59px; --tilt:  16deg; --spin: -2.34; }
+.doodle--17 { top: 72.9%; right: var(--edge); --f: 0.54; --size: 161px; --tilt: -29deg; --spin: -2.52; }
+.doodle--18 { top: 77.8%; right: var(--edge); --f: 1.23; --size: 163px; --tilt:  19deg; --spin: -1.92; }
+.doodle--19 { top: 82.9%; right: var(--edge); --f: 0.05; --size: 182px; --tilt: -26deg; --spin:  1.93; }
+.doodle--20 { top:   87%; right: var(--edge); --f: 0.72; --size: 142px; --tilt:  28deg; --spin:  2.59; }
+.doodle--21 { top: 91.7%; right: var(--edge); --f: 0.49; --size:  97px; --tilt:  24deg; --spin:  2.28; }
+.doodle--22 { top:  4.4%; left: var(--edge); --f: 0.18; --size:  88px; --tilt: -12deg; --spin:  1.58; }
+.doodle--23 { top:  9.4%; left: var(--edge); --f: 0.51; --size: 122px; --tilt:  -3deg; --spin:  1.98; }
+.doodle--24 { top: 12.5%; left: var(--edge); --f: 0.90; --size: 183px; --tilt: -24deg; --spin: -1.74; }
+.doodle--25 { top: 17.1%; left: var(--edge); --f: 0.45; --size: 138px; --tilt:   7deg; --spin: -2.17; }
+.doodle--26 { top: 21.1%; left: var(--edge); --f: 0.20; --size: 121px; --tilt: -18deg; --spin:  1.80; }
+.doodle--27 { top: 25.5%; left: var(--edge); --f: 1.09; --size: 178px; --tilt:   5deg; --spin:  1.84; }
+.doodle--28 { top: 32.2%; left: var(--edge); --f: 0.40; --size: 101px; --tilt:  10deg; --spin: -2.59; }
+.doodle--29 { top: 34.8%; left: var(--edge); --f: 0.63; --size: 120px; --tilt:   4deg; --spin:  2.43; }
+.doodle--30 { top: 40.1%; left: var(--edge); --f: 0.26; --size: 181px; --tilt: -25deg; --spin:  1.55; }
+.doodle--31 { top: 43.6%; left: var(--edge); --f: 0.71; --size: 142px; --tilt: -15deg; --spin: -2.31; }
+.doodle--32 { top: 49.9%; left: var(--edge); --f: 0.39; --size: 111px; --tilt: -26deg; --spin:  1.74; }
+.doodle--33 { top: 53.3%; left: var(--edge); --f: 1.18; --size: 125px; --tilt:  10deg; --spin:  2.38; }
+.doodle--34 { top: 58.7%; left: var(--edge); --f: 0.39; --size: 145px; --tilt:  29deg; --spin:  2.51; }
+.doodle--35 { top: 62.5%; left: var(--edge); --f: 0.39; --size: 116px; --tilt:  19deg; --spin:  1.70; }
+.doodle--36 { top: 67.1%; left: var(--edge); --f: 1.09; --size: 120px; --tilt:  24deg; --spin: -2.18; }
+.doodle--37 { top: 70.8%; left: var(--edge); --f: 0.91; --size:  75px; --tilt:  -9deg; --spin:  1.71; }
+.doodle--38 { top: 75.3%; left: var(--edge); --f: 0.53; --size: 179px; --tilt:  20deg; --spin: -2.25; }
+.doodle--39 { top: 79.6%; left: var(--edge); --f: 0.52; --size: 182px; --tilt: -10deg; --spin: -2.32; }
+.doodle--40 { top: 85.9%; left: var(--edge); --f: 0.28; --size: 185px; --tilt: -11deg; --spin:  1.79; }
+.doodle--41 { top: 89.5%; left: var(--edge); --f: 1.23; --size: 142px; --tilt:  12deg; --spin:  2.41; }
+.doodle--42 { top: 93.6%; left: var(--edge); --f: 0.91; --size: 176px; --tilt:  21deg; --spin:  2.50; }
 
 /* The hero set: pinned to the hero's top-right corner rather than to the
    margin, because that corner is empty in both hero layouts — beside the
@@ -293,16 +293,50 @@ img { max-width: 100%; height: auto; }
 
    Behind the content (z-index below the margin set's), so if the hero ever
    grows into this corner the text wins rather than a scribble crossing it. */
-.doodles--hero { z-index: -1; }
+/* ── In the content column ───────────────────────────────────────────────
+   Measuring the clearance around every text and image box says the column
+   is dense: experience, projects, awards and photos have no interior room
+   at all, and the only space inside them is the 76px left gutter beside
+   the trace. Genuine open corners exist in just two places — the hero's
+   bottom-right and contact's, both below the last line of their section.
+
+   So these go in the gutter strip and those two corners, sat behind the
+   content and pulled back in weight. Faint on purpose: they pass close to
+   text, and at full strength a scribble beside a paragraph competes with
+   it instead of sitting under it.
+
+   Hidden below 900px, where the gutter closes up and the column runs the
+   full width — there is no "empty spot" left to use, and the hero set
+   already carries the phone. */
+.doodles--in .doodle { opacity: 0.4; }
+.doodles--in, .doodles--hero { z-index: -1; }
+
+.doodle--p1 { top:  4.5%; left: 4.5%; --size: 58px; --tilt: -16deg; --spin:  2.10; }
+.doodle--p2 { top: 31.5%; left: 5.5%; --size: 52px; --tilt:  24deg; --spin: -1.70; }
+.doodle--p3 { top: 72.1%; left: 4.0%; --size: 62px; --tilt:  -8deg; --spin:  2.35; }
+.doodle--a1 { top: 14.5%; left: 5.0%; --size: 54px; --tilt:  13deg; --spin: -2.20; }
+.doodle--a2 { top: 58.0%; left: 4.0%; --size: 60px; --tilt: -21deg; --spin:  1.85; }
+.doodle--g1 { top:  7.7%; left: 4.5%; --size: 56px; --tilt:   9deg; --spin: -2.05; }
+.doodle--g2 { top: 54.2%; left: 4.0%; --size: 62px; --tilt: -14deg; --spin:  2.25; }
+.doodle--c1 { top: 58.0%; left:  84%; --size: 92px; --tilt:  18deg; --spin: -1.90; }
+.doodle--c2 { top: 14.0%; left: 4.5%; --size: 54px; --tilt: -11deg; --spin:  2.30; }
+
+@media (max-width: 900px) { .doodles--in { display: none; } }
 
 /* Insets are px, not %, and generous: these spin, and a rotating square needs
    about 0.21 x its own width of clearance (a 45deg square measures w x sqrt2,
    so it overhangs by (sqrt2-1)/2 on each side). Too tight and the container's
    overflow shaves a corner off mid-turn. The right-hand values also keep all
    three clear of the portrait once the hero stacks and it moves to the left. */
-.doodle--h1 { top:  2%; right:  24px; --size: 76px; --tilt: -18deg; --spin:  3.10; }
-.doodle--h2 { top: 11%; right:  96px; --size: 62px; --tilt:  21deg; --spin: -2.70; }
-.doodle--h3 { top:  4%; right: 150px; --size: 54px; --tilt:  -9deg; --spin:  2.40; }
+.doodle--h1 { top:  2%; right:  24px; --size: 84px; --tilt: -18deg; --spin:  2.10; }
+.doodle--h2 { top: 11%; right:  96px; --size: 58px; --tilt:  21deg; --spin: -1.65; }
+.doodle--h3 { top:  4%; right: 150px; --size: 48px; --tilt:  -9deg; --spin:  2.45; }
+/* The hero's own empty bottom-right, well clear of the portrait above it —
+   but only while the hero is two columns. Once it stacks, that corner is the
+   last lines of the bio, so this one goes rather than sit on the text. h1-h3
+   stay: their corner is empty in both layouts. */
+.doodle--h4 { top: 74%; right:  40px; --size: 118px; --tilt: 14deg; --spin: -1.80; }
+@media (max-width: 900px) { .doodle--h4 { display: none; } }
 
 /* Below this the margins can't hold a 132px shape without crowding — but
    only the margin set depends on having a margin. */

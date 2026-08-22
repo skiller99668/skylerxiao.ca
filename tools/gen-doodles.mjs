@@ -260,6 +260,15 @@ const shapes = [
    scales is by definition the space that exists. */
 const F_RANGE = [0.04, 0.96];
 
+/* A fifth or so are pushed past f=1, which runs them off the window edge to be
+   cropped by the container. Deliberate: marks that bleed off the side stop the
+   set reading as a tidy border. Only the outer end may spill — the inner end
+   keeps its clearance, so nothing ever crowds the text. */
+const BLEED_SHARE = 0.22;
+const BLEED_F = [1.06, 1.28];
+const SIZE = [58, 190];   // wide on purpose: a uniform set reads as a pattern
+const SPIN = [1.5, 2.6];  // degrees per pixel scrolled
+
 function placements(seed, perSide) {
   const rand = rng(seed);
   const ids = shapes.map((s) => s[0]);
@@ -275,17 +284,20 @@ function placements(seed, perSide) {
       // Half-step stagger between the sides so they never line up in pairs.
       const k = (i + s * 0.5) / perSide;
       const top = TOP + k * (BOTTOM - TOP) + (rand() - 0.5) * 2.4;
-      const size = Math.round(84 + rand() * 54);
-      const f = F_RANGE[0] + rand() * (F_RANGE[1] - F_RANGE[0]);
+      const size = Math.round(SIZE[0] + rand() * (SIZE[1] - SIZE[0]));
+      const bleeds = rand() < BLEED_SHARE;
+      const f = bleeds
+        ? BLEED_F[0] + rand() * (BLEED_F[1] - BLEED_F[0])
+        : F_RANGE[0] + rand() * (F_RANGE[1] - F_RANGE[0]);
       let shape = ids[Math.floor(rand() * ids.length)];
       while (shape === last) shape = ids[Math.floor(rand() * ids.length)];
       last = shape;
       out.push({
-        side, shape, size,
+        side, shape, size, bleeds,
         f: Math.round(f * 100) / 100,
         top: Math.round(top * 10) / 10,
         tilt: Math.round(rand() * 60 - 30),
-        spin: (2.4 + rand() * 1.5) * (rand() < 0.5 ? -1 : 1)
+        spin: (SPIN[0] + rand() * (SPIN[1] - SPIN[0])) * (rand() < 0.5 ? -1 : 1)
       });
     }
   });
@@ -299,11 +311,15 @@ const idx = (n) => String(n).padStart(2, '0');
 
 if (process.argv.includes('--place')) {
   const list = placements(77, 21);
-  const bad = list.filter((p) => p.top < 0 || p.top > 97 || p.f < 0 || p.f > 1);
+  const bad = list.filter((p) =>
+    p.top < 0 || p.top > 97 || p.f < 0 || (p.f > 1 && !p.bleeds) || p.f > BLEED_F[1]);
   if (bad.length) {
     bad.forEach((p) => console.error(`out of bounds: #${p.n} top=${p.top}% f=${p.f}`));
     process.exit(1);
   }
+  const bleeding = list.filter((p) => p.bleeds).length;
+  console.error(`${list.length} marks, ${bleeding} bleeding off the edge, ` +
+    `sizes ${Math.min(...list.map((p) => p.size))}-${Math.max(...list.map((p) => p.size))}px`);
   console.log('/* ── CSS: paste over the .doodle--NN block ── */');
   console.log(list.map((p) =>
     `.doodle--${idx(p.n)} { top: ${pad(p.top, 4)}%; ${p.side}: var(--edge); ` +

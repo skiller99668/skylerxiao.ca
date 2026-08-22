@@ -164,8 +164,9 @@ img { max-width: 100%; height: auto; }
 .doodle {
   --tilt: 0deg;              /* resting angle */
   --spin: 0;                 /* degrees turned per pixel scrolled */
+  --size: 118px;
   position: absolute;
-  width: 132px; height: 132px;
+  width: var(--size); height: var(--size);
   color: var(--pencil);
   opacity: 0.72;             /* a mark made in passing, not a diagram */
   transform: rotate(calc(var(--tilt) + var(--scroll, 0) * var(--spin) * 1deg));
@@ -188,26 +189,48 @@ img { max-width: 100%; height: auto; }
    without overlapping or — the failure that matters — leaving a sliver where
    all three are transparent and the doodle blinks out.
 
-   frame-1 is the one left standing when animation is off, so it carries the
-   resting opacity rather than inheriting the hidden default. */
-.doodle .frame { opacity: 0; animation: boil 0.36s step-end infinite; }
+   Paused unless the page is moving: a mark lying in the margin is a drawing,
+   not a loop, and idle motion in the corner of the eye is a distraction while
+   someone is trying to read. It boils only while it spins. frame-1 is the one
+   left standing when paused, so it carries the resting opacity rather than
+   inheriting the hidden default. */
+.doodle .frame {
+  opacity: 0;
+  animation: boil 0.36s step-end infinite;
+  animation-play-state: paused;
+}
 .doodle .frame-1 { opacity: 1; filter: url(#boil-1); }
 .doodle .frame-2 { filter: url(#boil-2); animation-delay: -0.12s; }
 .doodle .frame-3 { filter: url(#boil-3); animation-delay: -0.24s; }
+.doodles.spinning .frame { animation-play-state: running; }
 
 @keyframes boil {
   0%       { opacity: 1; }
   33.3333% { opacity: 0; }   /* held to 100% — no second stop needed */
 }
 
-/* Scattered down the page, alternating margins. Percentages so they keep
-   their spread as sections are added or removed. */
-.doodle--a { top:  7%; right: calc(50% + 452px); --tilt:  -8deg; --spin:  0.14; }
-.doodle--b { top: 21%; left:  calc(50% + 452px); --tilt:   6deg; --spin: -0.11; }
-.doodle--c { top: 39%; right: calc(50% + 452px); --tilt:  11deg; --spin:  0.09; }
-.doodle--d { top: 54%; left:  calc(50% + 452px); --tilt:  -5deg; --spin: -0.16; }
-.doodle--e { top: 70%; right: calc(50% + 452px); --tilt:   4deg; --spin:  0.12; }
-.doodle--f { top: 85%; left:  calc(50% + 452px); --tilt: -10deg; --spin: -0.08; }
+/* Scattered down the page. Deliberately not a pattern: the vertical gaps are
+   uneven, the sides don't strictly alternate, and the reach into the margin
+   and the size vary per mark — a tidy sequence reads as ornament, and these
+   are meant to read as something someone did while not paying attention.
+
+   The one hard rule is that reach + size stays under ~600px, which is what
+   fits in the margin at the 1240px cutoff below. Break it and a doodle gets
+   sliced off by the container's overflow. */
+.doodle--a { top:  4%; right: calc(50% + 468px); --size: 104px; --tilt: -14deg; --spin:  1.25; }
+.doodle--b { top:  9%; left:  calc(50% + 452px); --size: 132px; --tilt:   7deg; --spin: -0.95; }
+.doodle--c { top: 16%; right: calc(50% + 449px); --size:  96px; --tilt: -21deg; --spin:  1.45; }
+.doodle--d { top: 22%; left:  calc(50% + 486px); --size:  92px; --tilt:  12deg; --spin: -1.30; }
+.doodle--e { top: 29%; left:  calc(50% + 447px); --size: 118px; --tilt:  -6deg; --spin:  1.05; }
+.doodle--f { top: 35%; right: calc(50% + 478px); --size: 110px; --tilt:  17deg; --spin: -1.50; }
+.doodle--g { top: 43%; right: calc(50% + 452px); --size: 136px; --tilt:  -9deg; --spin:  1.15; }
+.doodle--h { top: 49%; left:  calc(50% + 464px); --size: 124px; --tilt:  23deg; --spin: -1.35; }
+.doodle--i { top: 57%; left:  calc(50% + 495px); --size: 100px; --tilt: -17deg; --spin:  1.40; }
+.doodle--j { top: 63%; right: calc(50% + 445px); --size: 128px; --tilt:   5deg; --spin: -1.10; }
+.doodle--k { top: 71%; right: calc(50% + 480px); --size:  98px; --tilt: -25deg; --spin:  1.50; }
+.doodle--l { top: 78%; left:  calc(50% + 455px); --size: 114px; --tilt:  14deg; --spin: -1.20; }
+.doodle--m { top: 86%; right: calc(50% + 490px); --size: 106px; --tilt: -11deg; --spin:  1.30; }
+.doodle--n { top: 93%; left:  calc(50% + 460px); --size: 120px; --tilt:  19deg; --spin: -1.45; }
 
 /* Below this the margins can't hold a 132px shape without crowding. */
 @media (max-width: 1240px) { .doodles { display: none; } }

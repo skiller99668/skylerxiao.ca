@@ -40,6 +40,25 @@ function smooth(pts) {
 
 const clamp = (v) => Math.max(4, Math.min(96, v));
 
+/* Straight-segment version, for the marks a pen makes in one flick —
+   zigzags and spikes keep their corners instead of being rounded off. */
+function poly(pts) {
+  return 'M' + pts.map((p) => `${r1(p[0])} ${r1(p[1])}`).join('L');
+}
+
+/* Scale a free-running walk into the box. Clamping is wrong for anything
+   that can leave the frame: it pins stray points to the edge and leaves a
+   dead straight run along it. Fitting keeps the shape and just resizes. */
+function fit(pts, lo = 6, hi = 94) {
+  const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs);
+  const y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const s = Math.min((hi - lo) / Math.max(x1 - x0, 0.001), (hi - lo) / Math.max(y1 - y0, 0.001));
+  const ox = lo + ((hi - lo) - (x1 - x0) * s) / 2;
+  const oy = lo + ((hi - lo) - (y1 - y0) * s) / 2;
+  return pts.map((p) => [ox + (p[0] - x0) * s, oy + (p[1] - y0) * s]);
+}
+
 /* Fast oval scrawl: laps that drift instead of stacking. */
 function scrawl(seed) {
   const rand = rng(seed);
@@ -136,13 +155,91 @@ function ring(seed) {
   return smooth(pts);
 }
 
+/* Hard zigzag — one flick back and forth, corners intact. */
+function zigzag(seed) {
+  const rand = rng(seed);
+  const pts = [];
+  for (let i = 0; i <= 13; i++) {
+    const x = 8 + (i / 13) * 84 + (rand() - 0.5) * 3;
+    const up = i % 2 === 0;
+    pts.push([clamp(x), clamp(up ? 26 + (rand() - 0.5) * 8 : 72 + (rand() - 0.5) * 8)]);
+  }
+  return poly(pts);
+}
+
+/* Scribbled-in blob: rows walked side to side inside an ellipse, which is
+   how a pen fills a shape when the point is to blot it out. */
+function blob(seed) {
+  const rand = rng(seed);
+  const pts = [];
+  const cx = 50, cy = 50, rx = 33, ry = 25;
+  let dir = 1;
+  for (let y = cy - ry; y <= cy + ry; y += 2.7) {
+    const k = (y - cy) / ry;
+    const half = rx * Math.sqrt(Math.max(0, 1 - k * k));
+    pts.push([clamp(cx + dir * half + (rand() - 0.5) * 4), clamp(y + (rand() - 0.5) * 1.4)]);
+    dir *= -1;
+  }
+  return smooth(pts);
+}
+
+/* Arrow: a shaft that bends, and a head drawn as two separate flicks. */
+function arrow(seed) {
+  const rand = rng(seed);
+  const shaft = [];
+  for (let i = 0; i <= 12; i++) {
+    const k = i / 12;
+    shaft.push([clamp(10 + k * 74), clamp(72 - k * 42 + Math.sin(k * 3.1) * 7 + (rand() - 0.5) * 2)]);
+  }
+  const tip = shaft[shaft.length - 1];
+  const head1 = [[clamp(tip[0] - 21), clamp(tip[1] - 4)], [tip[0], tip[1]]];
+  const head2 = [[clamp(tip[0] - 6), clamp(tip[1] + 20)], [tip[0], tip[1]]];
+  return smooth(shaft) + poly(head1) + poly(head2);
+}
+
+/* Spiky star, alternating reach, drawn without lifting. */
+function star(seed) {
+  const rand = rng(seed);
+  const pts = [];
+  const n = 9;
+  for (let i = 0; i <= n * 2; i++) {
+    const ang = (i / (n * 2)) * Math.PI * 2 - Math.PI / 2;
+    const r = (i % 2 ? 15 : 40) + (rand() - 0.5) * 7;
+    pts.push([clamp(50 + Math.cos(ang) * r), clamp(50 + Math.sin(ang) * r)]);
+  }
+  return poly(pts);
+}
+
+/* Tangle: a walk that keeps getting pulled back to the middle, so it knots
+   instead of wandering off. */
+function tangle(seed) {
+  const rand = rng(seed);
+  const pts = [];
+  let x = 50, y = 50, vx = 0, vy = 0;
+  for (let i = 0; i < 72; i++) {
+    // Pull weak and damping light, or it collapses to a scratch instead of
+    // opening out into a knot.
+    vx += (rand() - 0.5) * 19 - (x - 50) * 0.055;
+    vy += (rand() - 0.5) * 19 - (y - 50) * 0.055;
+    vx *= 0.84; vy *= 0.84;
+    x += vx; y += vy;
+    pts.push([x, y]);          // unclamped — fit() brings it back in
+  }
+  return smooth(fit(pts));
+}
+
 const shapes = [
-  ['d-scrawl', 'Fast oval scrawl, laps drifting off each other.', scrawl(7)],
-  ['d-coil',   'Spiral wound outward from the middle.',           coil(21)],
-  ['d-wave',   'Squiggle, no two humps the same.',                wave(4)],
-  ['d-burst',  'Scratched asterisk, arms overshooting the cross.', burst(13)],
+  ['d-scrawl', 'Fast oval scrawl, laps drifting off each other.',   scrawl(7)],
+  ['d-coil',   'Spiral wound outward from the middle.',             coil(21)],
+  ['d-wave',   'Squiggle, no two humps the same.',                  wave(4)],
+  ['d-burst',  'Scratched asterisk, arms overshooting the cross.',  burst(13)],
   ['d-loops',  'Loop-de-loop chain, the kind that fills a margin.', loops(9)],
-  ['d-ring',   'Ring gone round twice and a half.',               ring(33)]
+  ['d-ring',   'Ring gone round twice and a half.',                 ring(33)],
+  ['d-zigzag', 'Hard zigzag, one flick back and forth.',            zigzag(5)],
+  ['d-blob',   'Blotted-out blob, filled row by row.',              blob(18)],
+  ['d-arrow',  'Arrow with a bent shaft and a two-stroke head.',    arrow(26)],
+  ['d-star',   'Spiky star, reach alternating.',                    star(41)],
+  ['d-tangle', 'Tangle, a walk that keeps knotting on itself.',     tangle(12)]
 ];
 
 console.log(shapes.map(([id, note, d]) =>

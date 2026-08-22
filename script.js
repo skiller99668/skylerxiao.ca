@@ -143,9 +143,14 @@ clearTimeout(window.revealFailsafe);
 /* ============================================================
    Margin doodles — scroll-driven spin
 
-   Publishes scroll position as one custom property and lets CSS
-   decide what each doodle does with it, so adding or retuning a
-   doodle is a stylesheet change and never a change here.
+   Publishes scroll position as one custom property, plus a class
+   for "the page is moving right now", and lets CSS decide what
+   each doodle does with them. Adding or retuning a doodle is a
+   stylesheet change and never a change here.
+
+   The class is what keeps the doodles still at rest: they boil
+   only while they spin, so nothing twitches in the corner of the
+   eye while someone is reading.
 
    One property write per frame for the whole set, on a rAF-gated
    passive listener: nothing here reads layout, so it can't force
@@ -157,6 +162,7 @@ clearTimeout(window.revealFailsafe);
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var frame = null;
+  var settle = null;
 
   function update() {
     frame = null;
@@ -165,6 +171,14 @@ clearTimeout(window.revealFailsafe);
 
   window.addEventListener('scroll', function () {
     if (!frame) frame = window.requestAnimationFrame(update);
+
+    // Held open by every scroll event and only closes once they stop, so a
+    // continuous scroll never flickers the class off between two frames.
+    doodles.classList.add('spinning');
+    window.clearTimeout(settle);
+    settle = window.setTimeout(function () {
+      doodles.classList.remove('spinning');
+    }, 180);
   }, { passive: true });
 
   update();   // reloading part-way down the page should not unwind them

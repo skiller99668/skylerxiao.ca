@@ -75,11 +75,22 @@
        <svg class="icon"><use href="#i-name"></use></svg>
      ═══════════════════════════════════════════════════════════ -->
 <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-  <!-- Graphite grain. Displacement is deliberately tiny (1.5): enough to
-       break the vector cleanliness, not enough to bend a straight edge. -->
-  <filter id="pencil-grain" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" seed="5" result="n"/>
-    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+  <!-- Boil frames. Three copies of one noise field, differing only by seed,
+       so the same path lands in three slightly different places. Cycling
+       them is how hand-drawn animation "boils" — the drawing is the same,
+       the hand is not. numOctaves layers fine grain over the slow wobble,
+       so the line reads as pen rather than as a wavy vector. -->
+  <filter id="boil-1" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="boil-2" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="17" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="boil-3" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="31" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
 
   <symbol id="i-github" viewBox="0 0 24 24">
@@ -103,80 +114,79 @@
   </symbol>
 
   <!-- ── Margin doodles ──────────────────────────────────────
-       Graph-paper geometry: radial rhombus figures with solid
-       fills alternating against outlines, the way the shading
-       alternates in a hand-drawn pattern.
+       Biro scrawl: the marks you make in a margin while thinking
+       about something else. Each one is a continuous gesture that
+       overshoots and doubles back without ever closing on itself
+       — a lap that lands exactly on the one before it reads as
+       drawn, not as scribbled, so every lap is jittered off the
+       last.
 
-       Fill is set per-shape as a presentation attribute rather
-       than in CSS, because <use> renders into a shadow tree that
-       document selectors can't reach. `currentColor` still picks
-       up --pencil through inheritance.                          -->
+       Generated rather than drawn by hand, from a seeded noise
+       walk, because that irregularity is the whole effect and
+       hand-authored curves come out far too tidy. To reshape
+       one, edit its function in tools/gen-doodles.mjs and paste
+       the output back over this block — don't nudge the numbers
+       here, they are output and won't survive the next re-emit.
 
-  <!-- 8-point star: one petal, rotated. Alternating petals filled. -->
-  <symbol id="d-star" viewBox="0 0 100 100">
-    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="currentColor" fill-opacity=".9"/>
-    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="none" transform="rotate(45 50 50)"/>
-    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="currentColor" fill-opacity=".9" transform="rotate(90 50 50)"/>
-    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="none" transform="rotate(135 50 50)"/>
-    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="currentColor" fill-opacity=".9" transform="rotate(180 50 50)"/>
-    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="none" transform="rotate(225 50 50)"/>
-    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="currentColor" fill-opacity=".9" transform="rotate(270 50 50)"/>
-    <polygon points="50,50 40.2,37.4 50,8 59.8,37.4" fill="none" transform="rotate(315 50 50)"/>
+       Stroke only, no fills: these are lines, not figures. Stroke
+       styling lives in CSS; `currentColor` picks up --pencil.    -->
+
+  <!-- Fast oval scrawl, laps drifting off each other. -->
+  <symbol id="d-scrawl" viewBox="0 0 100 100">
+    <path d="M82.8 49.6C82.1 51.1 80.7 55.8 78.7 58.4C76.7 61 74 63.4 70.8 65.3C67.7 67.1 63.9 68.4 59.8 69.5C55.6 70.6 50.5 72.5 46 71.8C41.4 71.1 36.8 67.1 32.6 65.3C28.3 63.5 23.6 63 20.6 61.1C17.6 59.2 15.6 56.3 14.7 53.8C13.8 51.4 13.8 48.8 15.4 46.6C17 44.3 21.1 42.6 24.3 40.4C27.5 38.3 31 35.4 34.6 33.6C38.2 31.8 42.1 30 46.1 29.7C50 29.5 54.3 31.2 58.1 32.1C61.9 33 66.6 33.4 69 35.1C71.4 36.8 71.4 39.4 72.4 42C73.5 44.6 75.5 47.5 75.2 50.5C74.9 53.6 72 57.1 70.7 60.2C69.5 63.3 69.8 67 67.6 69.2C65.4 71.3 61 72.5 57.4 73C53.8 73.4 49.7 72.2 45.8 71.8C41.9 71.3 37.5 71.8 34.1 70.3C30.7 68.7 27.8 65.3 25.6 62.6C23.3 59.9 22.1 57.1 20.6 54.3C19.1 51.6 15.9 48.7 16.3 46.3C16.7 43.8 20.1 41.7 23.1 39.6C26.1 37.6 30.4 35.2 34.4 34.1C38.4 32.9 42.9 32.4 47.3 32.5C51.7 32.5 56.9 33.6 60.9 34.3C64.9 35 67.9 35.3 71.2 36.8C74.5 38.3 78.5 40.6 80.6 43.2C82.7 45.8 84.1 49.2 83.8 52.4C83.4 55.5 81 59.2 78.3 62C75.7 64.8 71.6 67.3 67.9 69.2C64.2 71.2 60.2 73.1 56.3 73.6C52.4 74 48.6 72.7 44.6 71.9C40.7 71.1 35.6 70.2 32.5 68.9C29.4 67.5 28.1 66.2 26.1 63.8C24.2 61.5 21.7 57.7 20.9 54.8C20.2 52 20.6 49.2 21.7 46.6C22.8 43.9 25.5 41.1 27.6 39.1C29.7 37 31.4 35.4 34.4 34.2C37.5 33.1 42.2 32.3 46 32.2C49.8 32.1 53.6 32.5 57.2 33.6C60.9 34.7 65.1 37.2 68 39C70.9 40.7 72.4 41.8 74.4 44.1C76.4 46.3 79.6 49.7 80.1 52.5C80.7 55.4 79.5 58.5 77.6 61C75.6 63.6 72 65.8 68.3 67.8C64.7 69.7 60.1 71.1 55.6 72.5C51.1 73.9 45.7 76.4 41.5 76.3C37.3 76.1 34 73.5 30.3 71.7C26.6 69.8 21.5 67.9 19.5 65.2C17.4 62.5 18.4 58.7 18 55.7C17.7 52.6 16.3 49.3 17.5 46.7C18.7 44.2 22 42.4 25.1 40.4C28.3 38.4 32.7 36.1 36.3 34.8C39.8 33.6 42.9 32.7 46.2 33.1C49.5 33.5 52.8 36 56.2 37.1C59.7 38.1 64.5 37.8 66.8 39.4C69 41 68.3 44.2 69.6 46.7C70.8 49.1 73.7 51.5 74.2 53.9C74.7 56.2 74.2 58.6 72.4 60.8C70.5 63.1 65.9 65.5 63.1 67.4C60.2 69.3 58.5 71.1 55.4 72.3C52.4 73.5 46.5 74.1 44.7 74.5"/>
   </symbol>
 
-  <!-- Isometric cube: two faces shaded, one left open. -->
-  <symbol id="d-cube" viewBox="0 0 100 100">
-    <polygon points="50,16 79,33 50,50 21,33" fill="none"/>
-    <polygon points="21,33 50,50 50,84 21,67" fill="currentColor" fill-opacity=".9"/>
-    <polygon points="79,33 79,67 50,84 50,50" fill="currentColor" fill-opacity=".62"/>
+  <!-- Spiral wound outward from the middle. -->
+  <symbol id="d-coil" viewBox="0 0 100 100">
+    <path d="M52.8 50C52.9 50.2 53.3 50.8 53.3 51.2C53.3 51.6 52.9 51.9 52.7 52.4C52.4 52.8 52.4 53.5 52 54C51.6 54.5 51 54.9 50.3 55.4C49.5 55.9 48.4 56.9 47.5 57C46.5 57.1 45.1 56.7 44.5 56.1C43.8 55.4 43.9 54.1 43.4 53.2C42.9 52.4 42.1 51.8 41.6 50.8C41 49.8 39.9 48.3 40.1 47.3C40.3 46.3 42.1 45.8 42.9 44.8C43.7 43.9 43.9 42.7 44.8 41.7C45.7 40.8 46.9 39.4 48.2 39C49.5 38.6 51.2 39 52.6 39.4C54 39.7 54.9 40.6 56.6 41.1C58.2 41.6 61.4 41.2 62.5 42.2C63.6 43.3 62.6 45.8 63 47.5C63.4 49.2 64.7 50.7 64.9 52.5C65.2 54.3 65.3 56.9 64.3 58.3C63.2 59.8 60.5 60.1 58.8 61.3C57.2 62.5 56.1 64.8 54.3 65.5C52.5 66.3 50.1 65.8 47.9 65.8C45.7 65.7 43.1 66.1 40.9 65.4C38.8 64.6 36.6 63.1 35.2 61.4C33.8 59.7 33.3 57.4 32.3 55.2C31.2 53.1 29.2 50.9 28.8 48.5C28.4 46.1 29 43.2 29.9 40.8C30.8 38.3 32.3 35.6 34.3 33.7C36.3 31.8 39.2 30.5 41.9 29.5C44.6 28.5 47.7 27.6 50.6 27.7C53.4 27.8 56.3 29 59.1 30C61.9 31.1 64.8 32.1 67.2 33.8C69.5 35.6 71.7 38.1 73.1 40.6C74.5 43.2 75.2 46.3 75.6 49.4C76.1 52.4 76.6 56 75.8 58.9C74.9 61.9 72.6 64.8 70.4 67.3C68.2 69.7 65.4 71.7 62.4 73.6C59.4 75.5 55.9 78.1 52.4 78.6C48.8 79.2 44.7 78 41 77C37.3 76 33.2 75.1 30.2 72.9C27.2 70.7 25.5 67.1 23.3 64C21.1 60.8 18.1 57.6 17.1 54C16.1 50.3 16.1 45.9 17 42C17.9 38.2 19.8 34.2 22.3 30.9C24.7 27.7 28.1 24.5 31.7 22.5C35.3 20.5 39.8 19.9 44 19C48.3 18.2 52.9 16.8 57.1 17.4C61.2 18.1 65.4 20.5 69 22.8C72.7 25 76.1 27.7 79.1 30.9C82.2 34.1 85.9 37.7 87.3 41.8C88.7 45.9 88 50.8 87.5 55.3C87 59.9 86.7 65.1 84.5 69C82.2 72.9 77.8 76.1 73.9 78.9C70 81.7 65.6 83.9 60.9 85.6C56.2 87.3 51 88.9 45.9 88.9C40.7 89 34.6 88.1 30.2 85.8C25.7 83.5 22.2 79 19 75.1C15.7 71.3 12.6 67.2 10.7 62.7C8.7 58.2 7.5 53 7.4 48C7.4 43.1 9.8 35.5 10.3 32.9"/>
   </symbol>
 
-  <!-- 6-petal rhombus flower. -->
-  <symbol id="d-flower" viewBox="0 0 100 100">
-    <polygon points="50,50 41,29 50,10 59,29" fill="currentColor" fill-opacity=".9"/>
-    <polygon points="50,50 41,29 50,10 59,29" fill="none" transform="rotate(60 50 50)"/>
-    <polygon points="50,50 41,29 50,10 59,29" fill="currentColor" fill-opacity=".9" transform="rotate(120 50 50)"/>
-    <polygon points="50,50 41,29 50,10 59,29" fill="none" transform="rotate(180 50 50)"/>
-    <polygon points="50,50 41,29 50,10 59,29" fill="currentColor" fill-opacity=".9" transform="rotate(240 50 50)"/>
-    <polygon points="50,50 41,29 50,10 59,29" fill="none" transform="rotate(300 50 50)"/>
-    <polygon points="50,32 62,50 50,68 38,50" fill="none"/>
+  <!-- Squiggle, no two humps the same. -->
+  <symbol id="d-wave" viewBox="0 0 100 100">
+    <path d="M7 49.6C7.3 50.8 8.2 54.5 8.9 57.1C9.5 59.6 10.1 62.9 10.7 64.9C11.4 66.8 12 68.3 12.6 68.9C13.2 69.5 13.9 69.6 14.5 68.4C15.1 67.3 15.7 64.3 16.3 61.7C17 59.2 17.6 56.5 18.2 53.3C18.8 50.1 19.5 45.8 20.1 42.4C20.7 39.1 21.3 35.5 22 33.2C22.6 30.9 23.2 29.6 23.8 28.7C24.4 27.7 25.1 26.3 25.7 27.5C26.3 28.7 26.9 33 27.6 36.1C28.2 39.1 28.8 42.5 29.4 45.9C30.1 49.2 30.7 52.9 31.3 56.1C31.9 59.3 32.6 62.3 33.2 65C33.8 67.7 34.4 71 35 72.2C35.7 73.3 36.3 72.8 36.9 72C37.5 71.2 38.2 69.7 38.8 67.2C39.4 64.8 40 60.6 40.7 57.2C41.3 53.8 41.9 50 42.5 46.6C43.1 43.2 43.8 39.2 44.4 36.8C45 34.4 45.6 33.6 46.3 32.3C46.9 31.1 47.5 29.2 48.1 29.3C48.8 29.5 49.4 31.1 50 33.1C50.6 35.1 51.2 38.3 51.9 41.4C52.5 44.6 53.1 48.9 53.7 51.9C54.4 54.9 55 57 55.6 59.5C56.2 62 56.9 65.4 57.5 66.8C58.1 68.2 58.7 68.2 59.3 67.9C60 67.6 60.6 66.7 61.2 65.1C61.8 63.5 62.5 60.6 63.1 58.3C63.7 56 64.3 53.6 65 51.1C65.6 48.7 66.2 45.4 66.8 43.4C67.4 41.4 68.1 40.7 68.7 39.2C69.3 37.7 69.9 34.5 70.6 34.4C71.2 34.3 71.8 37.3 72.4 38.6C73.1 39.8 73.7 40.1 74.3 41.8C74.9 43.5 75.6 46.8 76.2 48.8C76.8 50.8 77.4 51.9 78 53.9C78.7 55.8 79.3 59.2 79.9 60.4C80.5 61.7 81.2 61.1 81.8 61.3C82.4 61.5 83 62 83.7 61.5C84.3 61 84.9 60.1 85.5 58.4C86.1 56.7 86.8 53.4 87.4 51.4C88 49.5 88.6 48.4 89.3 46.7C89.9 44.9 90.5 42.3 91.1 41C91.8 39.7 92.7 39.4 93 39.1"/>
   </symbol>
 
-  <!-- Nested diamonds, solid core. -->
-  <symbol id="d-nest" viewBox="0 0 100 100">
-    <polygon points="50,5 95,50 50,95 5,50" fill="none"/>
-    <polygon points="50,20 80,50 50,80 20,50" fill="none"/>
-    <polygon points="50,34 66,50 50,66 34,50" fill="currentColor" fill-opacity=".9"/>
+  <!-- Scratched asterisk, arms overshooting the cross. -->
+  <symbol id="d-burst" viewBox="0 0 100 100">
+    <path d="M41.2 45.8C42.6 45.8 46.7 45.8 49.5 45.8C52.2 45.9 55 46 57.8 46.2C60.5 46.4 63.3 46.9 66.1 47.2C68.8 47.4 71.6 47.6 74.3 47.9C77.1 48.2 81.2 48.8 82.6 49M45.9 43.1C47 44 50.3 46.8 52.2 48.8C54.2 50.9 55.7 53.3 57.6 55.5C59.5 57.7 61.2 59.9 63.4 61.8C65.5 63.7 68.4 64.8 70.4 66.9C72.3 69 74.3 73 75 74.3M50.1 41C50.3 42.4 50.9 46.6 51.2 49.4C51.6 52.2 52.3 55 52.4 57.8C52.4 60.6 51.7 63.4 51.7 66.2C51.8 69 52.5 71.8 52.7 74.6C52.9 77.4 52.7 81.6 52.7 83M58.6 43.9C57.4 45.1 53.9 48.4 51.7 50.7C49.5 53 47.6 55.7 45.3 57.9C43 60.2 39.9 61.7 37.8 64.1C35.7 66.6 34.9 70.3 32.8 72.7C30.7 75.1 26.3 77.7 25.1 78.6M56.2 49.9C54.8 50 50.6 50.5 47.8 50.3C44.9 50.1 42 48.5 39.2 48.8C36.4 49.1 33.7 51.4 31 52C28.2 52.6 25.4 52.6 22.5 52.5C19.7 52.3 15.4 51.4 14 51.2M54.7 52.7C53.4 51.7 49.5 48.5 46.7 46.6C43.9 44.8 40.5 43.6 37.9 41.5C35.2 39.5 33.4 36.5 30.9 34.3C28.4 32.1 25.1 30.8 22.7 28.5C20.3 26.1 17.8 21.5 16.8 20.1M50 55.8C50 54.2 50.3 49.3 49.9 46.1C49.4 43 47.8 39.9 47.3 36.7C46.8 33.5 46.9 30.3 46.8 27.1C46.8 23.9 47.1 20.7 47.2 17.5C47.2 14.3 47.2 9.5 47.2 7.9M45.5 56.9C46.8 55.8 50.9 52.8 53.3 50.5C55.7 48.2 57.6 45.3 60.1 43.1C62.5 40.8 65.7 39.3 68 36.9C70.4 34.5 71.7 31 74 28.6C76.4 26.2 80.8 23.6 82.2 22.6"/>
   </symbol>
 
-  <!-- Pinwheel of shaded triangles. -->
-  <symbol id="d-pin" viewBox="0 0 100 100">
-    <polygon points="50,50 50,10 80,24" fill="currentColor" fill-opacity=".9"/>
-    <polygon points="50,50 50,10 80,24" fill="none" transform="rotate(90 50 50)"/>
-    <polygon points="50,50 50,10 80,24" fill="currentColor" fill-opacity=".9" transform="rotate(180 50 50)"/>
-    <polygon points="50,50 50,10 80,24" fill="none" transform="rotate(270 50 50)"/>
-    <polygon points="50,6 94,50 50,94 6,50" fill="none"/>
+  <!-- Loop-de-loop chain, the kind that fills a margin. -->
+  <symbol id="d-loops" viewBox="0 0 100 100">
+    <path d="M24.1 52.6C24.1 53.3 24.2 55.4 24.3 56.7C24.4 58 24.9 59.1 24.5 60.4C24.1 61.6 22.8 63.2 21.8 64.2C20.9 65.1 19.7 65.6 18.8 66.2C18 66.7 17.7 67.2 16.6 67.5C15.5 67.9 13.6 68.4 12.3 68.3C11 68.2 9.9 67.6 8.9 66.8C8 66.1 7.5 64.8 6.8 63.9C6.1 63 5.1 62.8 4.7 61.6C4.4 60.5 4.5 58.5 4.6 56.9C4.7 55.4 4.9 53.7 5.2 52.3C5.6 50.9 6.2 49.6 6.8 48.6C7.4 47.6 7.8 47.1 8.8 46.2C9.9 45.2 11.6 43.9 13.2 43C14.9 42.1 16.7 41 18.6 40.9C20.4 40.7 22.6 41.8 24.2 42C25.8 42.2 26.5 41.6 27.9 42.1C29.3 42.6 31.3 44 32.7 45C34.2 46.1 35.5 47 36.5 48.4C37.4 49.9 38 52.3 38.5 53.6C39 55 39.4 55.3 39.5 56.5C39.7 57.7 39.5 59.4 39.2 60.9C38.9 62.3 38.4 64.1 37.8 65.3C37.3 66.4 36.5 67 35.6 67.6C34.8 68.3 33.7 69.2 32.7 69.4C31.6 69.6 30.4 69.1 29.4 69C28.5 69 28.1 69.4 27.2 69.1C26.3 68.9 24.9 68 24 67.4C23.2 66.8 22.5 66.7 22.1 65.6C21.7 64.5 21.7 62.1 21.5 60.7C21.3 59.3 21 58.3 21.1 57.3C21.2 56.4 21.4 55.7 21.9 54.8C22.5 53.9 23.5 52.7 24.4 51.8C25.2 50.8 26.2 50 26.9 49.2C27.7 48.4 27.8 47.7 29 47C30.2 46.2 32.5 45 34 44.8C35.4 44.5 36.6 45.4 37.8 45.5C38.9 45.7 40 45.3 41.1 45.5C42.2 45.8 43.4 46.2 44.4 46.9C45.3 47.7 46.4 49.1 47 50C47.5 50.8 47.3 51.3 47.7 52.1C48.2 52.8 49.4 53.6 49.7 54.4C50.1 55.3 49.9 56.3 49.8 57.2C49.7 58 49.3 58.7 49 59.6C48.7 60.5 48.7 61.8 48.1 62.6C47.5 63.4 46.3 64.3 45.5 64.5C44.7 64.6 44.3 63.4 43.3 63.3C42.3 63.2 40.4 64.1 39.5 63.9C38.5 63.6 38.5 62.2 37.7 61.7C36.9 61.1 35.3 61.5 34.7 60.5C34.1 59.5 34.2 57 33.9 55.6C33.6 54.2 33.2 53.2 33 51.9C32.9 50.7 32.8 49.2 33.1 47.9C33.4 46.6 34 45.1 34.8 44C35.5 42.9 36.7 42.4 37.8 41.5C38.8 40.7 39.8 39.5 41.3 38.7C42.7 38 45.1 37.3 46.7 36.9C48.3 36.5 49.3 36.4 50.9 36.5C52.4 36.5 54.3 36.9 55.9 37.2C57.6 37.4 59.5 37.4 60.8 38.2C62 39 62.2 41 63.3 42C64.3 43 66.3 43 66.9 44.2C67.6 45.3 66.9 47.3 67.1 48.8C67.2 50.3 68.1 51.6 67.9 53.1C67.6 54.5 66.3 56.3 65.6 57.5C64.8 58.6 64.4 59.3 63.6 59.9C62.7 60.4 61.8 60.3 60.5 60.8C59.1 61.3 56.5 62.7 55.3 62.9C54.1 63.2 54.1 62.6 53.2 62.1C52.2 61.6 50.8 60.9 49.8 60C48.8 59.2 48 58.2 47.3 56.9C46.5 55.7 45.3 54 45.1 52.4C44.8 50.9 45.6 49.1 45.8 47.7C45.9 46.3 45.6 45.4 46.1 44.3C46.6 43.2 47.8 42.3 48.6 41.1C49.4 40 49.9 38.3 51 37.4C52.1 36.6 53.7 36.2 55.2 35.8C56.7 35.4 58.5 35.1 60.1 34.8C61.7 34.6 63.5 34 64.9 34.3C66.3 34.5 67.2 35.7 68.4 36.5C69.6 37.3 71 38.4 72 39.2C72.9 40.1 73.4 40.8 74.3 41.6C75.1 42.5 76.6 43.1 77.1 44.1C77.5 45.2 76.7 46.5 76.7 48C76.8 49.4 77.3 51.7 77.2 52.7C77.1 53.8 76.5 53.7 75.9 54.4C75.4 55 74.7 55.9 74.1 56.8C73.6 57.7 73.2 59 72.4 59.6C71.6 60.1 70.3 60.3 69.4 60.1C68.5 59.9 68.1 58.9 67.2 58.4C66.3 58 64.7 57.8 64.1 57.5C63.5 57.1 63.7 57.2 63.5 56.5C63.2 55.9 62.6 54.4 62.4 53.6C62.3 52.8 62.4 52.6 62.4 51.6C62.3 50.6 61.7 48.8 62.3 47.8C62.8 46.9 64.8 46.8 65.5 46.1C66.3 45.4 66.2 44.4 66.8 43.6C67.5 42.9 68.5 42.1 69.7 41.7C70.8 41.2 73 41.1 73.6 41"/>
   </symbol>
 
-  <!-- Hexagon cut into sectors, alternate ones shaded. -->
-  <symbol id="d-hexfan" viewBox="0 0 100 100">
-    <polygon points="50,6 88,28 88,72 50,94 12,72 12,28" fill="none"/>
-    <polygon points="50,50 50,6 88,28" fill="currentColor" fill-opacity=".9"/>
-    <polygon points="50,50 88,72 50,94" fill="currentColor" fill-opacity=".9"/>
-    <polygon points="50,50 12,28 12,72" fill="currentColor" fill-opacity=".9"/>
+  <!-- Ring gone round twice and a half. -->
+  <symbol id="d-ring" viewBox="0 0 100 100">
+    <path d="M83.5 50.2C83.4 52.2 83.9 58.1 82.9 61.9C81.8 65.7 79.7 69.7 77.4 72.9C75.1 76.2 72.3 79.1 69 81.3C65.6 83.6 61.2 86 57.3 86.4C53.3 86.8 49.3 84.7 45.3 83.9C41.3 83.1 36.7 83.6 33.3 81.8C29.9 80.1 27.3 76.4 24.9 73.5C22.5 70.5 20 67.5 18.8 64.1C17.6 60.7 17.4 56.6 17.7 53.1C17.9 49.5 19.4 46.2 20.6 43C21.8 39.8 22.8 36.6 24.7 33.7C26.6 30.9 29.4 28.5 32 26C34.6 23.6 37.1 20.7 40.3 19.2C43.5 17.6 47.3 17 51.1 16.9C54.9 16.8 59.7 16.9 63.2 18.5C66.7 20 68.9 23.6 71.9 26C74.9 28.5 79 30.1 81.1 33.2C83.2 36.3 83.7 40.6 84.5 44.6C85.3 48.6 86.5 53 85.9 57C85.3 61 83.3 65.3 81.1 68.4C78.9 71.6 75.6 73.5 72.6 75.8C69.6 78.1 66.6 81.4 63 82.1C59.5 82.8 55 80.2 51.4 80C47.8 79.7 44.5 81.2 41.2 80.6C37.9 80 34 78.4 31.6 76.2C29.1 74 28.3 70.4 26.4 67.5C24.6 64.5 21.7 61.6 20.5 58.3C19.3 55.1 18.9 51.4 19.2 47.9C19.5 44.5 20.8 41.2 22.2 37.9C23.6 34.6 25.4 31.5 27.5 28.2C29.6 24.9 31.5 20.2 34.9 18.3C38.2 16.4 43.4 16.9 47.5 16.9C51.7 16.8 55.6 17.3 59.5 18.2C63.4 19.1 67.9 20 71 22.2C74.1 24.3 76.2 28.2 78.1 31.3C80 34.5 81.5 37.5 82.4 40.9C83.2 44.3 83.2 48.3 83.2 51.8C83.3 55.4 83.8 59.2 82.6 62.3C81.4 65.4 78.3 67.8 75.9 70.3C73.5 72.8 71 75.2 68.3 77.2C65.5 79.2 62.8 81.5 59.5 82.4C56.3 83.4 52.4 83.2 48.8 82.8C45.3 82.3 41.5 81 38.2 79.5C35 78 31.9 76.3 29.1 73.8C26.2 71.4 22.7 68.3 21.2 64.8C19.6 61.3 20 57.1 19.7 53.1C19.4 49.1 19.3 42.9 19.2 40.9"/>
   </symbol>
 </svg>
 
 <!-- ═══ MARGIN DOODLES ═══
      Purely decorative, so aria-hidden. They sit faint against the paper and
-     firm up under the cursor — no links, no images, nothing to click. -->
+     firm up under the cursor — no links, no images, nothing to click.
+
+     Three <use> of one symbol per doodle: the boil frames. CSS gives each a
+     different noise seed and shows one at a time. -->
 <div class="doodles" aria-hidden="true">
-  <svg class="doodle doodle--a" viewBox="0 0 100 100"><use href="#d-star"></use><use href="#d-star" class="pass-2"></use></svg>
-  <svg class="doodle doodle--b" viewBox="0 0 100 100"><use href="#d-cube"></use><use href="#d-cube" class="pass-2"></use></svg>
-  <svg class="doodle doodle--c" viewBox="0 0 100 100"><use href="#d-flower"></use><use href="#d-flower" class="pass-2"></use></svg>
-  <svg class="doodle doodle--d" viewBox="0 0 100 100"><use href="#d-nest"></use><use href="#d-nest" class="pass-2"></use></svg>
-  <svg class="doodle doodle--e" viewBox="0 0 100 100"><use href="#d-pin"></use><use href="#d-pin" class="pass-2"></use></svg>
-  <svg class="doodle doodle--f" viewBox="0 0 100 100"><use href="#d-hexfan"></use><use href="#d-hexfan" class="pass-2"></use></svg>
+  <svg class="doodle doodle--a" viewBox="0 0 100 100">
+    <use class="frame frame-1" href="#d-scrawl"></use><use class="frame frame-2" href="#d-scrawl"></use><use class="frame frame-3" href="#d-scrawl"></use>
+  </svg>
+  <svg class="doodle doodle--b" viewBox="0 0 100 100">
+    <use class="frame frame-1" href="#d-coil"></use><use class="frame frame-2" href="#d-coil"></use><use class="frame frame-3" href="#d-coil"></use>
+  </svg>
+  <svg class="doodle doodle--c" viewBox="0 0 100 100">
+    <use class="frame frame-1" href="#d-burst"></use><use class="frame frame-2" href="#d-burst"></use><use class="frame frame-3" href="#d-burst"></use>
+  </svg>
+  <svg class="doodle doodle--d" viewBox="0 0 100 100">
+    <use class="frame frame-1" href="#d-loops"></use><use class="frame frame-2" href="#d-loops"></use><use class="frame frame-3" href="#d-loops"></use>
+  </svg>
+  <svg class="doodle doodle--e" viewBox="0 0 100 100">
+    <use class="frame frame-1" href="#d-ring"></use><use class="frame frame-2" href="#d-ring"></use><use class="frame frame-3" href="#d-ring"></use>
+  </svg>
+  <svg class="doodle doodle--f" viewBox="0 0 100 100">
+    <use class="frame frame-1" href="#d-wave"></use><use class="frame frame-2" href="#d-wave"></use><use class="frame frame-3" href="#d-wave"></use>
+  </svg>
 </div>
 
 <!-- ═══ NAV ═══ Add a section: add a link here, give the <section> a matching id. -->
@@ -204,6 +214,10 @@
       <div class="hero-inner">
         <img class="hero-portrait" src="img/portrait.jpg" alt="Skyler Xiao" width="800" height="1000">
         <div class="hero-text">
+          <p class="hero-eyebrow">Electrical Engineering ·
+            <a href="https://coursecatalogue.mcgill.ca/archive/2025-2026/en/undergraduate/engineering/programs/electrical-computer-engineering/electrical-engineering-beng/"
+               target="_blank" rel="noopener"
+               data-preview="img/mcgill.jpg"><span class="mark" style="--brush: var(--brush-mcgill)">McGill University</span></a></p>
           <h1>Skyler Xiao</h1>
           <p class="hero-thesis">
             I build things that sit between <span class="mark">software and hardware</span> — web apps,
@@ -211,11 +225,7 @@
           </p>
 
           <div class="hero-bio">
-            <p>I'm a second-year Electrical Engineering student at
-              <a href="https://coursecatalogue.mcgill.ca/archive/2025-2026/en/undergraduate/engineering/programs/electrical-computer-engineering/electrical-engineering-beng/"
-                 target="_blank" rel="noopener"
-                 data-preview="img/mcgill.jpg"><span class="mark" style="--brush: var(--brush-mcgill)">McGill University</span></a>
-              who spends most of his time somewhere between a breadboard and a text editor.</p>
+            <p>I'm a second-year Electrical Engineering student who spends most of his time somewhere between a breadboard and a text editor.</p>
             <p>I like problems where the answer has to actually work — where a thing either lights up or it doesn't. Most of what I build starts as a small annoyance I wanted to remove.</p>
             <p>Off the clock I play varsity badminton, solve cubes faster than is strictly reasonable, and take a camera most places I go.</p>
           </div>

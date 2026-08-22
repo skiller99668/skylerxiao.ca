@@ -141,6 +141,36 @@ clearTimeout(window.revealFailsafe);
 })();
 
 /* ============================================================
+   Margin doodles — scroll-driven spin
+
+   Publishes scroll position as one custom property and lets CSS
+   decide what each doodle does with it, so adding or retuning a
+   doodle is a stylesheet change and never a change here.
+
+   One property write per frame for the whole set, on a rAF-gated
+   passive listener: nothing here reads layout, so it can't force
+   a synchronous reflow while scrolling.
+   ============================================================ */
+(function initDoodleSpin() {
+  var doodles = document.querySelector('.doodles');
+  if (!doodles) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var frame = null;
+
+  function update() {
+    frame = null;
+    doodles.style.setProperty('--scroll', String(window.scrollY || window.pageYOffset || 0));
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!frame) frame = window.requestAnimationFrame(update);
+  }, { passive: true });
+
+  update();   // reloading part-way down the page should not unwind them
+})();
+
+/* ============================================================
    Scroll-triggered reveal
    ============================================================ */
 (function initReveal() {

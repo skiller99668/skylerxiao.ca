@@ -138,11 +138,18 @@ img { max-width: 100%; height: auto; }
 /* ============================================================
    Margin doodles
 
-   Drafting shapes in graphite, sitting in the empty margins to
-   break up the quadrille. Sharp geometry, but each shape is
-   stroked twice with a slight offset and pushed through a fine
-   displacement filter, so the lines read as pencil rather than
-   vector. They sit faint and firm up under the cursor.
+   Biro scrawl in the empty margins, breaking up the quadrille.
+   Two things move, and both are cheap:
+
+   1. The boil. Three copies of each scribble, each displaced by
+      a different noise seed, swapped a third of a cycle apart at
+      ~8fps. Only opacity animates — the filtered results are
+      rasterised once and then just toggled — so this is a hand
+      redrawing the line, not three filters running per frame.
+   2. The spin, driven off --scroll (set by script.js) rather
+      than by a timer, so the marks only turn while the page is
+      actually moving. Sign and rate differ per doodle so they
+      never look geared to each other.
 
    Decoration only: no links, no keyboard stop, and they hide
    entirely once the margins are too narrow to hold them.
@@ -155,38 +162,52 @@ img { max-width: 100%; height: auto; }
 }
 
 .doodle {
+  --tilt: 0deg;              /* resting angle */
+  --spin: 0;                 /* degrees turned per pixel scrolled */
   position: absolute;
   width: 132px; height: 132px;
   color: var(--pencil);
-  opacity: 0.72;             /* solid enough to read as shaded-in graphite */
-  filter: url(#pencil-grain);
+  opacity: 0.72;             /* a mark made in passing, not a diagram */
+  transform: rotate(calc(var(--tilt) + var(--scroll, 0) * var(--spin) * 1deg));
   transition: opacity var(--dur) var(--ease);
 }
 .doodle use {
-  fill: none;                /* default; filled shapes set their own */
+  fill: none;                /* these are lines, never figures */
   stroke: currentColor;
-  stroke-width: 1.3;
-  stroke-linejoin: miter;
+  stroke-width: 2;
+  stroke-linecap: round;     /* a pen leaves no mitred corners */
+  stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
   pointer-events: all;       /* whole shape is hoverable, not just the line */
 }
-/* Second pass: same shape, barely offset. Kept faint and tight —
-   with solid fills a bigger offset reads as an off-register print
-   rather than a hand that went over the shading twice. */
-.doodle .pass-2 {
-  transform: translate(0.8px, -0.6px);
-  opacity: 0.22;
-}
 .doodle:hover { opacity: 1; }
+
+/* Exactly one frame is up at any moment. step-end holds each frame fully on
+   for its third and then drops it with no interpolation, and the delays are
+   exact thirds of the duration, so the three visible windows tile the cycle
+   without overlapping or — the failure that matters — leaving a sliver where
+   all three are transparent and the doodle blinks out.
+
+   frame-1 is the one left standing when animation is off, so it carries the
+   resting opacity rather than inheriting the hidden default. */
+.doodle .frame { opacity: 0; animation: boil 0.36s step-end infinite; }
+.doodle .frame-1 { opacity: 1; filter: url(#boil-1); }
+.doodle .frame-2 { filter: url(#boil-2); animation-delay: -0.12s; }
+.doodle .frame-3 { filter: url(#boil-3); animation-delay: -0.24s; }
+
+@keyframes boil {
+  0%       { opacity: 1; }
+  33.3333% { opacity: 0; }   /* held to 100% — no second stop needed */
+}
 
 /* Scattered down the page, alternating margins. Percentages so they keep
    their spread as sections are added or removed. */
-.doodle--a { top:  7%; right: calc(50% + 452px); transform: rotate(-8deg); }
-.doodle--b { top: 21%; left:  calc(50% + 452px); transform: rotate(6deg); }
-.doodle--c { top: 39%; right: calc(50% + 452px); transform: rotate(11deg); }
-.doodle--d { top: 54%; left:  calc(50% + 452px); transform: rotate(-5deg); }
-.doodle--e { top: 70%; right: calc(50% + 452px); transform: rotate(4deg); }
-.doodle--f { top: 85%; left:  calc(50% + 452px); transform: rotate(-10deg); }
+.doodle--a { top:  7%; right: calc(50% + 452px); --tilt:  -8deg; --spin:  0.14; }
+.doodle--b { top: 21%; left:  calc(50% + 452px); --tilt:   6deg; --spin: -0.11; }
+.doodle--c { top: 39%; right: calc(50% + 452px); --tilt:  11deg; --spin:  0.09; }
+.doodle--d { top: 54%; left:  calc(50% + 452px); --tilt:  -5deg; --spin: -0.16; }
+.doodle--e { top: 70%; right: calc(50% + 452px); --tilt:   4deg; --spin:  0.12; }
+.doodle--f { top: 85%; left:  calc(50% + 452px); --tilt: -10deg; --spin: -0.08; }
 
 /* Below this the margins can't hold a 132px shape without crowding. */
 @media (max-width: 1240px) { .doodles { display: none; } }
@@ -365,6 +386,17 @@ main { position: relative; }
 }
 .hero-text { grid-area: text; }
 
+.hero-eyebrow {
+  font-family: var(--mono); font-size: var(--t-xs);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-2); margin: 0 0 var(--s-5);
+}
+/* The marked link goes a step darker still: --ink-2 only reaches 4.2:1 on
+   the red marker, under AA for text this small. Ink clears 11:1, and the
+   marker itself is the affordance. */
+.hero-eyebrow a { color: var(--ink); text-decoration: none; }
+.hero-eyebrow a:hover .mark::after { opacity: 1; }
+
 /* Circular, and ringed like the timeline nodes so the two read as the
    same family of marks. Greyscale keeps it from competing with the
    marker colours, which are the only real chroma on the page. */
@@ -391,11 +423,6 @@ main { position: relative; }
 .hero-bio p { margin: 0 0 var(--s-3); color: var(--ink-2); }
 .hero-bio p:first-child { color: var(--ink); }
 .hero-bio p:last-child { margin-bottom: 0; }
-/* The marked link goes a step darker than its paragraph: --ink-2 only
-   reaches 4.2:1 on the red marker, under AA. Ink clears 11:1, and the
-   marker itself is the affordance. */
-.hero-bio a { color: var(--ink); text-decoration: none; }
-.hero-bio a:hover .mark::after { opacity: 1; }
 
 /* ============================================================
    Rows — experience, education, awards
@@ -752,6 +779,11 @@ main { position: relative; }
   html { scroll-behavior: auto; }
   .js .fade-in { opacity: 1; transform: none; transition: none; }
   .btn:hover { transform: none; }
+  /* The doodles keep their resting tilt and one frame. script.js also stops
+     feeding --scroll, but pin the transform here too so toggling the OS
+     setting mid-session settles them rather than leaving them where they
+     happened to stop. */
+  .doodle { transform: rotate(var(--tilt)); }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

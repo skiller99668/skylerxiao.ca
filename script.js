@@ -188,6 +188,51 @@ clearTimeout(window.revealFailsafe);
 })();
 
 /* ============================================================
+   Highlighter — draw the swipes on
+
+   Every brush swipe (text highlights and the few doodles that
+   carry one) starts clipped to nothing; adding .drawn wipes it
+   open. Done here rather than with a CSS animation so a swipe
+   is drawn when it is actually looked at, and so a screenful
+   arrives in sequence rather than all at once.
+
+   Enhancement only: the CSS leaves swipes fully painted unless
+   .js is set, so a failure here costs highlights, never text.
+   ============================================================ */
+(function initDrawIn() {
+  var swipes = document.querySelectorAll('.mark, .brush-mark, .hl');
+  if (!swipes.length) return;
+
+  function drawAll() {
+    swipes.forEach(function (el) { el.classList.add('drawn'); });
+  }
+
+  if (!('IntersectionObserver' in window)) return drawAll();
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return drawAll();
+  }
+
+  // Staggered per batch, so what lands together draws in sequence. The
+  // counter resets once a screenful has been handed out, or a swipe far
+  // down the page would inherit a delay measured in whole seconds.
+  var step = 0, reset = null;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.style.setProperty('--draw-delay', (step * 0.07).toFixed(2) + 's');
+      entry.target.classList.add('drawn');
+      observer.unobserve(entry.target);
+      step++;
+    });
+    window.clearTimeout(reset);
+    reset = window.setTimeout(function () { step = 0; }, 300);
+  }, { threshold: 0.1, rootMargin: '0px 0px -24px 0px' });
+
+  swipes.forEach(function (el) { observer.observe(el); });
+})();
+
+/* ============================================================
    Scroll-triggered reveal
    ============================================================ */
 (function initReveal() {

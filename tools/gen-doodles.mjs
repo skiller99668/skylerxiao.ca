@@ -228,6 +228,28 @@ function tangle(seed) {
   return smooth(fit(pts));
 }
 
+/* Highlighter swipe: a closed band to lay colour under a mark. Filled, not
+   stroked, and the only shape here that is. Both edges wander independently
+   and the ends pinch, the way a chisel tip does going down and lifting off —
+   a clean rectangle reads as a UI element, not as a pen someone dragged. */
+function swipe(seed) {
+  const rand = rng(seed);
+  const n = 15, pts = [];
+  const edge = (dir) => {
+    for (let i = 0; i <= n; i++) {
+      const k = dir > 0 ? i / n : 1 - i / n;
+      const pinch = 0.62 + Math.sin(k * Math.PI) * 0.38;   // thin at both ends
+      pts.push([
+        5 + k * 90,
+        50 + dir * (17 * pinch + (rand() - 0.5) * 5.5)
+      ]);
+    }
+  };
+  edge(-1);            // along the top
+  edge(1);             // and back along the bottom
+  return smooth(pts) + 'Z';
+}
+
 const shapes = [
   ['d-scrawl', 'Fast oval scrawl, laps drifting off each other.',   scrawl(7)],
   ['d-coil',   'Spiral wound outward from the middle.',             coil(21)],
@@ -269,6 +291,14 @@ const BLEED_F = [1.06, 1.28];
 const SIZE = [58, 190];   // wide on purpose: a uniform set reads as a pattern
 const SPIN = [0.7, 1.3];  // degrees per pixel scrolled
 
+/* A few marks get a highlighter swipe under them. Kept to a small share on
+   purpose — colour on every one would read as a palette rather than as
+   someone having reached for a marker on the way past. Drawn from the same
+   brush tokens the text highlights use, so the two are obviously one hand. */
+const HL_SHARE = 0.16;
+const BRUSHES = ['--wash', '--brush-waive', '--brush-subly',
+                 '--brush-clock', '--brush-tex', '--brush-mcgill'];
+
 function placements(seed, perSide) {
   const rand = rng(seed);
   const ids = shapes.map((s) => s[0]);
@@ -292,8 +322,10 @@ function placements(seed, perSide) {
       let shape = ids[Math.floor(rand() * ids.length)];
       while (shape === last) shape = ids[Math.floor(rand() * ids.length)];
       last = shape;
+      const hl = rand() < HL_SHARE;
       out.push({
         side, shape, size, bleeds,
+        brush: hl ? BRUSHES[Math.floor(rand() * BRUSHES.length)] : null,
         f: Math.round(f * 100) / 100,
         top: Math.round(top * 10) / 10,
         tilt: Math.round(rand() * 60 - 30),
@@ -326,9 +358,15 @@ if (process.argv.includes('--place')) {
     `--f: ${p.f.toFixed(2)}; --size: ${pad(p.size, 3)}px; ` +
     `--tilt: ${pad(p.tilt, 3)}deg; --spin: ${pad(p.spin.toFixed(2), 5)}; }`
   ).join('\n'));
+  const lit = list.filter((p) => p.brush);
+  console.log(`\n/* The ${lit.length} marks someone went over with a highlighter. */`);
+  console.log(lit.map((p) =>
+    `.doodle--${idx(p.n)} { --brush: var(${p.brush}); }`).join('\n'));
+
   console.log('\n<!-- ── HTML: paste over the .doodles children ── -->');
   console.log(list.map((p) =>
     `  <svg class="doodle doodle--${idx(p.n)}" viewBox="0 0 100 100">` +
+    (p.brush ? '<use class="hl" href="#d-swipe"></use>' : '') +
     [1, 2, 3].map((f) => `<use class="frame frame-${f}" href="#${p.shape}"></use>`).join('') +
     `</svg>`
   ).join('\n'));
@@ -336,4 +374,6 @@ if (process.argv.includes('--place')) {
   console.log(shapes.map(([id, note, d]) =>
     `  <!-- ${note} -->\n  <symbol id="${id}" viewBox="0 0 100 100">\n    <path d="${d}"/>\n  </symbol>`
   ).join('\n\n'));
+  console.log('\n  <!-- Highlighter swipe. Filled, unlike every shape above. -->');
+  console.log(`  <symbol id="d-swipe" viewBox="0 0 100 100">\n    <path d="${swipe(64)}"/>\n  </symbol>`);
 }

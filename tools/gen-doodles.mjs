@@ -267,7 +267,7 @@ const F_RANGE = [0.04, 0.96];
 const BLEED_SHARE = 0.22;
 const BLEED_F = [1.06, 1.28];
 const SIZE = [58, 190];   // wide on purpose: a uniform set reads as a pattern
-const SPIN = [1.5, 2.6];  // degrees per pixel scrolled
+const SPIN = [0.7, 1.3];  // degrees per pixel scrolled
 
 function placements(seed, perSide) {
   const rand = rng(seed);

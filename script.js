@@ -200,11 +200,18 @@ clearTimeout(window.revealFailsafe);
    .js is set, so a failure here costs highlights, never text.
    ============================================================ */
 (function initDrawIn() {
-  var swipes = document.querySelectorAll('.mark, .brush-mark, .hl');
+  /* .doodle--lit, not the .hl inside it. Clipping an SVG element to zero
+     width collapses its client rect to zero area, and a zero-area target
+     never satisfies a threshold — observing the swipe itself deadlocks and
+     the colour never appears at all. The wrapper has a real box. */
+  var swipes = document.querySelectorAll('.mark, .brush-mark, .doodle--lit');
   if (!swipes.length) return;
 
+  function draw(el) {
+    el.classList.add('drawn');
+  }
   function drawAll() {
-    swipes.forEach(function (el) { el.classList.add('drawn'); });
+    swipes.forEach(draw);
   }
 
   if (!('IntersectionObserver' in window)) return drawAll();
@@ -221,15 +228,30 @@ clearTimeout(window.revealFailsafe);
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
       entry.target.style.setProperty('--draw-delay', (step * 0.07).toFixed(2) + 's');
-      entry.target.classList.add('drawn');
+      draw(entry.target);
       observer.unobserve(entry.target);
       step++;
     });
     window.clearTimeout(reset);
     reset = window.setTimeout(function () { step = 0; }, 300);
-  }, { threshold: 0.1, rootMargin: '0px 0px -24px 0px' });
+  }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
 
   swipes.forEach(function (el) { observer.observe(el); });
+
+  /* Safety net. The failure this guards against is not cosmetic: an
+     undrawn swipe is an invisible one, so anything already on screen that
+     the observer has not reported by now gets drawn regardless. Below-fold
+     swipes are left alone so they still arrive as you reach them. */
+  window.setTimeout(function () {
+    swipes.forEach(function (el) {
+      if (el.classList.contains('drawn')) return;
+      var r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        draw(el);
+        observer.unobserve(el);
+      }
+    });
+  }, 1500);
 })();
 
 /* ============================================================

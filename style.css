@@ -462,15 +462,22 @@ img { max-width: 100%; height: auto; }
    simply there. Nothing here is load-bearing for reading the page.
 
    Buttons are deliberately left out: their swipe *is* the button, and one
-   that paints itself in on arrival looks unfinished rather than drawn. */
+   that paints itself in on arrival looks unfinished rather than drawn.
+
+   The doodle carries .drawn, never the <use> inside it. Clipping an SVG
+   element to zero width collapses its client rect to zero area, and a
+   zero-area target can never satisfy an IntersectionObserver threshold — so
+   observing the swipe itself deadlocks: clipped, therefore unobservable,
+   therefore never unclipped, and the colour simply never appears. The doodle
+   wrapper is a normal replaced element with a real box and is safe. */
 .js .mark::before,
 .js .brush-mark::before,
-.js .hl {
+.js .doodle--lit .hl {
   clip-path: inset(0 100% 0 0);
 }
 .js .mark.drawn::before,
 .js .brush-mark.drawn::before,
-.js .hl.drawn {
+.js .doodle--lit.drawn .hl {
   clip-path: inset(0 -12% 0 0);
   transition: clip-path 0.6s var(--ease) var(--draw-delay, 0s);
 }
@@ -980,7 +987,7 @@ main { position: relative; }
   .doodle { transform: rotate(var(--tilt)); }
   /* Highlights are simply on. Unclipped outright rather than left to the
      global 0.01ms override, so one that never comes into view still shows. */
-  .js .mark::before, .js .brush-mark::before, .js .hl { clip-path: none; }
+  .js .mark::before, .js .brush-mark::before, .js .doodle--lit .hl { clip-path: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

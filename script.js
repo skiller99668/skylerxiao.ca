@@ -188,6 +188,31 @@ clearTimeout(window.revealFailsafe);
 })();
 
 /* ============================================================
+   Nav strip — say that it scrolls
+
+   The links overflow on a phone and the strip has always scrolled,
+   but silently: the last one or two sit past the right edge with
+   nothing to suggest they exist. These two classes drive a fade on
+   the tail, and only when there is genuinely something hidden —
+   which is why it is measured here rather than assumed from a
+   breakpoint. Purely a hint; the strip scrolls either way.
+   ============================================================ */
+(function initNavHint() {
+  var strip = document.querySelector('.nav-links');
+  if (!strip) return;
+
+  function sync() {
+    var over = strip.scrollWidth - strip.clientWidth;
+    strip.classList.toggle('can-scroll', over > 4);
+    strip.classList.toggle('at-end', strip.scrollLeft >= over - 4);
+  }
+
+  strip.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync, { passive: true });
+  sync();
+})();
+
+/* ============================================================
    The quadrille — rule it on, line by line
 
    Builds a throwaway overlay of real rules over the page and
@@ -355,4 +380,31 @@ clearTimeout(window.revealFailsafe);
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
   items.forEach(function (el) { observer.observe(el); });
+
+  /* Landing on a fragment — a shared #contact link, or a reload after
+     clicking one — puts the page mid-document before the observer has
+     evaluated anything, and loading index.html#contact renders a blank
+     page: every section sits at opacity 0 with nothing to bring it back.
+     The failsafe in <head> cannot help, because script.js has by then
+     already cleared it.
+
+     So sweep whatever is on screen and reveal it directly, rather than
+     trusting the observer to have caught it. Cheap, idempotent, and it
+     turns the worst case from "the page is empty" into "one section
+     appeared without its animation". */
+  function sweep() {
+    var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+    items.forEach(function (el) {
+      if (el.classList.contains('visible')) return;
+      var r = el.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) {
+        el.classList.add('visible');
+        observer.unobserve(el);
+      }
+    });
+  }
+
+  window.addEventListener('load', sweep);
+  window.setTimeout(sweep, 1200);
+  sweep();
 })();

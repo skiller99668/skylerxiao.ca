@@ -252,7 +252,7 @@ img { max-width: 100%; height: auto; }
   position: absolute;
   width: var(--size); height: var(--size);
   color: var(--pencil);
-  opacity: 0.72;             /* a mark made in passing, not a diagram */
+  opacity: 0.5;              /* a mark made in passing, not a diagram */
   transform: rotate(calc(var(--tilt) + var(--scroll, 0) * var(--spin) * 1deg));
   transition: opacity var(--dur) var(--ease);
 }
@@ -268,7 +268,7 @@ img { max-width: 100%; height: auto; }
 /* Opacity on the doodle dims the whole group, swipe included, and at 0.72 a
    highlighter tint that is already pale barely registers. Marked-up ones sit
    a step stronger so the colour actually reads. */
-.doodle--lit { opacity: 0.9; }
+.doodle--lit { opacity: 0.62; }
 
 .doodle use {
   fill: none;                /* these are lines, never figures */
@@ -372,7 +372,7 @@ img { max-width: 100%; height: auto; }
    Hidden below 900px, where the gutter closes up and the column runs the
    full width — there is no "empty spot" left to use, and the hero set
    already carries the phone. */
-.doodles--in .doodle { opacity: 0.4; }
+.doodles--in .doodle { opacity: 0.28; }
 
 /* The hand-placed marks that carry a highlighter, matching the generated
    ones above. Different brushes so the colour never looks systematic. */
@@ -396,7 +396,18 @@ img { max-width: 100%; height: auto; }
 .doodle--c1 { top: 58.0%; left:  84%; --size: 92px; --tilt:  18deg; --spin: -0.43; }
 .doodle--c2 { top: 14.0%; left: 4.5%; --size: 54px; --tilt: -11deg; --spin:  0.52; }
 
-@media (max-width: 900px) { .doodles--in { display: none; } }
+/* The gutter these sit in closes up below 900px and the column runs full
+   width, so the set goes — except the contact mark, which is not in the
+   gutter. Measuring the phone layout says the page has exactly two open
+   regions left at 390px: the hero's top-right, which the hero set already
+   holds, and the bottom-right of contact at r84. That one stays, so the
+   page still ends on a mark rather than on nothing. */
+@media (max-width: 900px) {
+  .doodles--in { display: none; }
+  .doodles--in:has(.doodle--c1) { display: block; }
+  .doodles--in > .doodle:not(.doodle--c1) { display: none; }
+  .doodle--c1 { top: 62%; left: auto; right: 4%; --size: 84px; }
+}
 
 /* Insets are px, not %, and generous: these spin, and a rotating square needs
    about 0.21 x its own width of clearance (a 45deg square measures w x sqrt2,
@@ -1010,8 +1021,64 @@ main { position: relative; }
   .btn-row { gap: var(--s-2) var(--s-4); }
 }
 
+/* ============================================================
+   Phones
+
+   Measured rather than guessed. Each rule below answers something
+   an audit at 360/390/430px actually turned up:
+
+   - 44 elements of text under 12px, which is below what a phone
+     renders comfortably at arm's length.
+   - 24 tap targets under 40px, the nav links among them at 30px
+     tall against a 44px guideline.
+   - The gallery dropping to one column, which pushed the page to
+     ~4980px — a third longer than it needs to be, all of it the
+     same six photos.
+   - The nav strip scrolling with nothing to say so.
+   ============================================================ */
+/* Tablets get this too: the type steps and hit areas below are about the
+   device being held, not about the layout having collapsed. */
+@media (max-width: 900px) {
+  /* Nothing under 12px. Every offender is a mono label — dates, tags,
+     captions, button text — the first things to go illegible on a phone.
+     The last three set their own size rather than taking a step, so the
+     token change alone does not reach them. */
+  :root { --t-xs: 0.75rem; --t-sm: 0.875rem; }
+  .gallery figcaption { font-size: 12px; }
+  .site-footer .wrap { font-size: 12px; }
+  .tag { font-size: 12px; padding: 3px 8px; }
+  .btn { font-size: 12px; }
+
+  /* Real hit areas. 44px is the floor; the nav row grows to hold it so the
+     strip stays one line and every link is comfortably thumbable. */
+  .nav .wrap { height: 60px; }
+  .nav-link { padding: 13px 12px; }
+  .nav-sig { padding: 10px 6px; }
+  .btn { padding: 13px 20px; }
+  /* Negative margin so the bigger target does not push the row apart —
+     the icon keeps its place and only its reach grows. */
+  .project-icon { padding: 12px; margin: -12px; }
+  .project-icon .icon { width: 20px; height: 20px; }
+
+  .nav-links { padding-right: 8px; }
+}
+
+/* The strip scrolls, but silently — the last link or two sit off the right
+   edge with nothing to suggest more. Fading the tail says so without adding
+   furniture, and it lifts at the end so the final link is never dimmed.
+
+   Both classes come from script.js, which is also what keeps this honest on
+   a wide phone where the links already fit: no overflow, no class, no fade. */
+.nav-links.can-scroll:not(.at-end) {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 30px), transparent);
+          mask-image: linear-gradient(90deg, #000 calc(100% - 30px), transparent);
+}
+
+/* Two columns, not one. Six photos stacked full width is a third of the
+   page's height spent on one section, and at 390px a half-width photo is
+   still 175px — plenty for a thumbnail whose job is to be tapped. */
 @media (max-width: 420px) {
-  .gallery { grid-template-columns: 1fr; }
+  .gallery { gap: 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

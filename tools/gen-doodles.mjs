@@ -288,8 +288,13 @@ const F_RANGE = [0.04, 0.96];
    keeps its clearance, so nothing ever crowds the text. */
 const BLEED_SHARE = 0.22;
 const BLEED_F = [1.06, 1.28];
-const SIZE = [58, 190];   // wide on purpose: a uniform set reads as a pattern
-const SPIN = [0.7, 1.3];  // degrees per pixel scrolled
+/* Range stays wide — a uniform set reads as a pattern — but the draw is
+   biased small. A flat distribution over this range puts half the marks
+   above 110px, which crowds the margin and pulls the eye off the text; the
+   exponent keeps the big ones as occasional punctuation. */
+const SIZE = [52, 168];
+const SIZE_BIAS = 1.9;    // >1 skews toward the small end
+const SPIN = [0.30, 0.60]; // deg per px — ~45deg per 100px wheel notch
 
 /* A few marks get a highlighter swipe under them. Kept to a small share on
    purpose — colour on every one would read as a palette rather than as
@@ -314,7 +319,7 @@ function placements(seed, perSide) {
       // Half-step stagger between the sides so they never line up in pairs.
       const k = (i + s * 0.5) / perSide;
       const top = TOP + k * (BOTTOM - TOP) + (rand() - 0.5) * 2.4;
-      const size = Math.round(SIZE[0] + rand() * (SIZE[1] - SIZE[0]));
+      const size = Math.round(SIZE[0] + Math.pow(rand(), SIZE_BIAS) * (SIZE[1] - SIZE[0]));
       const bleeds = rand() < BLEED_SHARE;
       const f = bleeds
         ? BLEED_F[0] + rand() * (BLEED_F[1] - BLEED_F[0])
@@ -342,7 +347,7 @@ const pad = (s, w) => String(s).padStart(w);
 const idx = (n) => String(n).padStart(2, '0');
 
 if (process.argv.includes('--place')) {
-  const list = placements(77, 21);
+  const list = placements(77, 14);
   const bad = list.filter((p) =>
     p.top < 0 || p.top > 97 || p.f < 0 || (p.f > 1 && !p.bleeds) || p.f > BLEED_F[1]);
   if (bad.length) {

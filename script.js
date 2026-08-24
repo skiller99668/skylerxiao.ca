@@ -188,31 +188,81 @@ clearTimeout(window.revealFailsafe);
 })();
 
 /* ============================================================
-   The quadrille — rule it on
+   The quadrille — rule it on, line by line
 
-   Grows the mask on body::before from the top-left corner out.
-   Two frames of delay so the browser has the 0% start value
-   committed before the end value lands, or there is nothing to
-   transition from and the ruling just appears.
+   Builds a throwaway overlay of real rules over the page and
+   scales each one out from its start, staggered per axis so the
+   ruling spreads from the top-left. The CSS ruling underneath is
+   held at opacity 0 until this finishes, then swapped in and the
+   overlay dropped — the two are pixel-identical, so the handover
+   is invisible.
 
-   The mask is dropped when the run is over: it only reaches
-   260vmax, and a page taller than that would keep a strip of
-   its bottom unruled forever.
+   Speed is fixed and duration derived from length, so every rule
+   travels at the same rate. Delay is capped: on a very long page
+   the rules past the cap all start together, which nobody sees
+   because they are thousands of pixels below the fold.
    ============================================================ */
 (function initGridDraw() {
   var root = document.documentElement;
-  var DUR = 2800;
-
   function finish() { root.classList.add('grid-done'); }
 
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     return finish();
   }
 
+  var body = document.body;
+  var pw = body.scrollWidth;
+  var ph = body.scrollHeight;
+  var vw = root.clientWidth || pw;
+  var vh = window.innerHeight || 800;
+
+  var CELL = 24;
+  var SPEED = 2400;      // px per second, the pen's pace
+  var SPREAD = 2200;     // ms across one screen of stagger
+  var CAP = 3000;        // ms, furthest a rule may be delayed
+
+  // A page long enough to need thousands of rules is not worth animating.
+  if (!pw || !ph || (pw / CELL) * (ph / CELL) > 4e6) return finish();
+
+  var wrap = document.createElement('div');
+  wrap.className = 'grid-draw';
+  wrap.setAttribute('aria-hidden', 'true');
+  var frag = document.createDocumentFragment();
+  var last = 0;
+
+  function rule(cls, css, progress, len) {
+    var at = Math.min(progress * SPREAD, CAP);
+    var dur = Math.max(200, (len / SPEED) * 1000);
+    var el = document.createElement('b');
+    el.className = cls;
+    el.style.cssText = css + ';--at:' + Math.round(at) + 'ms;--len:' + Math.round(dur) + 'ms';
+    if (at + dur > last) last = at + dur;
+    frag.appendChild(el);
+  }
+
+  for (var x = 0; x <= pw; x += CELL) {
+    rule('v', 'left:' + x + 'px;top:0;height:' + ph + 'px', x / vw, ph);
+  }
+  for (var y = 0; y <= ph; y += CELL) {
+    rule('h', 'top:' + y + 'px;left:0;width:' + pw + 'px', y / vh, pw);
+  }
+
+  wrap.appendChild(frag);
+  body.appendChild(wrap);
+
+  // Two frames: the zero-scale start has to be committed before the end
+  // value lands, or there is nothing to transition from.
   window.requestAnimationFrame(function () {
     window.requestAnimationFrame(function () {
-      root.classList.add('grid-in');
-      window.setTimeout(finish, DUR + 400);
+      wrap.classList.add('on');
+      window.setTimeout(function () {
+        // Both in the same tick, deliberately. Handing the swap to a rAF
+        // leaves the overlay in the document if that frame never comes, and
+        // the two layers are pixel-identical anyway, so there is nothing to
+        // stage — they land together and the handover is invisible.
+        finish();
+        if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+      }, last + 150);
     });
   });
 })();

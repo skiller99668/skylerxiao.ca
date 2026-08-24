@@ -706,8 +706,13 @@ main { position: relative; }
 /* ============================================================
    Rows — experience, education, awards
    ============================================================ */
+/* The date column is fixed rather than auto-sized: each row is its own grid,
+   so an auto column would size to its own content and the dates would stop
+   lining up with each other the moment a second row exists. 48px holds a
+   four-digit year with room to spare; anything longer wraps rather than
+   pushing every entry back across the page. */
 .row {
-  display: grid; grid-template-columns: 124px 1fr; gap: var(--s-5);
+  display: grid; grid-template-columns: 48px 1fr; gap: var(--s-3);
   padding: var(--s-4) 0; border-top: 1px solid var(--rule);
 }
 .row:last-child { border-bottom: 1px solid var(--rule); }

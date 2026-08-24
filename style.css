@@ -586,6 +586,13 @@ img { max-width: 100%; height: auto; }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; }
 
+/* The address in full where there is room for it, "Email" where there is not.
+   Not a styling preference: at 360px the row has ~320px and the three buttons
+   need ~540px, and the address is ~270px of that on its own. Type alone can't
+   close it — even at 8px, far under the 12px floor, they still overflow. So
+   the label gives way rather than the legibility. */
+.btn-short { display: none; }
+
 /* ============================================================
    Sections & the trace routing
 
@@ -644,10 +651,17 @@ main { position: relative; }
 .hero-inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: "text photo";
-  gap: var(--s-7);
+  grid-template-areas:
+    "text    photo"
+    "actions actions";
+  /* Tight row gap: .hero-bio already carries its own bottom margin, and the
+     column gap is what holds the portrait off the text. */
+  gap: var(--s-2) var(--s-7);
   align-items: center;
 }
+/* Full hero width, not the leftover beside the portrait — the address is
+   long, and in the text column the three buttons could not share a line. */
+.hero-inner > .btn-row { grid-area: actions; }
 .hero-text { grid-area: text; }
 
 .hero-eyebrow {
@@ -1021,7 +1035,7 @@ main { position: relative; }
   /* Portrait leads the stack — it is already first in source order. */
   .hero-inner {
     grid-template-columns: 1fr;
-    grid-template-areas: "photo" "text";
+    grid-template-areas: "photo" "text" "actions";
     gap: var(--s-5);
   }
   .hero-portrait { width: 132px; height: 132px; }
@@ -1068,13 +1082,20 @@ main { position: relative; }
   .nav .wrap { height: 60px; }
   .nav-link { padding: 13px 12px; }
   .nav-sig { padding: 10px 6px; }
-  .btn { padding: 13px 20px; }
+  .btn { padding: 13px 16px; }
   /* Negative margin so the bigger target does not push the row apart —
      the icon keeps its place and only its reach grows. */
   .project-icon { padding: 12px; margin: -12px; }
   .project-icon .icon { width: 20px; height: 20px; }
 
   .nav-links { padding-right: 8px; }
+
+  /* Short label, tighter row: together these bring the three buttons onto one
+     line down to 360px without taking the type under 12px. */
+  .btn-long { display: none; }
+  .btn-short { display: inline; }
+  .btn-row { gap: var(--s-2); }
+  .btn--quiet { padding: 8px 8px; }
 }
 
 /* The strip scrolls, but silently — the last link or two sit off the right

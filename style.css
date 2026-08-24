@@ -470,7 +470,7 @@ img { max-width: 100%; height: auto; }
    `mix-blend-mode: multiply` lets overlapping ink darken instead
    of stacking flatly.
    ============================================================ */
-.brush-mark, .btn, .mark {
+.brush-mark, .mark {
   position: relative;
   isolation: isolate;          /* keeps the z-index:-1 ink inside */
 }
@@ -479,8 +479,8 @@ img { max-width: 100%; height: auto; }
    Guarded by @supports: without mask support these would paint as
    plain rectangles, so they simply don't render instead. */
 @supports ((-webkit-mask-image: url("#m")) or (mask-image: url("#m"))) {
-  .brush-mark::before, .btn::before, .mark::before,
-  .brush-mark::after,  .btn::after,  .mark::after {
+  .brush-mark::before, .mark::before,
+  .brush-mark::after,  .mark::after {
     content: "";
     position: absolute;
     inset: 0 -5px;             /* ink runs slightly past the text, as marker does */
@@ -488,12 +488,12 @@ img { max-width: 100%; height: auto; }
     mix-blend-mode: multiply;
     background-color: var(--brush);
   }
-  .brush-mark::before, .btn::before, .mark::before {
+  .brush-mark::before, .mark::before {
     -webkit-mask: var(--swipe-1) center / 100% 100% no-repeat;
             mask: var(--swipe-1) center / 100% 100% no-repeat;
   }
   /* Second pass — overlapping ink multiplies darker, as real marker does. */
-  .brush-mark::after, .btn::after, .mark::after {
+  .brush-mark::after, .mark::after {
     -webkit-mask: var(--swipe-2) center / 100% 100% no-repeat;
             mask: var(--swipe-2) center / 100% 100% no-repeat;
     opacity: 0; transition: opacity var(--dur) var(--ease);
@@ -539,10 +539,15 @@ img { max-width: 100%; height: auto; }
 }
 
 /* ============================================================
-   Buttons — marker swipes, not boxes.
-   .btn           secondary: highlighter wash behind ink
-   .btn--primary  primary:   trace-coloured swipe, white text
-   .btn--quiet    tertiary:  a swipe under the words only
+   Buttons
+
+   No marker swipe. The highlighter stays on running text, where
+   it reads as something someone marked; on a control it was
+   decorating the affordance rather than being one.
+
+   .btn           secondary: plain ink, rule underneath
+   .btn--primary  primary:   solid trace fill, white text
+   .btn--quiet    tertiary:  text and icon only
    ============================================================ */
 .btn {
   display: inline-flex; align-items: center; gap: var(--s-2);
@@ -550,25 +555,34 @@ img { max-width: 100%; height: auto; }
   font-family: var(--mono); font-size: 11.5px;
   letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--ink); text-decoration: none;
-  background: none; border: 0; cursor: pointer;
-  transition: transform var(--dur) var(--ease), color var(--dur) var(--ease);
+  background: none; border: 1px solid var(--rule); border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), color var(--dur) var(--ease),
+              border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
 }
 .btn .icon { width: 14px; height: 14px; }
-.btn:hover { transform: translateY(-1px); }
-.btn:hover::after { opacity: 1; }
+.btn:hover { transform: translateY(-1px); border-color: var(--trace); color: var(--trace); }
 
+/* Solid rather than a wash: the white text was legible only because the
+   swipe sat behind it, so removing the ink without replacing the ground
+   would have left this button invisible on paper. */
 .btn--primary {
-  --brush: var(--trace);
+  background: var(--trace);
+  border-color: var(--trace);
+  color: var(--on-trace);
+}
+.btn--primary:hover {
+  background: var(--trace-deep);
+  border-color: var(--trace-deep);
   color: var(--on-trace);
 }
 
 .btn--quiet {
-  padding: 6px 6px 4px;
+  padding: 8px 10px;
   color: var(--ink-2);
+  border-color: transparent;
 }
-.btn--quiet::before,
-.btn--quiet::after { top: 62%; }   /* swipe sits under the words */
-.btn--quiet:hover { color: var(--ink); }
+.btn--quiet:hover { color: var(--ink); border-color: var(--rule); background: none; }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; }
 

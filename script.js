@@ -188,6 +188,36 @@ clearTimeout(window.revealFailsafe);
 })();
 
 /* ============================================================
+   The quadrille — rule it on
+
+   Grows the mask on body::before from the top-left corner out.
+   Two frames of delay so the browser has the 0% start value
+   committed before the end value lands, or there is nothing to
+   transition from and the ruling just appears.
+
+   The mask is dropped when the run is over: it only reaches
+   260vmax, and a page taller than that would keep a strip of
+   its bottom unruled forever.
+   ============================================================ */
+(function initGridDraw() {
+  var root = document.documentElement;
+  var DUR = 2800;
+
+  function finish() { root.classList.add('grid-done'); }
+
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return finish();
+  }
+
+  window.requestAnimationFrame(function () {
+    window.requestAnimationFrame(function () {
+      root.classList.add('grid-in');
+      window.setTimeout(finish, DUR + 400);
+    });
+  });
+})();
+
+/* ============================================================
    Highlighter — draw the swipes on
 
    Every brush swipe (text highlights and the few doodles that
@@ -227,7 +257,7 @@ clearTimeout(window.revealFailsafe);
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
-      entry.target.style.setProperty('--draw-delay', (step * 0.07).toFixed(2) + 's');
+      entry.target.style.setProperty('--draw-delay', (step * 0.11).toFixed(2) + 's');
       draw(entry.target);
       observer.unobserve(entry.target);
       step++;

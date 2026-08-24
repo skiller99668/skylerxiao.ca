@@ -48,6 +48,13 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 0.22s;
 
+  /* Separate curve for the highlighter draw, which runs for seconds rather
+     than a fraction of one. --ease is a hard ease-out: fine at 0.22s, but
+     stretched over 3s it spends most of its time finished, so the stroke
+     would bolt across and then visibly creep. This is near-linear with soft
+     ends, which is how a hand actually drags a marker. */
+  --ease-draw: cubic-bezier(0.33, 0.12, 0.3, 1);
+
   /* ── Brush swipes ───────────────────────────────────────
      The signature mark. These are *shapes*, not colours: they
      are used as masks, so the colour comes from --brush and any
@@ -94,12 +101,58 @@ body {
   font-size: var(--t-base);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+}
 
-  /* The quadrille. Texture only — never carries meaning. */
+/* ── The quadrille ───────────────────────────────────────────────────────
+   Texture only — never carries meaning.
+
+   On its own layer rather than on body's background, because it gets masked
+   on arrival and masking body would take the content with it. Sits at -2:
+   above the paper colour, below the in-content doodles at -1, below
+   everything that is actually read.
+
+   Covers body's box rather than the canvas, which is why body keeps
+   min-height:100vh — a short page would otherwise leave ruling short of the
+   fold. The paper colour stays on body and still propagates to the canvas,
+   so overscroll is paper, not white. */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
   background-image:
     linear-gradient(var(--grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+/* Ruled on from the top-left corner outward. A radial mask grown from 0 puts
+   the wavefront on a diagonal, so the ruling arrives the way a sheet would if
+   you drew it corner to corner rather than wiping in as a band.
+
+   Sized in vmax, not %, so the pace is set by the window and not by how long
+   the page happens to be — the visible reveal takes the same time on every
+   page. The mask is dropped outright once it is done: at 260vmax a very tall
+   page on a small window could still have ruling missing off the bottom, and
+   an unruled strip at the end of a long scroll is worse than no animation.
+
+   Under .js only, so the ruling is simply there if the script never runs. */
+.js body::before {
+  -webkit-mask-image: radial-gradient(circle at 0 0, #000 62%, transparent 84%);
+          mask-image: radial-gradient(circle at 0 0, #000 62%, transparent 84%);
+  -webkit-mask-repeat: no-repeat;   mask-repeat: no-repeat;
+  -webkit-mask-position: 0 0;       mask-position: 0 0;
+  -webkit-mask-size: 0% 0%;         mask-size: 0% 0%;
+}
+.js.grid-in body::before {
+  -webkit-mask-size: 260vmax 260vmax;
+          mask-size: 260vmax 260vmax;
+  -webkit-transition: -webkit-mask-size 2.8s var(--ease-draw);
+          transition: mask-size 2.8s var(--ease-draw);
+}
+.js.grid-done body::before {
+  -webkit-mask-image: none;  mask-image: none;
 }
 
 a { color: var(--trace); text-underline-offset: 3px; }
@@ -479,7 +532,7 @@ img { max-width: 100%; height: auto; }
 .js .brush-mark.drawn::before,
 .js .doodle--lit.drawn .hl {
   clip-path: inset(0 -12% 0 0);
-  transition: clip-path 0.6s var(--ease) var(--draw-delay, 0s);
+  transition: clip-path 3s var(--ease-draw) var(--draw-delay, 0s);
 }
 
 /* Highlighted words in running text */

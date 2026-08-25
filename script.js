@@ -395,20 +395,14 @@ clearTimeout(window.revealFailsafe);
   var index = -1;
   var frame = null;
 
-  /* Panels transition height, which cannot animate to auto — so measure each
-     one's natural height and write it back as a custom property. Measured
-     with the panel briefly unclamped, because in live mode it is 0. */
-  function measure() {
-    items.forEach(function (item) {
-      var panel = item.querySelector('.project-panel');
-      var prevH = panel.style.height;
-      panel.style.transition = 'none';
-      panel.style.height = 'auto';
-      var h = panel.scrollHeight;
-      panel.style.height = prevH;
-      panel.style.transition = '';
-      item.style.setProperty('--panel-h', h + 'px');
-    });
+  /* Only fits() needs a size, and the panel's inner block reports its natural
+     height whatever the outer grid track is doing — so nothing has to be
+     unclamped, measured and put back. */
+  function tallestPanel() {
+    return items.reduce(function (max, item) {
+      var inner = item.querySelector('.project-panel-in');
+      return Math.max(max, inner ? inner.scrollHeight : 0);
+    }, 0);
   }
 
   /* Live mode needs the stage to fit the window with the tallest panel open.
@@ -418,13 +412,10 @@ clearTimeout(window.revealFailsafe);
   function fits() {
     if (reduce) return false;
     if (window.innerWidth < 901) return false;
-    var tallest = 0, tabs = 0;
-    items.forEach(function (item) {
-      var h = parseFloat(item.style.getPropertyValue('--panel-h')) || 0;
-      if (h > tallest) tallest = h;
-      tabs += item.querySelector('.project-tab').offsetHeight;
-    });
-    return window.innerHeight > STICK + tabs + tallest + ROOM;
+    var tabs = items.reduce(function (sum, item) {
+      return sum + item.querySelector('.project-tab').offsetHeight;
+    }, 0);
+    return window.innerHeight > STICK + tabs + tallestPanel() + ROOM;
   }
 
   // Every panel open, nothing selected. Called whenever live mode is off, not
@@ -437,7 +428,6 @@ clearTimeout(window.revealFailsafe);
     items.forEach(function (item) {
       item.classList.remove('is-open');
       item.querySelector('.project-tab').setAttribute('aria-expanded', 'true');
-      item.querySelector('.project-panel').style.removeProperty('height');
     });
     scroll.style.removeProperty('--scroll-room');
   }
@@ -466,9 +456,6 @@ clearTimeout(window.revealFailsafe);
       var on = i === index;
       item.classList.toggle('is-open', on);
       item.querySelector('.project-tab').setAttribute('aria-expanded', String(on));
-      // Height set here rather than by a rule: see the note in style.css.
-      item.querySelector('.project-panel').style.height =
-        on ? (item.style.getPropertyValue('--panel-h') || 'auto') : '0px';
     });
     if (viaClick) {
       window.scrollTo({ top: slotTop(index), behavior: reduce ? 'auto' : 'smooth' });
@@ -484,7 +471,6 @@ clearTimeout(window.revealFailsafe);
   }
 
   function sync() {
-    measure();
     live = fits();
     scroll.classList.toggle('is-live', live);
 

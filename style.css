@@ -870,8 +870,8 @@ main { position: relative; }
    - With .is-live, script.js has confirmed there is room and
      drives the focus from scroll position.
 
-   The panel heights are measured and written back as --panel-h
-   rather than transitioned to auto, which does not animate.
+   The open panel is collapsed by grid track, not by height, so
+   nothing has to measure or write a pixel value to animate.
    ============================================================ */
 .project {
   position: relative;
@@ -896,14 +896,26 @@ main { position: relative; }
   transition: color var(--dur) var(--ease), font-size 0.42s var(--ease),
               padding 0.42s var(--ease);
 }
-/* The trace thickening where the open project meets it, rather than a
-   coloured stripe alongside — the line and the tab are one object. */
-.project-tab::before {
+/* The open tab connects to the trace with the same pair of marks the section
+   headings use — a diamond pad on the line and a short routing run out to the
+   words. A thick coloured stripe down one edge would read as a generic accent
+   border; this reads as the page's own wiring, which is what it is.
+
+   Both animate by transform, not by size, so nothing here lays out per frame. */
+.project-tab::before {                 /* the pad, centred on the 1px trace */
   content: "";
-  position: absolute; left: 0; top: 10px; bottom: 10px;
-  width: 3px; background: var(--trace);
-  opacity: 0; transform: scaleY(0.3); transform-origin: 50% 50%;
+  position: absolute; left: -3px; top: 50%; margin-top: -3.5px;
+  width: 7px; height: 7px; background: var(--trace);
+  opacity: 0; transform: rotate(45deg) scale(0.35);
   transition: opacity var(--dur) var(--ease), transform 0.42s var(--ease);
+}
+.project-tab::after {                  /* the run from the pad to the title */
+  content: "";
+  position: absolute; left: 10px; top: 50%;
+  width: calc(var(--gutter) - 26px); height: 1px;
+  background: var(--trace); opacity: 0.35;
+  transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform 0.42s var(--ease);
 }
 .project-tab:hover { color: var(--ink); }
 .project-tab:focus-visible { outline-offset: -3px; }
@@ -914,8 +926,9 @@ main { position: relative; }
   padding-top: var(--s-5); padding-bottom: var(--s-4);
 }
 .project.is-open > .project-tab-h > .project-tab::before {
-  opacity: 1; transform: scaleY(1);
+  opacity: 1; transform: rotate(45deg) scale(1);
 }
+.project.is-open > .project-tab-h > .project-tab::after { transform: scaleX(1); }
 
 /* The title's highlighter draws itself on as the project opens and rewinds
    when it closes, so the mark belongs to the focus rather than being a
@@ -927,7 +940,11 @@ main { position: relative; }
 }
 
 .project-panel { overflow: hidden; }
-.project-panel-in { padding: 0 0 var(--s-5); }
+/* No padding on the grid item itself: it survives a collapsed 0fr row and
+   leaves every shut panel 24px tall. The spacing lives on the last child,
+   where an overflow:hidden parent keeps it from collapsing out. */
+.project-panel-in { padding: 0; }
+.project-panel-in > :last-child { margin-bottom: var(--s-5); }
 
 .project-shot {
   display: block; width: 100%; max-width: 400px;
@@ -961,15 +978,22 @@ main { position: relative; }
    stage fits the window. .projects-scroll is a fixed block of scroll room
    and the stage sticks inside it, so how much scrolling the section takes
    never depends on which panel happens to be open. */
-/* The height itself is written by script.js, not by a rule keyed off
-   .is-open. Transitioning to a var() that the script also rewrites left the
-   computed height lagging a frame behind the class — the selector matched
-   the open panel while the box stayed collapsed. One owner of the value is
-   worth more here than a tidy declarative rule. */
+/* Collapsed by grid track rather than by height. A height transition needs a
+   measured pixel target, which meant the script writing heights that had to
+   stay in step with the class — and when they drifted, the open panel stayed
+   shut. A 0fr/1fr track needs no measurement at all: the row simply has no
+   size until it does, and the panel's own content decides how big "1fr" is.
+   It also keeps the animation off width/height, so nothing is re-laid out
+   from a value the script owns. */
 .is-live .project-panel {
-  height: 0;
-  transition: height 0.46s var(--ease);
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.46s var(--ease);
 }
+.is-live .project.is-open .project-panel { grid-template-rows: 1fr; }
+/* min-height:0 is what lets a grid item actually collapse below its content;
+   without it the row refuses to go to zero and nothing appears to close. */
+.is-live .project-panel > * { min-height: 0; overflow: hidden; }
 
 .is-live .project-panel-in {
   opacity: 0; transform: translateY(-6px);

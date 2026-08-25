@@ -400,75 +400,125 @@
       </div>
       <h2>Selected projects <span class="aside">— 4 of 6</span></h2>
 
-      <!-- ── PROJECT ──────────────────────────────────────────
-           Copy this block to add one.
-           data-preview  → image shown on hover (optional)
-           .project-title → the project's own page
-           Drop the .tag--win span if there's no award, and drop
-           either icon link if there's no repo / no live site.   -->
-      <article class="project" style="--brush: var(--brush-waive)" data-preview="img/previews/waive.jpg">
-        <div>
-          <h3><a class="project-title" href="projects/waive/"><span class="mark">Waive</span></a></h3>
-          <p>A web app that turns intimidating government notices into plain language and a clear next step. Built with three teammates in 36 hours.</p>
-          <div class="tags">
-            <span class="tag tag--win">2nd place</span>
-            <span class="tag">Next.js</span>
-            <span class="tag">TypeScript</span>
-            <span class="tag">Hackathon</span>
-          </div>
-        </div>
-        <div class="project-links">
-          <a class="project-icon" href="https://github.com/skiller99668/Waive" target="_blank" rel="noopener" aria-label="Waive repository on GitHub"><svg class="icon icon--solid"><use href="#i-github"></use></svg></a>
-          <a class="project-icon" href="https://waivelegal.vercel.app" target="_blank" rel="noopener" aria-label="Waive live site"><svg class="icon"><use href="#i-arrow"></use></svg></a>
-        </div>
-      </article>
-      <!-- ── /PROJECT ────────────────────────────────────────- -->
+      <!-- ── PROJECTS ─────────────────────────────────────────
+           One project is open at a time. The tabs hang off the
+           section trace on the left; scrolling moves the focus
+           down them, and clicking one jumps the page to its slot
+           so the scroll position and the open panel never
+           disagree.
 
-      <article class="project" style="--brush: var(--brush-subly)" data-preview="img/previews/subly.jpg">
-        <div>
-          <h3><a class="project-title" href="projects/subly/"><span class="mark">Subly</span></a></h3>
-          <p>A sublease marketplace with map-based discovery, auth, and listing management — for students who move twice a year.</p>
-          <div class="tags">
-            <span class="tag">TypeScript</span>
-            <span class="tag">Supabase</span>
-            <span class="tag">Maps API</span>
-          </div>
-        </div>
-        <div class="project-links">
-          <a class="project-icon" href="https://github.com/skiller99668/Subly" target="_blank" rel="noopener" aria-label="Subly repository on GitHub"><svg class="icon icon--solid"><use href="#i-github"></use></svg></a>
-          <a class="project-icon" href="https://sublyrealtor.vercel.app" target="_blank" rel="noopener" aria-label="Subly live site"><svg class="icon"><use href="#i-arrow"></use></svg></a>
-        </div>
-      </article>
+           .projects-scroll is a fixed block of scroll room and
+           .projects-stage sticks inside it. That separation is
+           load-bearing: if the list scrolled normally, opening a
+           panel would change the document height, which changes
+           which project sits at the focus line, which opens a
+           different panel — a loop. Here the scroll room does not
+           depend on which panel is open.
 
-      <article class="project" style="--brush: var(--brush-clock)" data-preview="img/previews/alarm-clock.jpg">
-        <div>
-          <h3><a class="project-title" href="projects/alarm-clock/"><span class="mark">Alarm clock, from scratch</span></a></h3>
-          <p>An ESP-32 alarm clock — simulated in Wokwi, then soldered. Firmware, enclosure, and a snooze button that actually feels good to press.</p>
-          <div class="tags">
-            <span class="tag">C++</span>
-            <span class="tag">ESP-32</span>
-            <span class="tag">PlatformIO</span>
+           To add one: copy an <article>, give it a --brush, a
+           unique id on the tab/panel pair, and a shot.        -->
+      <div class="projects-scroll">
+        <div class="projects-stage">
+        <article class="project is-open" style="--brush: var(--brush-waive)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-waive"
+              aria-expanded="true" aria-controls="panel-waive">
+              <span class="mark">Waive</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-waive" role="region" aria-labelledby="tab-waive">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/waive.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>A web app that turns intimidating government notices into plain language and a clear next step. Built with three teammates in 36 hours.</p>
+              <div class="tags">
+                <span class="tag tag--win">2nd place</span>
+                <span class="tag">Next.js</span>
+                <span class="tag">TypeScript</span>
+                <span class="tag">Hackathon</span>
+              </div>
+              <div class="project-links">
+                <a class="project-case" href="projects/waive/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+                <a class="project-icon" href="https://github.com/skiller99668/Waive" target="_blank" rel="noopener" aria-label="Waive repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
+                <a class="project-icon" href="https://waivelegal.vercel.app" target="_blank" rel="noopener" aria-label="Waive live site"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="project-links">
-          <a class="project-icon" href="https://github.com/skiller99668/AlarmClock" target="_blank" rel="noopener" aria-label="Alarm clock repository on GitHub"><svg class="icon icon--solid"><use href="#i-github"></use></svg></a>
-        </div>
-      </article>
+        </article>
 
-      <article class="project" style="--brush: var(--brush-tex)" data-preview="img/previews/snaptex.jpg">
-        <div>
-          <h3><a class="project-title" href="projects/snaptex/"><span class="mark">SnapTeX</span></a></h3>
-          <p>A Chrome extension that screenshots scrolling pages and converts LaTeX into readable Unicode — including the malformed kind.</p>
-          <div class="tags">
-            <span class="tag">JavaScript</span>
-            <span class="tag">MathJax</span>
-            <span class="tag">RegEx</span>
+        <article class="project" style="--brush: var(--brush-subly)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-subly"
+              aria-expanded="false" aria-controls="panel-subly">
+              <span class="mark">Subly</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-subly" role="region" aria-labelledby="tab-subly">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/subly.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>A sublease marketplace with map-based discovery, auth, and listing management — for students who move twice a year.</p>
+              <div class="tags">
+                <span class="tag">TypeScript</span>
+                <span class="tag">Supabase</span>
+                <span class="tag">Maps API</span>
+              </div>
+              <div class="project-links">
+                <a class="project-case" href="projects/subly/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+                <a class="project-icon" href="https://github.com/skiller99668/Subly" target="_blank" rel="noopener" aria-label="Subly repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
+                <a class="project-icon" href="https://sublyrealtor.vercel.app" target="_blank" rel="noopener" aria-label="Subly live site"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+              </div>
+            </div>
           </div>
+        </article>
+
+        <article class="project" style="--brush: var(--brush-clock)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-alarm-clock"
+              aria-expanded="false" aria-controls="panel-alarm-clock">
+              <span class="mark">Alarm clock, from scratch</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-alarm-clock" role="region" aria-labelledby="tab-alarm-clock">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/alarm-clock.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>An ESP-32 alarm clock — simulated in Wokwi, then soldered. Firmware, enclosure, and a snooze button that actually feels good to press.</p>
+              <div class="tags">
+                <span class="tag">C++</span>
+                <span class="tag">ESP-32</span>
+                <span class="tag">PlatformIO</span>
+              </div>
+              <div class="project-links">
+                <a class="project-case" href="projects/alarm-clock/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+                <a class="project-icon" href="https://github.com/skiller99668/AlarmClock" target="_blank" rel="noopener" aria-label="Alarm clock, from scratch repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="project" style="--brush: var(--brush-tex)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-snaptex"
+              aria-expanded="false" aria-controls="panel-snaptex">
+              <span class="mark">SnapTeX</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-snaptex" role="region" aria-labelledby="tab-snaptex">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/snaptex.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>A Chrome extension that screenshots scrolling pages and converts LaTeX into readable Unicode — including the malformed kind.</p>
+              <div class="tags">
+                <span class="tag">JavaScript</span>
+                <span class="tag">MathJax</span>
+                <span class="tag">RegEx</span>
+              </div>
+              <div class="project-links">
+                <a class="project-case" href="projects/snaptex/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+                <a class="project-icon" href="https://github.com/skiller99668/SnapTeX" target="_blank" rel="noopener" aria-label="SnapTeX repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
+              </div>
+            </div>
+          </div>
+        </article>
         </div>
-        <div class="project-links">
-          <a class="project-icon" href="https://github.com/skiller99668/SnapTeX" target="_blank" rel="noopener" aria-label="SnapTeX repository on GitHub"><svg class="icon icon--solid"><use href="#i-github"></use></svg></a>
-        </div>
-      </article>
+      </div>
     </div>
   </section>
 

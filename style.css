@@ -855,41 +855,139 @@ main { position: relative; }
    the row still behaves like one big click target, while the
    icon links sit above it on z-index.
    ============================================================ */
+/* ============================================================
+   Projects — one open at a time, hung off the trace
+
+   The tabs reach back to the section's vertical line and sit on
+   it, so the line reads as the spine the projects hang from
+   rather than as decoration beside them.
+
+   Two states, and the fallback is the honest one:
+
+   - Without .is-live (no JS, a short window, reduced motion, or
+     a phone) every panel is simply open. Nothing is hidden
+     behind an interaction that may not run.
+   - With .is-live, script.js has confirmed there is room and
+     drives the focus from scroll position.
+
+   The panel heights are measured and written back as --panel-h
+   rather than transitioned to auto, which does not animate.
+   ============================================================ */
 .project {
   position: relative;
-  display: grid; grid-template-columns: 1fr auto; gap: var(--s-5);
-  align-items: start; padding: var(--s-5) 0;
   border-top: 1px solid var(--rule);
 }
 .project:last-of-type { border-bottom: 1px solid var(--rule); }
 
-.project h3 {
-  font-family: var(--display); font-weight: 600; font-size: var(--t-lg);
-  margin: 0 0 var(--s-1); letter-spacing: -0.015em;
-}
-/* The title marks itself with a nested .mark, which keeps the link
-   itself unpositioned — its ::after must resolve against .project to
-   stretch over the whole row, and a positioned link would trap it. */
-.project-title { color: var(--ink); text-decoration: none; }
-.project-title::after {          /* stretches the hit area over the row */
-  content: ""; position: absolute; inset: 0; z-index: 1;
-}
-.project .mark::before { opacity: 0.8; transition: opacity var(--dur) var(--ease); }
-.project:hover .mark::before { opacity: 1; }
-.project:hover .mark::after { opacity: 1; }
-.project p { margin: 0 0 var(--s-2); color: var(--ink-2); font-size: var(--t-md); max-width: 46em; }
+.project-tab-h { margin: 0; font-weight: inherit; font-size: inherit; }
 
-/* Icon links — above the stretched title link so they stay clickable */
-.project-links {
-  position: relative; z-index: 2;
-  display: flex; align-items: center; gap: var(--s-3); padding-top: 6px;
+/* Pulled a full gutter left so the tab begins exactly on the trace, then
+   padded back so its text still lines up with every other heading on the
+   page. Same trick the timeline logos use to sit on the line. */
+.project-tab {
+  position: relative;
+  display: block; width: calc(100% + var(--gutter));
+  margin-left: calc(var(--gutter) * -1);
+  padding: var(--s-4) 0 var(--s-4) var(--gutter);
+  background: none; border: 0; cursor: pointer; text-align: left;
+  font-family: var(--display); font-weight: 600;
+  font-size: var(--t-md); letter-spacing: -0.015em;
+  color: var(--ink-2);
+  transition: color var(--dur) var(--ease), font-size 0.42s var(--ease),
+              padding 0.42s var(--ease);
 }
+/* The trace thickening where the open project meets it, rather than a
+   coloured stripe alongside — the line and the tab are one object. */
+.project-tab::before {
+  content: "";
+  position: absolute; left: 0; top: 10px; bottom: 10px;
+  width: 3px; background: var(--trace);
+  opacity: 0; transform: scaleY(0.3); transform-origin: 50% 50%;
+  transition: opacity var(--dur) var(--ease), transform 0.42s var(--ease);
+}
+.project-tab:hover { color: var(--ink); }
+.project-tab:focus-visible { outline-offset: -3px; }
+
+.project.is-open > .project-tab-h > .project-tab {
+  color: var(--ink);
+  font-size: var(--t-lg);
+  padding-top: var(--s-5); padding-bottom: var(--s-4);
+}
+.project.is-open > .project-tab-h > .project-tab::before {
+  opacity: 1; transform: scaleY(1);
+}
+
+/* The title's highlighter draws itself on as the project opens and rewinds
+   when it closes, so the mark belongs to the focus rather than being a
+   one-time reveal. Overrides the page-wide draw-in for these marks only. */
+.js .project .mark::before { clip-path: inset(0 100% 0 0); }
+.js .project.is-open .mark::before {
+  clip-path: inset(0 -12% 0 0);
+  transition: clip-path 0.62s var(--ease-draw) 0.1s;
+}
+
+.project-panel { overflow: hidden; }
+.project-panel-in { padding: 0 0 var(--s-5); }
+
+.project-shot {
+  display: block; width: 100%; max-width: 400px;
+  aspect-ratio: 16 / 9; object-fit: cover;
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  margin: 0 0 var(--s-4);
+  background: var(--paper-raise);
+}
+.project p { margin: 0 0 var(--s-3); color: var(--ink-2); font-size: var(--t-md); max-width: 46em; }
+
+.project-links {
+  display: flex; align-items: center; gap: var(--s-4);
+}
+.project-case {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: var(--t-xs);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--trace); text-decoration: none;
+}
+.project-case .icon { width: 13px; height: 13px; }
+.project-case:hover { color: var(--trace-deep); }
 .project-icon {
   display: inline-flex; color: var(--ink-3);
   transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .project-icon .icon { width: 17px; height: 17px; }
 .project-icon:hover { color: var(--trace); transform: translateY(-1px); }
+
+/* ── Live mode ───────────────────────────────────────────────────────────
+   Only reached once script.js has measured the panels and confirmed the
+   stage fits the window. .projects-scroll is a fixed block of scroll room
+   and the stage sticks inside it, so how much scrolling the section takes
+   never depends on which panel happens to be open. */
+/* The height itself is written by script.js, not by a rule keyed off
+   .is-open. Transitioning to a var() that the script also rewrites left the
+   computed height lagging a frame behind the class — the selector matched
+   the open panel while the box stayed collapsed. One owner of the value is
+   worth more here than a tidy declarative rule. */
+.is-live .project-panel {
+  height: 0;
+  transition: height 0.46s var(--ease);
+}
+
+.is-live .project-panel-in {
+  opacity: 0; transform: translateY(-6px);
+  transition: opacity 0.3s var(--ease), transform 0.36s var(--ease);
+}
+.is-live .project.is-open .project-panel-in {
+  opacity: 1; transform: none;
+  transition-delay: 0.12s;
+}
+
+.is-live.projects-scroll { min-height: var(--scroll-room, auto); }
+.is-live .projects-stage { position: sticky; top: var(--stage-top, 96px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .project-tab, .project-tab::before,
+  .is-live .project-panel, .is-live .project-panel-in { transition: none; }
+}
+
 
 /* ============================================================
    Project hover preview

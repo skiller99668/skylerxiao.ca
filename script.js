@@ -309,7 +309,12 @@ clearTimeout(window.revealFailsafe);
      width collapses its client rect to zero area, and a zero-area target
      never satisfies a threshold — observing the swipe itself deadlocks and
      the colour never appears at all. The wrapper has a real box. */
-  var swipes = document.querySelectorAll('.mark, .brush-mark, .doodle--lit');
+  // Project titles are excluded: their highlighter is driven by which
+  // project is open (see the projects block above), and two owners of the
+  // same clip-path would fight over it.
+  var swipes = [].slice.call(
+    document.querySelectorAll('.mark, .brush-mark, .doodle--lit')
+  ).filter(function (el) { return !el.closest('.project'); });
   if (!swipes.length) return;
 
   function draw(el) {
@@ -357,6 +362,161 @@ clearTimeout(window.revealFailsafe);
       }
     });
   }, 1500);
+})();
+
+/* ============================================================
+   Projects — scroll drives which one is open
+
+   The tabs hang off the section trace and one panel is open at a
+   time. Scrolling through the section moves the focus down them;
+   clicking a tab jumps the page to that project's slot, so the
+   scroll position and the open panel can never disagree.
+
+   Enhancement only, and it opts *in*. Until .is-live is set the
+   CSS leaves every panel open, so no-JS, a short window, reduced
+   motion and phones all get the whole section as plain content.
+   Nothing here is required to read a project.
+   ============================================================ */
+(function initProjects() {
+  var scroll = document.querySelector('.projects-scroll');
+  if (!scroll) return;
+
+  var stage = scroll.querySelector('.projects-stage');
+  var items = [].slice.call(scroll.querySelectorAll('.project'));
+  if (items.length < 2) return;
+
+  var reduce = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var STICK = 88;        // stage offset below the sticky nav
+  var SLOT = 0.62;       // screens of scroll per project
+  var ROOM = 48;         // breathing space below the stage before it is cramped
+  var live = false;
+  var index = -1;
+  var frame = null;
+
+  /* Panels transition height, which cannot animate to auto — so measure each
+     one's natural height and write it back as a custom property. Measured
+     with the panel briefly unclamped, because in live mode it is 0. */
+  function measure() {
+    items.forEach(function (item) {
+      var panel = item.querySelector('.project-panel');
+      var prevH = panel.style.height;
+      panel.style.transition = 'none';
+      panel.style.height = 'auto';
+      var h = panel.scrollHeight;
+      panel.style.height = prevH;
+      panel.style.transition = '';
+      item.style.setProperty('--panel-h', h + 'px');
+    });
+  }
+
+  /* Live mode needs the stage to fit the window with the tallest panel open.
+     On a short window it would be cropped, so the section stays a plain list
+     instead — better to show everything than to hide it behind a viewport
+     that cannot display it. */
+  function fits() {
+    if (reduce) return false;
+    if (window.innerWidth < 901) return false;
+    var tallest = 0, tabs = 0;
+    items.forEach(function (item) {
+      var h = parseFloat(item.style.getPropertyValue('--panel-h')) || 0;
+      if (h > tallest) tallest = h;
+      tabs += item.querySelector('.project-tab').offsetHeight;
+    });
+    return window.innerHeight > STICK + tabs + tallest + ROOM;
+  }
+
+  // Every panel open, nothing selected. Called whenever live mode is off, not
+  // only when it switches off — the markup ships with the first project open
+  // so the section still reads correctly without JS, and that has to be
+  // cleared here or the first tab keeps its selected styling over a list
+  // where everything is already expanded.
+  function relax() {
+    index = -1;
+    items.forEach(function (item) {
+      item.classList.remove('is-open');
+      item.querySelector('.project-tab').setAttribute('aria-expanded', 'true');
+      item.querySelector('.project-panel').style.removeProperty('height');
+    });
+    scroll.style.removeProperty('--scroll-room');
+  }
+
+  /* Distance from the top of the document to the scroll block.
+
+     Deliberately not offsetTop: that is measured against the nearest
+     positioned ancestor, and .section > .wrap is position:relative, so
+     offsetTop returns a few hundred pixels inside the wrap rather than the
+     page offset — which aimed the whole mapping at the wrong part of the
+     document. A rect read is also self-correcting when anything above
+     changes height. */
+  function blockTop() {
+    return scroll.getBoundingClientRect().top + window.scrollY;
+  }
+
+  function slotTop(i) {
+    return blockTop() + i * window.innerHeight * SLOT;
+  }
+
+  function open(next, viaClick) {
+    next = Math.max(0, Math.min(items.length - 1, next));
+    if (next === index) return;
+    index = next;
+    items.forEach(function (item, i) {
+      var on = i === index;
+      item.classList.toggle('is-open', on);
+      item.querySelector('.project-tab').setAttribute('aria-expanded', String(on));
+      // Height set here rather than by a rule: see the note in style.css.
+      item.querySelector('.project-panel').style.height =
+        on ? (item.style.getPropertyValue('--panel-h') || 'auto') : '0px';
+    });
+    if (viaClick) {
+      window.scrollTo({ top: slotTop(index), behavior: reduce ? 'auto' : 'smooth' });
+    }
+  }
+
+  function onScroll() {
+    frame = null;
+    if (!live) return;
+    // -rect.top is how far the block's top has passed above the viewport top.
+    var into = -scroll.getBoundingClientRect().top;
+    open(Math.round(into / (window.innerHeight * SLOT)));
+  }
+
+  function sync() {
+    measure();
+    live = fits();
+    scroll.classList.toggle('is-live', live);
+
+    if (!live) return relax();
+
+    scroll.style.setProperty('--stage-top', STICK + 'px');
+    scroll.style.setProperty('--scroll-room', Math.round(
+      stage.offsetHeight + (items.length - 1) * window.innerHeight * SLOT) + 'px');
+    index = -1;                       // force open() to apply, not early-return
+    onScroll();
+  }
+
+  items.forEach(function (item, i) {
+    item.querySelector('.project-tab').addEventListener('click', function () {
+      if (!live) return;              // plain list: the panel is already open
+      open(i, true);
+    });
+  });
+
+  window.addEventListener('scroll', function () {
+    if (!frame) frame = window.requestAnimationFrame(onScroll);
+  }, { passive: true });
+
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(sync, 160);
+  }, { passive: true });
+
+  // Images change the panel heights as they land, so measure again after.
+  window.addEventListener('load', sync);
+  sync();
 })();
 
 /* ============================================================

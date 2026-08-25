@@ -477,8 +477,14 @@ clearTimeout(window.revealFailsafe);
     if (!live) return relax();
 
     scroll.style.setProperty('--stage-top', STICK + 'px');
+    /* items.length slots, not items.length - 1. The stage unsticks once the
+       block's bottom reaches it, at (room - stageHeight) of scrolling. With
+       one slot per gap that lands exactly where the last project opens, so it
+       appeared and was immediately scrolled away — measured at 13% of its
+       range still stuck, against 100% for the ones before it. The extra slot
+       is the last project's turn to be looked at. */
     scroll.style.setProperty('--scroll-room', Math.round(
-      stage.offsetHeight + (items.length - 1) * window.innerHeight * SLOT) + 'px');
+      stage.offsetHeight + items.length * window.innerHeight * SLOT) + 'px');
     index = -1;                       // force open() to apply, not early-return
     onScroll();
   }

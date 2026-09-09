@@ -388,9 +388,9 @@ clearTimeout(window.revealFailsafe);
   var reduce = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var STICK = 88;        // stage offset below the sticky nav
+  var STICK = 76;        // stage offset below the sticky nav (~54px tall)
   var SLOT = 0.62;       // screens of scroll per project
-  var ROOM = 48;         // breathing space below the stage before it is cramped
+  var ROOM = 32;         // breathing space below the stage before it is cramped
   var live = false;
   var index = -1;
   var frame = null;

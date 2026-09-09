@@ -896,10 +896,11 @@ main { position: relative; }
   position: relative;
   display: block; width: calc(100% + var(--gutter));
   margin-left: calc(var(--gutter) * -1);
-  /* s-3 rather than s-4: nine tabs on the spine, and every closed one counts
-     against fits(). The open tab keeps its larger padding below, so the
-     focused project still has presence. */
-  padding: var(--s-3) 0 var(--s-3) var(--gutter);
+  /* s-2 rather than s-4: nine tabs on the spine, and every closed one counts
+     against fits() — at s-4 the section stopped going live on a scaled
+     laptop and fell back to a plain list. The open tab keeps its larger
+     padding below, so the focused project still has presence. */
+  padding: var(--s-2) 0 var(--s-2) var(--gutter);
   background: none; border: 0; cursor: pointer; text-align: left;
   font-family: var(--display); font-weight: 600;
   font-size: var(--t-md); letter-spacing: -0.015em;
@@ -963,7 +964,7 @@ main { position: relative; }
 .project-panel-in {
   padding: 0;
   display: grid;
-  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
   column-gap: var(--s-5);
   align-items: start;
 }

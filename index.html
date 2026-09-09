@@ -398,7 +398,7 @@
         <svg class="doodle doodle--p2 doodle--lit" viewBox="0 0 100 100"><use class="hl" href="#d-swipe"></use><use class="frame frame-1" href="#d-ring"></use><use class="frame frame-2" href="#d-ring"></use><use class="frame frame-3" href="#d-ring"></use></svg>
         <svg class="doodle doodle--p3" viewBox="0 0 100 100"><use class="frame frame-1" href="#d-tangle"></use><use class="frame frame-2" href="#d-tangle"></use><use class="frame frame-3" href="#d-tangle"></use></svg>
       </div>
-      <h2>Selected projects <span class="aside">— 4 of 6</span></h2>
+      <h2>Projects</h2>
 
       <!-- ── PROJECTS ─────────────────────────────────────────
            One project is open at a time. The tabs hang off the
@@ -429,42 +429,18 @@
           <div class="project-panel" id="panel-waive" role="region" aria-labelledby="tab-waive">
             <div class="project-panel-in">
               <img class="project-shot" src="img/previews/waive.jpg" alt="" width="1200" height="750" loading="lazy">
-              <p>A web app that turns intimidating government notices into plain language and a clear next step. Built with three teammates in 36 hours.</p>
+              <p>A deterministic engine that computes filing deadlines and routes remedies for benefit overpayments and debt lawsuits across three jurisdictions, from one domain-blind codebase. A local Ollama model reads the notice and drafts the plain-language explanation — every deadline, eligibility check and citation runs through pure, tested TypeScript.</p>
               <div class="tags">
                 <span class="tag tag--win">2nd place</span>
                 <span class="tag">Next.js</span>
                 <span class="tag">TypeScript</span>
-                <span class="tag">Hackathon</span>
+                <span class="tag">Ollama</span>
+                <span class="tag">105 tests</span>
               </div>
               <div class="project-links">
                 <a class="project-case" href="projects/waive/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
                 <a class="project-icon" href="https://github.com/skiller99668/Waive" target="_blank" rel="noopener" aria-label="Waive repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
                 <a class="project-icon" href="https://waivelegal.vercel.app" target="_blank" rel="noopener" aria-label="Waive live site"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <article class="project" style="--brush: var(--brush-subly)">
-          <h3 class="project-tab-h">
-            <button class="project-tab" type="button" id="tab-subly"
-              aria-expanded="false" aria-controls="panel-subly">
-              <span class="mark">Subly</span>
-            </button>
-          </h3>
-          <div class="project-panel" id="panel-subly" role="region" aria-labelledby="tab-subly">
-            <div class="project-panel-in">
-              <img class="project-shot" src="img/previews/subly.jpg" alt="" width="1200" height="750" loading="lazy">
-              <p>A sublease marketplace with map-based discovery, auth, and listing management — for students who move twice a year.</p>
-              <div class="tags">
-                <span class="tag">TypeScript</span>
-                <span class="tag">Supabase</span>
-                <span class="tag">Maps API</span>
-              </div>
-              <div class="project-links">
-                <a class="project-case" href="projects/subly/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-                <a class="project-icon" href="https://github.com/skiller99668/Subly" target="_blank" rel="noopener" aria-label="Subly repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
-                <a class="project-icon" href="https://sublyrealtor.vercel.app" target="_blank" rel="noopener" aria-label="Subly live site"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
               </div>
             </div>
           </div>
@@ -480,15 +456,63 @@
           <div class="project-panel" id="panel-alarm-clock" role="region" aria-labelledby="tab-alarm-clock">
             <div class="project-panel-in">
               <img class="project-shot" src="img/previews/alarm-clock.jpg" alt="" width="1200" height="750" loading="lazy">
-              <p>An ESP-32 alarm clock — simulated in Wokwi, then soldered. Firmware, enclosure, and a snooze button that actually feels good to press.</p>
+              <p>An ESP-32 clock with a DS1302 RTC, LCD, 4x4 keypad and a WS2812B sunrise, coordinated over a shared I2C bus. To dismiss it you solve a maths problem that scales in difficulty with how quickly you answered last time. Simulated in Wokwi, then soldered.</p>
               <div class="tags">
                 <span class="tag">C++</span>
                 <span class="tag">ESP-32</span>
+                <span class="tag">I2C</span>
                 <span class="tag">PlatformIO</span>
               </div>
               <div class="project-links">
                 <a class="project-case" href="projects/alarm-clock/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
                 <a class="project-icon" href="https://github.com/skiller99668/AlarmClock" target="_blank" rel="noopener" aria-label="Alarm clock, from scratch repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="project" style="--brush: var(--brush-subly)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-subly"
+              aria-expanded="false" aria-controls="panel-subly">
+              <span class="mark">Subly</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-subly" role="region" aria-labelledby="tab-subly">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/subly.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>A sublease and roommate marketplace with a clustered Mapbox map, proximity and price filters, direct messaging and two-way reviews. Postgres schema and row-level security in Supabase, with notifications fired from database triggers so they hold even on writes made straight from the client.</p>
+              <div class="tags">
+                <span class="tag">Next.js</span>
+                <span class="tag">Supabase</span>
+                <span class="tag">Mapbox</span>
+                <span class="tag">PostgreSQL</span>
+              </div>
+              <div class="project-links">
+                <a class="project-case" href="projects/subly/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+                <a class="project-icon" href="https://github.com/skiller99668/Subly" target="_blank" rel="noopener" aria-label="Subly repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
+                <a class="project-icon" href="https://sublyrealtor.vercel.app" target="_blank" rel="noopener" aria-label="Subly live site"><svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="project" style="--brush: var(--brush-court)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-courtiq"
+              aria-expanded="false" aria-controls="panel-courtiq">
+              <span class="mark">CourtIQ</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-courtiq" role="region" aria-labelledby="tab-courtiq">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/courtiq.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>Imports a public Sleeper NBA league, infers whether it scores by points or by categories from undocumented settings, and ranks players with per-game rate normalisation or a nine-category z-score model. Optional AI narration sits on top and never influences a ranking or a trade.</p>
+              <div class="tags">
+                <span class="tag">TypeScript</span>
+                <span class="tag">Sleeper API</span>
+                <span class="tag">Analytics</span>
+                <span class="tag">23+ checks</span>
               </div>
             </div>
           </div>
@@ -504,15 +528,100 @@
           <div class="project-panel" id="panel-snaptex" role="region" aria-labelledby="tab-snaptex">
             <div class="project-panel-in">
               <img class="project-shot" src="img/previews/snaptex.jpg" alt="" width="1200" height="750" loading="lazy">
-              <p>A Chrome extension that screenshots scrolling pages and converts LaTeX into readable Unicode — including the malformed kind.</p>
+              <p>A Chrome extension that converts LaTeX expressions into paste-ready Unicode, plus a scrolling-screenshot merger and a persistent screenshot bag for collecting visual context.</p>
               <div class="tags">
                 <span class="tag">JavaScript</span>
-                <span class="tag">MathJax</span>
+                <span class="tag">Chrome Extensions API</span>
                 <span class="tag">RegEx</span>
               </div>
               <div class="project-links">
                 <a class="project-case" href="projects/snaptex/">Case study<svg class="icon" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
                 <a class="project-icon" href="https://github.com/skiller99668/SnapTeX" target="_blank" rel="noopener" aria-label="SnapTeX repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="project" style="--brush: var(--brush-tail)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-tail"
+              aria-expanded="false" aria-controls="panel-tail">
+              <span class="mark">Custom tail, in C</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-tail" role="region" aria-labelledby="tab-tail">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/tail.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>The Unix tail command rebuilt around a ring buffer for O(1) retrieval over large files. Manual heap management and pointer arithmetic, checked for leaks, with a Makefile build handling compilation and dependencies.</p>
+              <div class="tags">
+                <span class="tag">C</span>
+                <span class="tag">Makefiles</span>
+                <span class="tag">Memory management</span>
+                <span class="tag">File I/O</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="project" style="--brush: var(--brush-site)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-portfolio"
+              aria-expanded="false" aria-controls="panel-portfolio">
+              <span class="mark">This site</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-portfolio" role="region" aria-labelledby="tab-portfolio">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/portfolio.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>Built from scratch as a job-hunting tool and a front-end exercise, iterated through several design passes into one visual identity — its type, palette, and the marker you are looking at. Deployed on GitHub Pages behind a domain configured at Namecheap.</p>
+              <div class="tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">GitHub Pages</span>
+              </div>
+              <div class="project-links">
+                <a class="project-icon" href="https://github.com/skiller99668/skylerxiao.ca" target="_blank" rel="noopener" aria-label="This site repository on GitHub"><svg class="icon icon--solid" aria-hidden="true"><use href="#i-github"></use></svg></a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="project" style="--brush: var(--brush-hire)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-hiring"
+              aria-expanded="false" aria-controls="panel-hiring">
+              <span class="mark">Company hiring system</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-hiring" role="region" aria-labelledby="tab-hiring">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/hiring.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>Object-oriented models for employees, jobs and companies standing in for real hiring infrastructure, with a CSV parsing engine that validates and handles errors as it reads, and algorithms that grade performance and compare candidates.</p>
+              <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">OOP</span>
+                <span class="tag">CSV parsing</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="project" style="--brush: var(--brush-city)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-citydata"
+              aria-expanded="false" aria-controls="panel-citydata">
+              <span class="mark">World city data tool</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-citydata" role="region" aria-labelledby="tab-citydata">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/citydata.jpg" alt="" width="1200" height="750" loading="lazy">
+              <p>40,000+ city records cleaned, filtered and aggregated in Bash — population statistics and cross-country comparisons, with validation checks for missing or malformed rows.</p>
+              <div class="tags">
+                <span class="tag">Bash</span>
+                <span class="tag">grep</span>
+                <span class="tag">Pipelines</span>
               </div>
             </div>
           </div>

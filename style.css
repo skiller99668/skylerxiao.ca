@@ -80,6 +80,14 @@
   --brush-clock: #FAD79B;   /* LED-display amber      */
   --brush-tex:   #D9C7F5;   /* syntax-highlight violet */
   --brush-mcgill:#F9C3C9;   /* McGill red #ED1B2F, lightened */
+  /* Five more, spaced around the wheel from the four above so nine
+     projects still read as nine distinct marks. All light: the marker
+     sits behind dark text. */
+  --brush-court:  #FBC4B0;  /* CourtIQ, basketball leather */
+  --brush-tail:   #B4E4E4;  /* Custom tail, terminal teal  */
+  --brush-site:   #DDF2B2;  /* this site's own highlighter */
+  --brush-hire:   #F3C6DA;  /* hiring system, rose         */
+  --brush-city:   #CBCDF5;  /* city data, periwinkle       */
 
   --pencil: #2F343D;        /* graphite for the margin doodles */
 }
@@ -888,7 +896,10 @@ main { position: relative; }
   position: relative;
   display: block; width: calc(100% + var(--gutter));
   margin-left: calc(var(--gutter) * -1);
-  padding: var(--s-4) 0 var(--s-4) var(--gutter);
+  /* s-3 rather than s-4: nine tabs on the spine, and every closed one counts
+     against fits(). The open tab keeps its larger padding below, so the
+     focused project still has presence. */
+  padding: var(--s-3) 0 var(--s-3) var(--gutter);
   background: none; border: 0; cursor: pointer; text-align: left;
   font-family: var(--display); font-weight: 600;
   font-size: var(--t-md); letter-spacing: -0.015em;
@@ -941,18 +952,40 @@ main { position: relative; }
 
 .project-panel { overflow: hidden; }
 /* No padding on the grid item itself: it survives a collapsed 0fr row and
-   leaves every shut panel 24px tall. The spacing lives on the last child,
-   where an overflow:hidden parent keeps it from collapsing out. */
-.project-panel-in { padding: 0; }
+   leaves every shut panel 24px tall. The spacing lives on the children,
+   where an overflow:hidden parent keeps it from collapsing out.
+
+   Shot beside the text rather than above it. Stacked, a panel is the image
+   plus the prose — around 390px, and with nine tabs on the spine that total
+   pushed fits() past a laptop window, which drops the whole section to its
+   plain-list fallback. Side by side the panel is max(image, prose) instead
+   of the sum, which is also a better use of an 860px column. */
+.project-panel-in {
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  column-gap: var(--s-5);
+  align-items: start;
+}
+.project-panel-in > :not(.project-shot) { grid-column: 2; }
 .project-panel-in > :last-child { margin-bottom: var(--s-5); }
 
 .project-shot {
-  display: block; width: 100%; max-width: 400px;
+  grid-column: 1; grid-row: 1 / -1; align-self: start;
+  display: block; width: 100%;
   aspect-ratio: 16 / 9; object-fit: cover;
   border: 1px solid var(--rule); border-radius: var(--radius);
-  margin: 0 0 var(--s-4);
+  margin: 0 0 var(--s-5);
   background: var(--paper-raise);
 }
+/* Live mode is off below 901px anyway, but the plain-list fallback still
+   renders these panels — two columns would squeeze the prose to nothing. */
+@media (max-width: 760px) {
+  .project-panel-in { grid-template-columns: minmax(0, 1fr); }
+  .project-panel-in > :not(.project-shot) { grid-column: 1; }
+  .project-shot { grid-column: 1; grid-row: auto; max-width: 400px; margin-bottom: var(--s-4); }
+}
+
 .project p { margin: 0 0 var(--s-3); color: var(--ink-2); font-size: var(--t-md); max-width: 46em; }
 
 .project-links {

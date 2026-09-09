@@ -114,73 +114,96 @@
   <section class="cmp" id="c-project">
     <p class="cmp-title">Project</p>
     <p class="cmp-note">
-      An <code>&lt;article&gt;</code>, not a link &mdash; it holds several links and anchors can&rsquo;t nest.
-      The title link stretches over the whole row, so the row still acts as one big click target
-      while the icons stay separately clickable.
+      An <code>&lt;article&gt;</code> holding a tab and a panel. One panel is open at a time: the
+      tabs hang off the section trace, scrolling moves the focus down them, and clicking one
+      jumps the page to that project&rsquo;s slot so the scroll position and the open panel can
+      never disagree.
     </p>
     <p class="cmp-note">
-      <code>data-preview</code> is the image shown on hover (desktop pointers only; touch is
-      unaffected). Point the title at the project&rsquo;s own page under <code>/projects/</code>.
-      Drop <code>.tag--win</code> when there&rsquo;s no award, and drop either icon when there&rsquo;s no
-      repo or no live site.
+      The <code>&lt;button&gt;</code> and <code>id</code> pairing is load-bearing, not decoration:
+      <code>aria-controls</code> and <code>aria-labelledby</code> tie tab to panel, and
+      <code>aria-expanded</code> is what a screen reader reads as open or shut &mdash;
+      <code>script.js</code> keeps it in step with <code>.is-open</code>. Give each new project a
+      unique slug and use it in <em>both</em> ids.
     </p>
     <p class="cmp-note">
-      <code>--brush</code> on the row sets the marker colour, which the title&rsquo;s
-      <code>.mark</code> inherits. Named tokens exist for the current four; a new project can use
-      any hex directly &mdash; <code>style="--brush: #A8EBCF"</code>. Pick something light: the
-      marker sits <em>behind</em> dark text, so a saturated colour will fail contrast.
+      Only the first article ships with <code>.is-open</code> and
+      <code>aria-expanded="true"</code>, so the section still reads correctly before any script
+      runs. Without <code>.is-live</code> &mdash; no JS, reduced motion, a narrow or short window
+      &mdash; every panel is simply open and the section is a plain list.
+    </p>
+    <p class="cmp-note">
+      <code>--brush</code> on the article sets the marker colour behind the title. Nine named
+      tokens exist (<code>--brush-waive</code> &hellip; <code>--brush-city</code>); a new project
+      can use any hex directly. Pick something light: the marker sits <em>behind</em> dark text,
+      so a saturated colour will fail contrast.
+    </p>
+    <p class="cmp-note">
+      Drop the case-study link when there is no page under <code>/projects/</code>, and drop
+      either icon when there is no repo or no live site. If a project has none of the three, omit
+      <code>.project-links</code> altogether rather than leaving an empty flex row.
+    </p>
+    <p class="cmp-note">
+      <strong>Adding one costs a slot.</strong> <code>fits()</code> in <code>script.js</code>
+      only switches live mode on when <code>88 + every tab + the tallest panel + 48</code> fits
+      the window. Each extra project adds a tab to that sum, so past a certain count the section
+      quietly stops being interactive and falls back to the plain list. Nine currently needs
+      ~800px of window height.
     </p>
     <div class="cmp-grid">
       <div class="demo">
-        <article class="project" style="border-top:0;--brush:var(--brush-subly)" data-preview="img/previews/subly.jpg">
-          <div>
-            <h3><a class="project-title" href="#"><span class="mark">Project name</span></a></h3>
-            <p>One or two sentences on what it does and who it&rsquo;s for.</p>
-            <div class="tags">
-              <span class="tag tag--win">2nd place</span>
-              <span class="tag">Next.js</span>
-              <span class="tag">Supabase</span>
+        <article class="project is-open" style="border-top:0;--brush:var(--brush-subly)">
+          <h3 class="project-tab-h">
+            <button class="project-tab" type="button" id="tab-demo"
+              aria-expanded="true" aria-controls="panel-demo">
+              <span class="mark">Project name</span>
+            </button>
+          </h3>
+          <div class="project-panel" id="panel-demo" role="region" aria-labelledby="tab-demo">
+            <div class="project-panel-in">
+              <img class="project-shot" src="img/previews/subly.jpg" alt="" width="1200" height="750">
+              <p>One or two sentences on what it does and who it&rsquo;s for.</p>
+              <div class="tags">
+                <span class="tag tag--win">2nd place</span>
+                <span class="tag">Next.js</span>
+              </div>
+              <div class="project-links">
+                <a class="project-case" href="#">Case study<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="9,6 18,6 18,15"/></svg></a>
+                <a class="project-icon" href="#" aria-label="Repository on GitHub"><svg class="icon icon--solid" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.7.8.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+              </div>
             </div>
-          </div>
-          <div class="project-links">
-            <a class="project-icon" href="#" aria-label="Repository on GitHub"><svg class="icon icon--solid" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.7.8.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
-            <a class="project-icon" href="#" aria-label="Live site"><svg class="icon" viewBox="0 0 24 24"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="9,6 18,6 18,15"/></svg></a>
           </div>
         </article>
       </div>
-<pre>&lt;<span class="t">article</span> <span class="a">class</span>=<span class="a">"project"</span>
-         <span class="a">style</span>=<span class="a">"--brush: var(--brush-subly)"</span>
-         <span class="a">data-preview</span>=<span class="a">"img/previews/slug.jpg"</span>&gt;
-  &lt;<span class="t">div</span>&gt;
-    &lt;<span class="t">h3</span>&gt;
-      &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-title"</span>
-         <span class="a">href</span>=<span class="a">"projects/slug/"</span>&gt;
-        &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"mark"</span>&gt;Project name&lt;/<span class="t">span</span>&gt;
-      &lt;/<span class="t">a</span>&gt;
-    &lt;/<span class="t">h3</span>&gt;
-    &lt;<span class="t">p</span>&gt;One or two sentences.&lt;/<span class="t">p</span>&gt;
-    &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"tags"</span>&gt;
-      &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tag tag--win"</span>&gt;2nd place&lt;/<span class="t">span</span>&gt;
-      &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tag"</span>&gt;Next.js&lt;/<span class="t">span</span>&gt;
+<pre>&lt;<span class="t">article</span> <span class="a">class</span>=<span class="a">"project"</span> <span class="a">style</span>=<span class="a">"--brush: var(--brush-subly)"</span>&gt;
+  &lt;<span class="t">h3</span> <span class="a">class</span>=<span class="a">"project-tab-h"</span>&gt;
+    &lt;<span class="t">button</span> <span class="a">class</span>=<span class="a">"project-tab"</span> <span class="a">type</span>=<span class="a">"button"</span> <span class="a">id</span>=<span class="a">"tab-slug"</span>
+      <span class="a">aria-expanded</span>=<span class="a">"false"</span> <span class="a">aria-controls</span>=<span class="a">"panel-slug"</span>&gt;
+      &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"mark"</span>&gt;Project name&lt;/<span class="t">span</span>&gt;
+    &lt;/<span class="t">button</span>&gt;
+  &lt;/<span class="t">h3</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-panel"</span> <span class="a">id</span>=<span class="a">"panel-slug"</span>
+       <span class="a">role</span>=<span class="a">"region"</span> <span class="a">aria-labelledby</span>=<span class="a">"tab-slug"</span>&gt;
+    &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-panel-in"</span>&gt;
+      &lt;<span class="t">img</span> <span class="a">class</span>=<span class="a">"project-shot"</span> <span class="a">src</span>=<span class="a">"img/previews/slug.jpg"</span>
+           <span class="a">alt</span>=<span class="a">""</span> <span class="a">width</span>=<span class="a">"1200"</span> <span class="a">height</span>=<span class="a">"750"</span> <span class="a">loading</span>=<span class="a">"lazy"</span>&gt;
+      &lt;<span class="t">p</span>&gt;One or two sentences.&lt;/<span class="t">p</span>&gt;
+      &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"tags"</span>&gt;
+        &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tag"</span>&gt;Next.js&lt;/<span class="t">span</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
+      <span class="c">&lt;!-- omit entirely when there are no links --&gt;</span>
+      &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-links"</span>&gt;
+        &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-case"</span> <span class="a">href</span>=<span class="a">"projects/slug/"</span>&gt;Case study&hellip;&lt;/<span class="t">a</span>&gt;
+        &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-icon"</span> <span class="a">href</span>=<span class="a">"REPO"</span>&gt;&hellip;&lt;/<span class="t">a</span>&gt;
+      &lt;/<span class="t">div</span>&gt;
     &lt;/<span class="t">div</span>&gt;
   &lt;/<span class="t">div</span>&gt;
-  &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-links"</span>&gt;
-    &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-icon"</span> <span class="a">href</span>=<span class="a">"REPO"</span>
-       <span class="a">target</span>=<span class="a">"_blank"</span> <span class="a">rel</span>=<span class="a">"noopener"</span>
-       <span class="a">aria-label</span>=<span class="a">"Name repository on GitHub"</span>&gt;
-      &lt;<span class="t">svg</span> <span class="a">class</span>=<span class="a">"icon icon--solid"</span>&gt;
-        &lt;<span class="t">use</span> <span class="a">href</span>=<span class="a">"#i-github"</span>&gt;&lt;/<span class="t">use</span>&gt;
-      &lt;/<span class="t">svg</span>&gt;
-    &lt;/<span class="t">a</span>&gt;
-    &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-icon"</span> <span class="a">href</span>=<span class="a">"LIVE_URL"</span>
-       <span class="a">target</span>=<span class="a">"_blank"</span> <span class="a">rel</span>=<span class="a">"noopener"</span>
-       <span class="a">aria-label</span>=<span class="a">"Name live site"</span>&gt;
-      &lt;<span class="t">svg</span> <span class="a">class</span>=<span class="a">"icon"</span>&gt;
-        &lt;<span class="t">use</span> <span class="a">href</span>=<span class="a">"#i-arrow"</span>&gt;&lt;/<span class="t">use</span>&gt;
-      &lt;/<span class="t">svg</span>&gt;
-    &lt;/<span class="t">a</span>&gt;
-  &lt;/<span class="t">div</span>&gt;
-&lt;/<span class="t">article</span>&gt;</pre>
+&lt;/<span class="t">article</span>&gt;
+
+<span class="c">&lt;!-- all articles live inside --&gt;</span>
+&lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"projects-scroll"</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"projects-stage"</span>&gt; &hellip; &lt;/<span class="t">div</span>&gt;
+&lt;/<span class="t">div</span>&gt;</pre>
     </div>
   </section>
 

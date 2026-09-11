@@ -1041,6 +1041,31 @@ main { position: relative; }
 .is-live.projects-scroll { min-height: var(--scroll-room, auto); }
 .is-live .projects-stage { position: sticky; top: var(--stage-top, 96px); }
 
+/* ── Live mode on a phone ────────────────────────────────────────────────
+   Same idea, one project instead of the list. Nine tap targets at a usable
+   size come to ~400px before any content, so the list and a readable panel
+   cannot share a phone screen; the focused project gets it to itself and
+   scrolling still moves through them.
+
+   Only inside .is-live — the fallback stays a plain list of everything, so
+   nothing is unreachable if the script never runs. */
+.projects-count { display: none; }
+
+@media (max-width: 900px) {
+  .is-live .projects-count {
+    display: block;
+    font-family: var(--mono); font-size: var(--t-xs);
+    letter-spacing: 0.12em; color: var(--ink-3);
+    margin: 0 0 var(--s-3); font-variant-numeric: tabular-nums;
+  }
+  .is-live .project:not(.is-open) { display: none; }
+  /* With one on screen the rules top and bottom read as a stray box. */
+  .is-live .project { border-top: 0; }
+  .is-live .project:last-of-type { border-bottom: 0; }
+  /* Nothing above it to separate from, so the open tab loses its extra lead-in. */
+  .is-live .project.is-open > .project-tab-h > .project-tab { padding-top: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .project-tab, .project-tab::before,
   .is-live .project-panel, .is-live .project-panel-in { transition: none; }

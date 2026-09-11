@@ -383,6 +383,7 @@ clearTimeout(window.revealFailsafe);
 
   var stage = scroll.querySelector('.projects-stage');
   var items = [].slice.call(scroll.querySelectorAll('.project'));
+  var counter = scroll.querySelector('.projects-count');
   if (items.length < 2) return;
 
   var reduce = window.matchMedia &&
@@ -411,7 +412,22 @@ clearTimeout(window.revealFailsafe);
      that cannot display it. */
   function fits() {
     if (reduce) return false;
-    if (window.innerWidth < 901) return false;
+
+    /* Below 901px the stage shows the focused project on its own — nine tap
+       targets at a usable size plus a readable panel is about 400px of tabs
+       before any content, which no phone has to spare. So the budget there is
+       one tab, not all of them.
+
+       It has to be computed rather than measured, because the CSS that hides
+       the others only applies once .is-live is set, and .is-live is what this
+       decides. Measuring the live rule's effect before applying it would
+       deadlock: every tab is visible, the sum never fits, so it never goes
+       live, so the tabs are never hidden. */
+    var one = items[0].querySelector('.project-tab').offsetHeight;
+    if (window.innerWidth < 901) {
+      return window.innerHeight > STICK + one + tallestPanel() + ROOM;
+    }
+
     var tabs = items.reduce(function (sum, item) {
       return sum + item.querySelector('.project-tab').offsetHeight;
     }, 0);
@@ -457,6 +473,9 @@ clearTimeout(window.revealFailsafe);
       item.classList.toggle('is-open', on);
       item.querySelector('.project-tab').setAttribute('aria-expanded', String(on));
     });
+    // On mobile the others are hidden, so this is the only thing saying how
+    // far through the list you are. Harmless on desktop, where it isn't shown.
+    if (counter) counter.textContent = (index + 1) + ' / ' + items.length;
     if (viaClick) {
       window.scrollTo({ top: slotTop(index), behavior: reduce ? 'auto' : 'smooth' });
     }

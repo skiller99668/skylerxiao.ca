@@ -1212,8 +1212,19 @@ main { position: relative; }
   white-space: nowrap;          /* the address is one thing; never break it */
   transition: background-color var(--dur) var(--ease);
 }
+/* Before the reveal it's a <button>; the resets make it the same bar, to the
+   pixel, so swapping in the link doesn't move anything. */
+button.contact-mail {
+  width: 100%; border: 0; margin: 0;
+  font-weight: inherit; line-height: inherit;
+  cursor: pointer;
+}
 .contact-mail .icon { width: 0.78em; height: 0.78em; }
-.contact-mail:hover { background: var(--trace-deep); }
+.contact-mail:hover { background: var(--trace-deep); color: var(--on-trace); }
+.contact-mail.is-revealed span { animation: contact-reveal 0.35s var(--ease); }
+@keyframes contact-reveal {
+  from { opacity: 0; transform: translateY(0.18em); }
+}
 
 .contact-profiles {
   display: grid;

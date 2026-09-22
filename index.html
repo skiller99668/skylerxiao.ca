@@ -696,12 +696,17 @@
 
            TODO: the Instagram and Spotify hrefs are placeholders — swap in the
            real profile URLs. Left obviously wrong on purpose so they cannot
-           ship quietly pointing somewhere unintended. -->
+           ship quietly pointing somewhere unintended.
+
+           The bar starts as a reveal button; script.js assembles the address
+           from the two halves below and swaps in the mailto link, so this copy
+           never sits in the source as one scrapeable string. -->
       <div class="contact-links">
-        <a class="contact-mail" href="mailto:skyler.xiao@mail.mcgill.ca">
+        <button class="contact-mail" type="button" aria-label="Click to reveal email address"
+                data-user="skyler.xiao" data-domain="mail.mcgill.ca">
           <svg class="icon" aria-hidden="true"><use href="#i-mail"></use></svg>
-          <span>skyler.xiao@mail.mcgill.ca</span>
-        </a>
+          <span>Click to reveal</span>
+        </button>
 
         <div class="contact-profiles">
           <a class="profile" href="https://github.com/skiller99668" target="_blank" rel="noopener">

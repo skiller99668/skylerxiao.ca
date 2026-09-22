@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "style.css"
+        ],
+        "createdAt": "2026-08-25T21:55:56.519Z",
+        "reason": "Quadrille engineering-paper ground is the named design system; user commissioned the grid draw-in animation for it"
+      }
+    ]
+  }
+}

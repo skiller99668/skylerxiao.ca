@@ -531,6 +531,36 @@ clearTimeout(window.revealFailsafe);
 })();
 
 /* ============================================================
+   Contact — click to reveal the address
+
+   The bar ships as a button holding the address in two halves.
+   The first click swaps it for the real mailto link, so the
+   second click is the one that opens a mail client.
+   ============================================================ */
+(function initMailReveal() {
+  var button = document.querySelector('button.contact-mail');
+  if (!button) return;
+
+  button.addEventListener('click', function () {
+    var address = button.getAttribute('data-user') + '@' +
+                  button.getAttribute('data-domain');
+
+    var link = document.createElement('a');
+    link.className = 'contact-mail is-revealed';
+    link.href = 'mailto:' + address;
+    link.innerHTML = button.querySelector('svg').outerHTML;
+    var text = document.createElement('span');
+    text.textContent = address;
+    link.appendChild(text);
+
+    button.replaceWith(link);
+    // The button that had focus is gone; hand it on so a keyboard user's
+    // next Enter sends the email rather than starting from the top.
+    link.focus({ preventScroll: true });
+  });
+})();
+
+/* ============================================================
    Scroll-triggered reveal
    ============================================================ */
 (function initReveal() {

@@ -304,8 +304,44 @@ const HL_SHARE = 0.34;
 const BRUSHES = ['--wash', '--brush-waive', '--brush-subly',
                  '--brush-clock', '--brush-tex', '--brush-mcgill'];
 
+/* Not every mark stays out in the margin. A few straddle the column's edge,
+   passing under the text, and a few sit wholly behind it — the page is one
+   sheet, and someone drew on all of it before writing.
+
+   --tuck is measured in from the column edge rather than scaled off the
+   margin like --f, so a tucked mark sits at the same depth behind the text
+   at every width; --f is pinned to 0 for them. Bleeding marks are never
+   tucked: one end runs off the window, the other behind the text, and the
+   mark stops reading as either.
+
+   Drawn from their own seeded stream, after everything else is decided, so
+   adding the tuck moved none of the marks that were already placed.
+
+   A mark behind the text can sit anywhere from just inside the column's
+   edge out to its middle — kept near the edge, that set read as a second,
+   inner margin rather than as marks scattered behind the text. */
+const UNDER_SHARE = 0.4;      // wholly behind the text
+const STRADDLE_SHARE = 0.12;  // half in, half out
+const COLUMN_HALF = 454;      // half of --column-w: (860 measure + 2 x 24) / 2
+
+/* Loose marks: a few more, behind the text only, dropped anywhere down the
+   page rather than on the two sides' even stagger. They break up the rhythm
+   the margin set has by construction. Their own stream again, so adding
+   them moved nothing. */
+const LOOSE = 6;
+
+// Anywhere from clear of the column edge (room to turn included) to centred
+// on the column's middle line.
+function underTuck(size, t) {
+  const swing = size * 0.207;
+  const min = size + swing * 2 + 24;
+  const max = Math.max(min, COLUMN_HALF + size / 2 + swing);
+  return Math.round(min + t * (max - min));
+}
+
 function placements(seed, perSide) {
   const rand = rng(seed);
+  const tuckRand = rng(seed + 1);
   const ids = shapes.map((s) => s[0]);
   const out = [];
   let last = '';
@@ -338,6 +374,40 @@ function placements(seed, perSide) {
       });
     }
   });
+  out.forEach((p) => {
+    // Always draw both, so whether one mark tucks never shifts the next.
+    const r = tuckRand(), depth = tuckRand();
+    if (p.bleeds) return;
+    const swing = p.size * 0.207;
+    if (r < UNDER_SHARE) {
+      p.under = true;
+      p.tuck = underTuck(p.size, depth);
+    } else if (r < UNDER_SHARE + STRADDLE_SHARE) {
+      p.tuck = Math.round(swing + p.size * (0.35 + depth * 0.3));
+    }
+    if (p.tuck) p.f = 0;
+  });
+
+  const looseRand = rng(seed + 2);
+  for (let i = 0; i < LOOSE; i++) {
+    const size = Math.round(SIZE[0] + Math.pow(looseRand(), SIZE_BIAS) * (SIZE[1] - SIZE[0]));
+    let shape = ids[Math.floor(looseRand() * ids.length)];
+    while (shape === last) shape = ids[Math.floor(looseRand() * ids.length)];
+    last = shape;
+    const hl = looseRand() < HL_SHARE;
+    out.push({
+      side: looseRand() < 0.5 ? 'right' : 'left',
+      shape, size, bleeds: false, under: true,
+      brush: hl ? BRUSHES[Math.floor(looseRand() * BRUSHES.length)] : null,
+      f: 0,
+      // One per stretch of the page, jittered across the whole stretch: a
+      // free draw for six put four in the bottom fifth, a cluster of its own.
+      top: Math.round((TOP + 1 + (i + looseRand()) / LOOSE * (BOTTOM - TOP - 2)) * 10) / 10,
+      tuck: underTuck(size, looseRand()),
+      tilt: Math.round(looseRand() * 60 - 30),
+      spin: (SPIN[0] + looseRand() * (SPIN[1] - SPIN[0])) * (looseRand() < 0.5 ? -1 : 1)
+    });
+  }
   return out.map((p, i) => ({ ...p, n: i + 1 }));
 }
 
@@ -355,13 +425,17 @@ if (process.argv.includes('--place')) {
     process.exit(1);
   }
   const bleeding = list.filter((p) => p.bleeds).length;
+  const under = list.filter((p) => p.under).length;
+  const straddling = list.filter((p) => p.tuck && !p.under).length;
   console.error(`${list.length} marks, ${bleeding} bleeding off the edge, ` +
+    `${straddling} straddling the column edge, ${under} behind the text, ` +
     `sizes ${Math.min(...list.map((p) => p.size))}-${Math.max(...list.map((p) => p.size))}px`);
   console.log('/* ── CSS: paste over the .doodle--NN block ── */');
   console.log(list.map((p) =>
     `.doodle--${idx(p.n)} { top: ${pad(p.top, 4)}%; ${p.side}: var(--edge); ` +
     `--f: ${p.f.toFixed(2)}; --size: ${pad(p.size, 3)}px; ` +
-    `--tilt: ${pad(p.tilt, 3)}deg; --spin: ${pad(p.spin.toFixed(2), 5)}; }`
+    `--tilt: ${pad(p.tilt, 3)}deg; --spin: ${pad(p.spin.toFixed(2), 5)};` +
+    (p.tuck ? ` --tuck: ${pad(p.tuck, 3)}px;` : '') + ' }'
   ).join('\n'));
   const lit = list.filter((p) => p.brush);
   console.log(`\n/* The ${lit.length} marks someone went over with a highlighter. */`);
@@ -370,7 +444,7 @@ if (process.argv.includes('--place')) {
 
   console.log('\n<!-- ── HTML: paste over the .doodles children ── -->');
   console.log(list.map((p) =>
-    `  <svg class="doodle doodle--${idx(p.n)}${p.brush ? ' doodle--lit' : ''}" viewBox="0 0 100 100">` +
+    `  <svg class="doodle doodle--${idx(p.n)}${p.brush ? ' doodle--lit' : ''}${p.under ? ' doodle--under' : ''}" viewBox="0 0 100 100">` +
     (p.brush ? '<use class="hl" href="#d-swipe"></use>' : '') +
     [1, 2, 3].map((f) => `<use class="frame frame-${f}" href="#${p.shape}"></use>`).join('') +
     `</svg>`

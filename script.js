@@ -390,11 +390,12 @@ clearTimeout(window.revealFailsafe);
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var STICK = 76;        // stage offset below the sticky nav (~54px tall)
-  var SLOT = 0.62;       // screens of scroll per project
+  var SLOT = 0.45;       // screens of scroll per project
   var ROOM = 32;         // breathing space below the stage before it is cramped
   var live = false;
   var index = -1;
   var frame = null;
+  var top = STICK;       // where the stage actually sticks; set by sync()
 
   /* Only fits() needs a size, and the panel's inner block reports its natural
      height whatever the outer grid track is doing — so nothing has to be
@@ -404,6 +405,15 @@ clearTimeout(window.revealFailsafe);
       var inner = item.querySelector('.project-panel-in');
       return Math.max(max, inner ? inner.scrollHeight : 0);
     }, 0);
+  }
+
+  /* The stage as it stands with the tallest panel open, whichever one is
+     open now. Subtracting every panel rather than just the open one keeps
+     this right mid-transition, when one is closing as the next opens. */
+  function tallestStage() {
+    return items.reduce(function (h, item) {
+      return h - item.querySelector('.project-panel').offsetHeight;
+    }, stage.offsetHeight) + tallestPanel();
   }
 
   /* Live mode needs the stage to fit the window with the tallest panel open.
@@ -460,8 +470,11 @@ clearTimeout(window.revealFailsafe);
     return scroll.getBoundingClientRect().top + window.scrollY;
   }
 
+  /* Scroll position that puts the stage halfway through project i's slot.
+     Slots count from the moment the stage sticks, which is when the block's
+     top has risen to `top`, not to the window edge. */
   function slotTop(i) {
-    return blockTop() + i * window.innerHeight * SLOT;
+    return blockTop() - top + (i + 0.5) * window.innerHeight * SLOT;
   }
 
   function open(next, viaClick) {
@@ -484,9 +497,11 @@ clearTimeout(window.revealFailsafe);
   function onScroll() {
     frame = null;
     if (!live) return;
-    // -rect.top is how far the block's top has passed above the viewport top.
-    var into = -scroll.getBoundingClientRect().top;
-    open(Math.round(into / (window.innerHeight * SLOT)));
+    // How far the page has scrolled since the stage stuck. floor, not round:
+    // each project owns one whole slot, so the first and last get the same
+    // turn as the rest instead of a half and a slot and a half.
+    var into = top - scroll.getBoundingClientRect().top;
+    open(Math.floor(into / (window.innerHeight * SLOT)));
   }
 
   function sync() {
@@ -495,15 +510,21 @@ clearTimeout(window.revealFailsafe);
 
     if (!live) return relax();
 
-    scroll.style.setProperty('--stage-top', STICK + 'px');
-    /* items.length slots, not items.length - 1. The stage unsticks once the
-       block's bottom reaches it, at (room - stageHeight) of scrolling. With
-       one slot per gap that lands exactly where the last project opens, so it
-       appeared and was immediately scrolled away — measured at 13% of its
-       range still stuck, against 100% for the ones before it. The extra slot
-       is the last project's turn to be looked at. */
+    /* Pinned at the top, a stage shorter than the window left the rest of it
+       blank for the whole run — on a 1000px window, a third of the screen
+       for five screens of scrolling, which read as the page having ended.
+       Centred in the room below the nav, the leftover splits into a margin
+       above and one below, and the stage reads as the thing being looked at.
+       Centred on its tallest state, so a short panel opening never moves it. */
+    var stageH = tallestStage();
+    top = STICK + Math.max(0, Math.round((window.innerHeight - STICK - stageH) / 2));
+    scroll.style.setProperty('--stage-top', top + 'px');
+    /* The stage unsticks once the block's bottom reaches it, after
+       (room - stageHeight) of scrolling. One slot per project, measured
+       against the tallest stage so a shorter panel being open only ever
+       lengthens the last project's turn, never cuts it. */
     scroll.style.setProperty('--scroll-room', Math.round(
-      stage.offsetHeight + items.length * window.innerHeight * SLOT) + 'px');
+      stageH + items.length * window.innerHeight * SLOT) + 'px');
     index = -1;                       // force open() to apply, not early-return
     onScroll();
   }

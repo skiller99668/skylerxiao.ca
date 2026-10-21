@@ -153,12 +153,18 @@
     <div class="cmp-grid">
       <div class="demo">
         <article class="project is-open" style="border-top:0;--brush:var(--brush-subly)">
-          <h3 class="project-tab-h">
-            <button class="project-tab" type="button" id="tab-demo"
-              aria-expanded="true" aria-controls="panel-demo">
-              <span class="mark">Project name</span>
-            </button>
-          </h3>
+          <div class="project-head">
+            <h3 class="project-tab-h">
+              <button class="project-tab" type="button" id="tab-demo"
+                aria-expanded="true" aria-controls="panel-demo">
+                <span class="mark">Project name</span>
+              </button>
+            </h3>
+            <div class="project-links">
+              <a class="project-case" href="#">Case study<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="9,6 18,6 18,15"/></svg></a>
+              <a class="project-icon" href="#" aria-label="Repository on GitHub"><svg class="icon icon--solid" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.7.8.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+            </div>
+          </div>
           <div class="project-panel" id="panel-demo" role="region" aria-labelledby="tab-demo">
             <div class="project-panel-in">
               <img class="project-shot" src="img/previews/subly.jpg" alt="" width="1200" height="750">
@@ -167,21 +173,26 @@
                 <span class="tag tag--win">2nd place</span>
                 <span class="tag">Next.js</span>
               </div>
-              <div class="project-links">
-                <a class="project-case" href="#">Case study<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><line x1="6" y1="18" x2="18" y2="6"/><polyline points="9,6 18,6 18,15"/></svg></a>
-                <a class="project-icon" href="#" aria-label="Repository on GitHub"><svg class="icon icon--solid" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.7.8.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
-              </div>
             </div>
           </div>
         </article>
       </div>
 <pre>&lt;<span class="t">article</span> <span class="a">class</span>=<span class="a">"project"</span> <span class="a">style</span>=<span class="a">"--brush: var(--brush-subly)"</span>&gt;
-  &lt;<span class="t">h3</span> <span class="a">class</span>=<span class="a">"project-tab-h"</span>&gt;
-    &lt;<span class="t">button</span> <span class="a">class</span>=<span class="a">"project-tab"</span> <span class="a">type</span>=<span class="a">"button"</span> <span class="a">id</span>=<span class="a">"tab-slug"</span>
-      <span class="a">aria-expanded</span>=<span class="a">"false"</span> <span class="a">aria-controls</span>=<span class="a">"panel-slug"</span>&gt;
-      &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"mark"</span>&gt;Project name&lt;/<span class="t">span</span>&gt;
-    &lt;/<span class="t">button</span>&gt;
-  &lt;/<span class="t">h3</span>&gt;
+  &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-head"</span>&gt;
+    &lt;<span class="t">h3</span> <span class="a">class</span>=<span class="a">"project-tab-h"</span>&gt;
+      &lt;<span class="t">button</span> <span class="a">class</span>=<span class="a">"project-tab"</span> <span class="a">type</span>=<span class="a">"button"</span> <span class="a">id</span>=<span class="a">"tab-slug"</span>
+        <span class="a">aria-expanded</span>=<span class="a">"false"</span> <span class="a">aria-controls</span>=<span class="a">"panel-slug"</span>&gt;
+        &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"mark"</span>&gt;Project name&lt;/<span class="t">span</span>&gt;
+      &lt;/<span class="t">button</span>&gt;
+    &lt;/<span class="t">h3</span>&gt;
+    <span class="c">&lt;!-- case study, live site, GitHub, in that order;
+         omit entirely when there are no links --&gt;</span>
+    &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-links"</span>&gt;
+      &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-case"</span> <span class="a">href</span>=<span class="a">"projects/slug/"</span>&gt;Case study&hellip;&lt;/<span class="t">a</span>&gt;
+      &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-icon"</span> <span class="a">href</span>=<span class="a">"SITE"</span>&gt;&hellip;&lt;/<span class="t">a</span>&gt;
+      &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-icon"</span> <span class="a">href</span>=<span class="a">"REPO"</span>&gt;&hellip;&lt;/<span class="t">a</span>&gt;
+    &lt;/<span class="t">div</span>&gt;
+  &lt;/<span class="t">div</span>&gt;
   &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-panel"</span> <span class="a">id</span>=<span class="a">"panel-slug"</span>
        <span class="a">role</span>=<span class="a">"region"</span> <span class="a">aria-labelledby</span>=<span class="a">"tab-slug"</span>&gt;
     &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-panel-in"</span>&gt;
@@ -190,11 +201,6 @@
       &lt;<span class="t">p</span>&gt;One or two sentences.&lt;/<span class="t">p</span>&gt;
       &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"tags"</span>&gt;
         &lt;<span class="t">span</span> <span class="a">class</span>=<span class="a">"tag"</span>&gt;Next.js&lt;/<span class="t">span</span>&gt;
-      &lt;/<span class="t">div</span>&gt;
-      <span class="c">&lt;!-- omit entirely when there are no links --&gt;</span>
-      &lt;<span class="t">div</span> <span class="a">class</span>=<span class="a">"project-links"</span>&gt;
-        &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-case"</span> <span class="a">href</span>=<span class="a">"projects/slug/"</span>&gt;Case study&hellip;&lt;/<span class="t">a</span>&gt;
-        &lt;<span class="t">a</span> <span class="a">class</span>=<span class="a">"project-icon"</span> <span class="a">href</span>=<span class="a">"REPO"</span>&gt;&hellip;&lt;/<span class="t">a</span>&gt;
       &lt;/<span class="t">div</span>&gt;
     &lt;/<span class="t">div</span>&gt;
   &lt;/<span class="t">div</span>&gt;
@@ -324,18 +330,22 @@
   <!-- PHOTO -->
   <section class="cmp" id="c-photo">
     <p class="cmp-title">Photo</p>
-    <p class="cmp-note">Swap the file in <code>/img</code> and keep the same filename &mdash; nothing else changes. Keep <code>width</code>/<code>height</code> matching the real file so the page doesn&rsquo;t jump while images load, and leave <code>alt</code> empty for purely decorative shots.</p>
+    <p class="cmp-note">A tile in the mosaic. Crop the photo to 3:4 at 720&times;960 and drop it in <code>/img</code>; keep <code>width</code>/<code>height</code> matching the file so the page doesn&rsquo;t jump while it loads, and describe the photo in <code>alt</code>. Each tile&rsquo;s size comes from its place in the mosaic and the photo is cropped to fit, so order matters: the 1st is the large tile, the 5th the wide one. The mosaic is drawn for six; a seventh needs its own area in the template.</p>
     <div class="cmp-grid">
       <div class="demo">
-        <div class="gallery" style="grid-template-columns:repeat(2,1fr)">
-          <figure><img src="img/travel-02.jpg" alt="" width="1200" height="800" loading="lazy"><figcaption>Banff, AB</figcaption></figure>
-          <figure><img src="img/travel-05.jpg" alt="" width="1200" height="800" loading="lazy"><figcaption>Algonquin, ON</figcaption></figure>
+        <div class="gallery">
+          <figure><img src="img/travel-barcelona.jpg" alt="The towers of the Sagrada Família against a clear evening sky" width="720" height="960" loading="lazy"><figcaption>Barcelona</figcaption></figure>
+          <figure><img src="img/travel-tunis.jpg" alt="A narrow whitewashed alley with blue doors and window grilles, the sea at its far end" width="720" height="960" loading="lazy"><figcaption>Tunis</figcaption></figure>
+          <figure><img src="img/travel-pisa.jpg" alt="The Leaning Tower of Pisa above a crowd of visitors on the square" width="720" height="960" loading="lazy"><figcaption>Pisa</figcaption></figure>
+          <figure><img src="img/travel-nara.jpg" alt="Skyler standing beside an antlered deer in a park" width="720" height="960" loading="lazy"><figcaption>Nara</figcaption></figure>
+          <figure><img src="img/travel-shibuya.jpg" alt="Shibuya Crossing under a wide blue sky, lined with lit billboards" width="720" height="960" loading="lazy"><figcaption>Shibuya</figcaption></figure>
+          <figure><img src="img/travel-carthage.jpg" alt="Two Roman columns rising from stone ruins under a bright sun" width="720" height="960" loading="lazy"><figcaption>Carthage</figcaption></figure>
         </div>
       </div>
 <pre>&lt;<span class="t">figure</span>&gt;
-  &lt;<span class="t">img</span> <span class="a">src</span>=<span class="a">"img/travel-01.jpg"</span> <span class="a">alt</span>=<span class="a">""</span>
-       <span class="a">width</span>=<span class="a">"1200"</span> <span class="a">height</span>=<span class="a">"800"</span> <span class="a">loading</span>=<span class="a">"lazy"</span>&gt;
-  &lt;<span class="t">figcaption</span>&gt;Moab, UT&lt;/<span class="t">figcaption</span>&gt;
+  &lt;<span class="t">img</span> <span class="a">src</span>=<span class="a">"img/travel-tunis.jpg"</span> <span class="a">alt</span>=<span class="a">"What the photo shows"</span>
+       <span class="a">width</span>=<span class="a">"720"</span> <span class="a">height</span>=<span class="a">"960"</span> <span class="a">loading</span>=<span class="a">"lazy"</span>&gt;
+  &lt;<span class="t">figcaption</span>&gt;Tunis, Tunisia&lt;/<span class="t">figcaption</span>&gt;
 &lt;/<span class="t">figure</span>&gt;</pre>
     </div>
   </section>

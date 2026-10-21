@@ -12,7 +12,7 @@
      --ink 17.8:1 · --ink-2 6.2:1 · --ink-3 4.8:1 · --trace 5.2:1 */
   --paper:        #FBFBF9;   /* page ground                      */
   --paper-raise:  #FFFFFF;   /* cards / raised surfaces          */
-  --grid:         #E7ECE8;   /* quadrille rule (texture only)    */
+  --grid:         #EAEEEB;   /* quadrille rule (texture only)    */
   --ink:          #14161A;   /* primary text                     */
   --ink-2:        #585F6B;   /* secondary text                   */
   --ink-3:        #6A7079;   /* labels, captions, meta           */
@@ -43,6 +43,7 @@
   --gutter: 76px;   /* left rail holding the trace routing */
   --measure: 860px; /* content column                      */
   --pad: 28px;      /* page side padding                   */
+  --column-w: calc(var(--measure) + 2 * var(--s-5)); /* column + its air: margins start past it */
 
   --radius: 6px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -220,8 +221,8 @@ img { max-width: 100%; height: auto; }
       actually moving. Sign and rate differ per doodle so they
       never look geared to each other.
 
-   Decoration only: no links, no keyboard stop, and they hide
-   entirely once the margins are too narrow to hold them.
+   Decoration only: no links, no keyboard stop, and the ones out
+   in the margin hide once it is too narrow to hold them.
    ============================================================ */
 .doodles {
   position: absolute; inset: 0;
@@ -237,8 +238,8 @@ img { max-width: 100%; height: auto; }
   --f: 0.5;                  /* 0 = against the text, 1 = against the window */
 
   /* Where the mark sits across the margin, resolved per viewport. The margin
-     runs from the edge of the measure out to the window edge, so its width is
-     (50% - measure/2); --f slides the mark along whatever is left of that once
+     runs from the edge of the column out to the window edge, so its width is
+     (50% - column/2); --f slides the mark along whatever is left of that once
      the mark's own width and its swing are taken out. Because the travel is
      derived from the space that actually exists, --f can be anything in 0..1
      and the mark still lands inside the margin at every width. Whichever of
@@ -250,11 +251,14 @@ img { max-width: 100%; height: auto; }
      corner as it spins — cropped by the container on the outside, and running
      into the text on the inside. max() stops the travel going negative in the
      narrowest margin, where the room simply runs out and the marks stack up
-     against the text edge instead of spilling past the window. */
+     against the column edge instead of spilling past the window.
+
+     --tuck then slides a mark back in behind the column, by a fixed distance
+     from its edge — see the generator for which ones and why. */
   --swing: calc(var(--size) * 0.207);
-  --travel: max(0px, 50% - var(--measure) / 2 - var(--size) - var(--swing) * 2);
+  --travel: max(0px, 50% - var(--column-w) / 2 - var(--size) - var(--swing) * 2);
   --edge: calc(
-    50% + var(--measure) / 2 + var(--swing) + var(--travel) * var(--f)
+    50% + var(--column-w) / 2 + var(--swing) + var(--travel) * var(--f) - var(--tuck, 0px)
   );
 
   position: absolute;
@@ -324,35 +328,49 @@ img { max-width: 100%; height: auto; }
    matching markup. Two rules the generator enforces and hand-editing breaks:
    reach + size must stay under 598px, which is what fits in the margin at the
    1240px cutoff below, and top must stay under 97%. Past either, a doodle is
-   silently sliced off or dropped entirely by the container's overflow. */
+   silently sliced off or dropped entirely by the container's overflow.
+
+   The whole set sits at -2, on the grid and behind everything in the
+   column, so the ones carrying --tuck pass under the text rather than
+   over it. Those wholly behind it (.doodle--under) drop below even the
+   in-column set: a hatched blob behind the bio read heavier than the text
+   over it even at 0.24. */
+.doodles--margin { z-index: -2; }
+.doodles--margin .doodle--under { opacity: 0.2; }
 .doodle--01 { top:  1.8%; right: var(--edge); --f: 0.49; --size:  52px; --tilt:  23deg; --spin: -0.54; }
-.doodle--02 { top:  7.9%; right: var(--edge); --f: 0.50; --size: 149px; --tilt: -27deg; --spin: -0.34; }
+.doodle--02 { top:  7.9%; right: var(--edge); --f: 0.00; --size: 149px; --tilt: -27deg; --spin: -0.34; --tuck: 435px; }
 .doodle--03 { top: 15.2%; right: var(--edge); --f: 0.09; --size:  84px; --tilt: -18deg; --spin: -0.37; }
-.doodle--04 { top: 22.9%; right: var(--edge); --f: 0.60; --size:  86px; --tilt: -13deg; --spin: -0.51; }
-.doodle--05 { top: 29.2%; right: var(--edge); --f: 0.15; --size:  94px; --tilt: -30deg; --spin: -0.58; }
-.doodle--06 { top: 36.5%; right: var(--edge); --f: 0.33; --size:  82px; --tilt:  21deg; --spin: -0.42; }
-.doodle--07 { top: 42.4%; right: var(--edge); --f: 0.38; --size:  64px; --tilt:   8deg; --spin:  0.46; }
+.doodle--04 { top: 22.9%; right: var(--edge); --f: 0.00; --size:  86px; --tilt: -13deg; --spin: -0.51; --tuck: 323px; }
+.doodle--05 { top: 29.2%; right: var(--edge); --f: 0.00; --size:  94px; --tilt: -30deg; --spin: -0.58; --tuck:  76px; }
+.doodle--06 { top: 36.5%; right: var(--edge); --f: 0.00; --size:  82px; --tilt:  21deg; --spin: -0.42; --tuck: 161px; }
+.doodle--07 { top: 42.4%; right: var(--edge); --f: 0.00; --size:  64px; --tilt:   8deg; --spin:  0.46; --tuck:  51px; }
 .doodle--08 { top:   49%; right: var(--edge); --f: 0.37; --size:  86px; --tilt:   6deg; --spin: -0.41; }
 .doodle--09 { top: 54.7%; right: var(--edge); --f: 1.15; --size:  54px; --tilt: -15deg; --spin:  0.39; }
-.doodle--10 { top: 61.4%; right: var(--edge); --f: 0.66; --size:  78px; --tilt: -11deg; --spin:  0.54; }
+.doodle--10 { top: 61.4%; right: var(--edge); --f: 0.00; --size:  78px; --tilt: -11deg; --spin:  0.54; --tuck:  61px; }
 .doodle--11 { top: 70.3%; right: var(--edge); --f: 1.23; --size:  63px; --tilt: -29deg; --spin: -0.55; }
 .doodle--12 { top: 74.9%; right: var(--edge); --f: 0.13; --size: 105px; --tilt:  19deg; --spin: -0.54; }
 .doodle--13 { top: 82.6%; right: var(--edge); --f: 0.79; --size: 158px; --tilt: -16deg; --spin: -0.30; }
-.doodle--14 { top: 88.5%; right: var(--edge); --f: 0.74; --size:  79px; --tilt:  17deg; --spin:  0.40; }
-.doodle--15 { top:  5.3%; left: var(--edge); --f: 0.25; --size:  52px; --tilt: -23deg; --spin:  0.53; }
+.doodle--14 { top: 88.5%; right: var(--edge); --f: 0.00; --size:  79px; --tilt:  17deg; --spin:  0.40; --tuck:  67px; }
+.doodle--15 { top:  5.3%; left: var(--edge); --f: 0.00; --size:  52px; --tilt: -23deg; --spin:  0.53; --tuck:  38px; }
 .doodle--16 { top: 12.8%; left: var(--edge); --f: 0.63; --size:  71px; --tilt: -29deg; --spin: -0.47; }
-.doodle--17 { top: 18.5%; left: var(--edge); --f: 0.63; --size: 154px; --tilt:  -5deg; --spin:  0.59; }
+.doodle--17 { top: 18.5%; left: var(--edge); --f: 0.00; --size: 154px; --tilt:  -5deg; --spin:  0.59; --tuck: 474px; }
 .doodle--18 { top: 26.4%; left: var(--edge); --f: 0.43; --size:  95px; --tilt:  24deg; --spin:  0.51; }
-.doodle--19 { top: 32.4%; left: var(--edge); --f: 0.18; --size:  59px; --tilt:  11deg; --spin: -0.54; }
+.doodle--19 { top: 32.4%; left: var(--edge); --f: 0.00; --size:  59px; --tilt:  11deg; --spin: -0.54; --tuck: 290px; }
 .doodle--20 { top: 38.9%; left: var(--edge); --f: 0.46; --size:  84px; --tilt: -17deg; --spin: -0.59; }
 .doodle--21 { top: 46.7%; left: var(--edge); --f: 1.11; --size:  57px; --tilt: -13deg; --spin:  0.43; }
 .doodle--22 { top: 52.7%; left: var(--edge); --f: 1.07; --size:  98px; --tilt: -18deg; --spin:  0.38; }
 .doodle--23 { top: 57.9%; left: var(--edge); --f: 1.09; --size: 148px; --tilt:  28deg; --spin:  0.40; }
-.doodle--24 { top: 65.5%; left: var(--edge); --f: 0.95; --size: 119px; --tilt:  26deg; --spin:  0.49; }
-.doodle--25 { top: 72.7%; left: var(--edge); --f: 0.50; --size: 137px; --tilt: -16deg; --spin: -0.36; }
+.doodle--24 { top: 65.5%; left: var(--edge); --f: 0.00; --size: 119px; --tilt:  26deg; --spin:  0.49; --tuck:  88px; }
+.doodle--25 { top: 72.7%; left: var(--edge); --f: 0.00; --size: 137px; --tilt: -16deg; --spin: -0.36; --tuck: 327px; }
 .doodle--26 { top: 78.1%; left: var(--edge); --f: 1.20; --size:  87px; --tilt:   5deg; --spin:  0.37; }
-.doodle--27 { top: 85.4%; left: var(--edge); --f: 0.73; --size: 146px; --tilt: -26deg; --spin:  0.37; }
+.doodle--27 { top: 85.4%; left: var(--edge); --f: 0.00; --size: 146px; --tilt: -26deg; --spin:  0.37; --tuck:  94px; }
 .doodle--28 { top: 92.5%; left: var(--edge); --f: 1.18; --size:  84px; --tilt:  18deg; --spin:  0.54; }
+.doodle--29 { top: 17.2%; right: var(--edge); --f: 0.00; --size:  52px; --tilt: -27deg; --spin: -0.36; --tuck: 195px; }
+.doodle--30 { top: 30.5%; right: var(--edge); --f: 0.00; --size:  62px; --tilt:   7deg; --spin:  0.43; --tuck: 386px; }
+.doodle--31 { top: 47.8%; left: var(--edge); --f: 0.00; --size:  61px; --tilt: -28deg; --spin: -0.59; --tuck: 309px; }
+.doodle--32 { top: 61.9%; right: var(--edge); --f: 0.00; --size:  54px; --tilt:   9deg; --spin:  0.57; --tuck: 355px; }
+.doodle--33 { top:   68%; right: var(--edge); --f: 0.00; --size:  61px; --tilt:  28deg; --spin: -0.36; --tuck: 195px; }
+.doodle--34 { top: 81.7%; left: var(--edge); --f: 0.00; --size:  57px; --tilt: -29deg; --spin: -0.57; --tuck: 440px; }
 .doodle--03 { --brush: var(--wash); }
 .doodle--06 { --brush: var(--brush-clock); }
 .doodle--11 { --brush: var(--brush-subly); }
@@ -364,6 +382,8 @@ img { max-width: 100%; height: auto; }
 .doodle--23 { --brush: var(--brush-tex); }
 .doodle--24 { --brush: var(--brush-subly); }
 .doodle--28 { --brush: var(--brush-tex); }
+.doodle--30 { --brush: var(--brush-waive); }
+.doodle--34 { --brush: var(--brush-subly); }
 
 /* ── In the content column ───────────────────────────────────────────────
    Measuring the clearance around every text and image box says the column
@@ -416,21 +436,29 @@ img { max-width: 100%; height: auto; }
 /* Insets are px, not %, and generous: these spin, and a rotating square needs
    about 0.21 x its own width of clearance (a 45deg square measures w x sqrt2,
    so it overhangs by (sqrt2-1)/2 on each side). Too tight and the container's
-   overflow shaves a corner off mid-turn. The right-hand values also keep all
-   three clear of the portrait once the hero stacks and it moves to the left. */
-.doodle--h1 { top:  2%; right:  24px; --size: 84px; --tilt: -18deg; --spin:  0.47; }
-.doodle--h2 { top: 11%; right:  96px; --size: 58px; --tilt:  21deg; --spin: -0.37; }
-.doodle--h3 { top:  4%; right: 150px; --size: 48px; --tilt:  -9deg; --spin:  0.55; }
-/* The hero's own empty bottom-right, well clear of the portrait above it —
-   but only while the hero is two columns. Once it stacks, that corner is the
-   last lines of the bio, so this one goes rather than sit on the text. h1-h3
-   stay: their corner is empty in both layouts. */
+   overflow shaves a corner off mid-turn.
+
+   One to each empty edge of the hero rather than three in its top-right
+   corner, where they bunched into a single knot beside the name: h1 keeps
+   the corner, h2 sits in the space the thesis leaves on the right, h4 the
+   bottom-right beside the bio, and h3 crosses to the left gutter, which
+   is empty in the hero — the trace only starts at the first section. */
+.doodle--h1 { top:  3%; right:  28px; --size: 84px; --tilt: -18deg; --spin:  0.47; }
+.doodle--h2 { top: 40%; right:  92px; --size: 58px; --tilt:  21deg; --spin: -0.37; }
+.doodle--h3 { top: 62%; left:   14px; --size: 48px; --tilt:  -9deg; --spin:  0.55; }
 .doodle--h4 { top: 74%; right:  40px; --size: 118px; --tilt: 14deg; --spin: -0.41; }
-@media (max-width: 900px) { .doodle--h4 { display: none; } }
+/* h2 and h4 live beside the line ends, which only stay clear of them while
+   the column is full width; narrower, they would sit on the text. h3's
+   gutter closes on a phone. h1, tucked furthest into its corner, stays. */
+@media (max-width: 900px) { .doodle--h2, .doodle--h4 { display: none; } }
+@media (max-width: 720px) { .doodle--h3 { display: none; } }
 
 /* Below this the margins can't hold a 132px shape without crowding — but
-   only the margin set depends on having a margin. */
-@media (max-width: 1240px) { .doodles--margin { display: none; } }
+   only the marks out in the margin depend on having one. Those wholly behind
+   the text are placed from the column's edge, not the window's, and stay
+   until the column itself runs nearly edge to edge. */
+@media (max-width: 1240px) { .doodles--margin .doodle:not(.doodle--under) { display: none; } }
+@media (max-width: 900px)  { .doodles--margin { display: none; } }
 
 /* ============================================================
    Navigation
@@ -655,23 +683,13 @@ main { position: relative; }
    Hero
 
    Carries the about copy too — the site has no separate About
-   section. Sized to hold all of it without feeling like a wall:
-   the portrait balances the text block rather than topping it.
+   section.
    ============================================================ */
 .hero { padding: calc(var(--s-8) + var(--s-5)) 0 var(--s-8); }
 .hero > .wrap {
   position: relative;   /* anchors .doodles--hero to the hero, not the page */
   padding-left: calc(var(--pad) + var(--gutter));
 }
-
-.hero-inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: "text photo";
-  gap: var(--s-7);
-  align-items: center;
-}
-.hero-text { grid-area: text; }
 
 .hero-eyebrow {
   font-family: var(--mono); font-size: var(--t-xs);
@@ -684,29 +702,19 @@ main { position: relative; }
 .hero-eyebrow a { color: var(--ink); text-decoration: none; }
 .hero-eyebrow a:hover .mark::after { opacity: 1; }
 
-/* Circular, and ringed like the timeline nodes so the two read as the
-   same family of marks. Greyscale keeps it from competing with the
-   marker colours, which are the only real chroma on the page. */
-.hero-portrait {
-  grid-area: photo;
-  width: 220px; height: 220px;
-  border-radius: 50%; object-fit: cover;
-  filter: grayscale(1) contrast(1.04);
-  background: var(--paper-raise);
-  box-shadow: 0 0 0 5px var(--paper), 0 0 0 6px var(--rule);
-}
-
 .hero h1 {
   font-family: var(--display); font-weight: 800; font-size: var(--t-2xl);
   line-height: 1.02; letter-spacing: -0.035em; margin: 0 0 var(--s-5);
   text-wrap: balance;
 }
+/* Both measures stop short of the hero's bottom-right corner, which is
+   where .doodle--h4 lives. */
 .hero-thesis {
   font-size: var(--t-lg); line-height: 1.5;
-  max-width: 32em; margin: 0 0 var(--s-5);
+  max-width: 28em; margin: 0 0 var(--s-5);
 }
 
-.hero-bio { margin: 0 0 var(--s-6); max-width: 62ch; }
+.hero-bio { margin: 0 0 var(--s-6); max-width: 56ch; }
 .hero-bio p { margin: 0 0 var(--s-3); color: var(--ink-2); }
 .hero-bio p:first-child { color: var(--ink); }
 .hero-bio p:last-child { margin-bottom: 0; }
@@ -825,12 +833,8 @@ main { position: relative; }
 .tl-body li:last-child { margin-bottom: 0; }
 
 /* Hanging the logo on the trace needs slack outside --measure for it to
-   hang into. Below that the row goes self-contained and the logo leads it.
-   The hero portrait gives ground at the same width, before the text column
-   beside it gets too narrow to read comfortably. */
+   hang into. Below that the row goes self-contained and the logo leads it. */
 @media (max-width: 900px) {
-  .hero-portrait { width: 168px; height: 168px; }
-
   .tl-head {
     grid-template-columns: var(--tl-logo) minmax(0, 1fr) auto auto;
     grid-template-areas:
@@ -882,12 +886,20 @@ main { position: relative; }
    nothing has to measure or write a pixel value to animate.
    ============================================================ */
 .project {
+  /* The tab's vertical padding, shared with the links beside it so the two
+     stay on one centre line as the open tab grows. */
+  --tab-pt: var(--s-2); --tab-pb: var(--s-2);
   position: relative;
   border-top: 1px solid var(--rule);
 }
+.project.is-open { --tab-pt: var(--s-5); --tab-pb: var(--s-4); }
 .project:last-of-type { border-bottom: 1px solid var(--rule); }
 
-.project-tab-h { margin: 0; font-weight: inherit; font-size: inherit; }
+/* Title on the left, the project's links on the right of the same line.
+   Siblings rather than nested: the tab is a button and links can't sit
+   inside one. */
+.project-head { display: flex; align-items: stretch; gap: var(--s-4); }
+.project-tab-h { flex: 1 1 auto; min-width: 0; margin: 0; font-weight: inherit; font-size: inherit; }
 
 /* Pulled a full gutter left so the tab begins exactly on the trace, then
    padded back so its text still lines up with every other heading on the
@@ -900,7 +912,7 @@ main { position: relative; }
      against fits() — at s-4 the section stopped going live on a scaled
      laptop and fell back to a plain list. The open tab keeps its larger
      padding below, so the focused project still has presence. */
-  padding: var(--s-2) 0 var(--s-2) var(--gutter);
+  padding: var(--tab-pt) 0 var(--tab-pb) var(--gutter);
   background: none; border: 0; cursor: pointer; text-align: left;
   font-family: var(--display); font-weight: 600;
   font-size: var(--t-md); letter-spacing: -0.015em;
@@ -932,15 +944,14 @@ main { position: relative; }
 .project-tab:hover { color: var(--ink); }
 .project-tab:focus-visible { outline-offset: -3px; }
 
-.project.is-open > .project-tab-h > .project-tab {
+.project.is-open .project-tab {
   color: var(--ink);
   font-size: var(--t-lg);
-  padding-top: var(--s-5); padding-bottom: var(--s-4);
 }
-.project.is-open > .project-tab-h > .project-tab::before {
+.project.is-open .project-tab::before {
   opacity: 1; transform: rotate(45deg) scale(1);
 }
-.project.is-open > .project-tab-h > .project-tab::after { transform: scaleX(1); }
+.project.is-open .project-tab::after { transform: scaleX(1); }
 
 /* The title's highlighter draws itself on as the project opens and rewinds
    when it closes, so the mark belongs to the focus rather than being a
@@ -961,9 +972,14 @@ main { position: relative; }
    pushed fits() past a laptop window, which drops the whole section to its
    plain-list fallback. Side by side the panel is max(image, prose) instead
    of the sum, which is also a better use of an 860px column. */
+/* The trailing 1fr row is where the shot's extra height goes. It spans every
+   row, and without a flexible one to absorb the difference the rows beside it
+   split it between them — which opened a gap above the tags once the links
+   moved up to the title line and the prose got shorter than the shot. */
 .project-panel-in {
   padding: 0;
   display: grid;
+  grid-template-rows: auto auto 1fr;
   grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
   column-gap: var(--s-5);
   align-items: start;
@@ -989,8 +1005,19 @@ main { position: relative; }
 
 .project p { margin: 0 0 var(--s-3); color: var(--ink-2); font-size: var(--t-md); max-width: 46em; }
 
+/* Case study, live site, GitHub — in that order, on the title's line. The
+   same padding as the tab, so their centre is the title's centre whatever
+   size the title is. In live mode only the open project shows them: on nine
+   closed rows they would be a column of icons beside every title. */
 .project-links {
+  flex: none;
   display: flex; align-items: center; gap: var(--s-4);
+  padding: var(--tab-pt) 0 var(--tab-pb);
+  transition: padding 0.42s var(--ease), opacity 0.3s var(--ease) 0.12s, visibility 0s;
+}
+.is-live .project:not(.is-open) .project-links {
+  opacity: 0; visibility: hidden;
+  transition: padding 0.42s var(--ease), opacity 0.2s var(--ease), visibility 0s 0.2s;
 }
 .project-case {
   display: inline-flex; align-items: center; gap: 6px;
@@ -1063,7 +1090,7 @@ main { position: relative; }
   .is-live .project { border-top: 0; }
   .is-live .project:last-of-type { border-bottom: 0; }
   /* Nothing above it to separate from, so the open tab loses its extra lead-in. */
-  .is-live .project.is-open > .project-tab-h > .project-tab { padding-top: 0; }
+  .is-live .project.is-open { --tab-pt: 0px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1103,19 +1130,81 @@ main { position: relative; }
 .tag--win { color: var(--trace); border-color: var(--trace); }
 
 /* ============================================================
-   Photos
+   Photos — a mosaic
+
+   Six tiles of different sizes, cut to fit one square with no
+   gaps left over: a large one, two tall narrow ones, two small
+   ones and a wide one across the bottom. Straight edges and a
+   single gutter throughout, so it reads as one composed plate
+   rather than a row of thumbnails.
+
+   The square is the whole trick. Rows are 1fr and the box is
+   aspect-ratio 1, so every tile keeps its proportion at any
+   width with nothing measured; each photo is cropped into its
+   tile by object-fit, steered with object-position where the
+   subject sits off centre. Captions are paper tags cut into the
+   bottom-left corner of each tile.
+
+   Drawn for six. A seventh photo needs its own area in the
+   template — the areas are lettered in source order, a to f. On
+   a phone the same six re-cut into two columns, the wide tile
+   still across the foot.
    ============================================================ */
-.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.gallery figure { margin: 0; }
-.gallery img {
-  width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block;
-  border: 1px solid var(--rule); border-radius: 2px;
-  transition: opacity var(--dur) var(--ease);
+.gallery {
+  --g: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  grid-template-areas:
+    "a a b c"
+    "a a b c"
+    "a a d c"
+    "a a d f"
+    "e e e f"
+    "e e e f";
+  gap: var(--g);
+  aspect-ratio: 1;
 }
-.gallery figure:hover img { opacity: 0.9; }
+.gallery figure {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--paper-raise);
+}
+.gallery img {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
 .gallery figcaption {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--ink-3); margin-top: 5px; letter-spacing: 0.03em;
+  position: absolute; left: 0; bottom: 0;
+  max-width: calc(100% - 12px);
+  padding: 5px 9px 4px;
+  background: var(--paper);
+  border-top-right-radius: 2px;
+  font-family: var(--mono); font-size: 11px; line-height: 1.35;
+  color: var(--ink-2); letter-spacing: 0.03em;
+}
+
+.gallery figure:nth-child(1) { grid-area: a; }
+.gallery figure:nth-child(2) { grid-area: b; }
+.gallery figure:nth-child(3) { grid-area: c; }
+.gallery figure:nth-child(4) { grid-area: d; }
+.gallery figure:nth-child(5) { grid-area: e; }
+.gallery figure:nth-child(6) { grid-area: f; }
+/* Crops for the tiles whose subject sits off centre: the spires high in
+   their frame, the crossing low in its, the column's capital high. */
+.gallery figure:nth-child(1) img { object-position: 50% 30%; }
+.gallery figure:nth-child(5) img { object-position: 50% 62%; }
+.gallery figure:nth-child(6) img { object-position: 50% 60%; }
+
+/* The one movement: a slow push into the photo, inside its tile's edges. */
+@media (hover: hover) {
+  .gallery figure:hover img { transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery img { transition: none; }
 }
 
 /* ============================================================
@@ -1290,18 +1379,29 @@ button.contact-mail {
   .node::after { width: 22px; flex: none; }
 
   .hero { padding: var(--s-7) 0 var(--s-6); }
-  /* Portrait leads the stack — it is already first in source order. */
-  .hero-inner {
-    grid-template-columns: 1fr;
-    grid-template-areas: "photo" "text";
-    gap: var(--s-5);
-  }
-  .hero-portrait { width: 132px; height: 132px; }
   .row { grid-template-columns: 1fr; gap: var(--s-1); }
   /* Projects keep their two columns: stacked, the icons drift closer to the
      next project's title than to their own and read as belonging to it. */
   .project { gap: var(--s-4); }
-  .gallery { grid-template-columns: repeat(2, 1fr); }
+  /* Two columns: the large and the two tall tiles alternate down the sides,
+     the small ones fill in beside them, and the wide one still closes it. */
+  .gallery {
+    --g: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(10, minmax(0, 1fr));
+    grid-template-areas:
+      "a b"
+      "a b"
+      "a b"
+      "a d"
+      "c d"
+      "c d"
+      "c f"
+      "c f"
+      "e e"
+      "e e";
+    aspect-ratio: 1 / 2;
+  }
   /* Buttons stay content-sized: a stretched button stretches its brush
      swipe too, leaving ink trailing well past the words. */
   .btn-row { gap: var(--s-2) var(--s-4); }
@@ -1361,12 +1461,6 @@ button.contact-mail {
           mask-image: linear-gradient(90deg, #000 calc(100% - 30px), transparent);
 }
 
-/* Two columns, not one. Six photos stacked full width is a third of the
-   page's height spent on one section, and at 390px a half-width photo is
-   still 175px — plenty for a thumbnail whose job is to be tapped. */
-@media (max-width: 420px) {
-  .gallery { gap: 8px; }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
